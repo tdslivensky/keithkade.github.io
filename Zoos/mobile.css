@@ -1,0 +1,108 @@
+body {
+	margin:0; 
+	padding: 0;
+	background: #339966;
+	font-family: helvetica, arial, sans-serif; 
+}
+#wrapper {
+	margin: 3%;	
+    max-width: 1500px;
+}
+header {
+    height: 200px;
+    width: 106%;
+    margin-left: -3%;
+    border-top: 7px solid white;
+    border-bottom: 7px solid white;
+    text-align: center;
+    background-size: 100%;
+    background-repeat: none;
+    background-position: center;
+    background-image: url('header.jpg');
+}
+header h1 {
+    padding-top: .5em;
+    font-size: 350%;
+    color: white;
+	font-family: trebuchet, arial, sans-serif; 
+}
+header h1 {
+    padding-top: 1.3em;
+    font-size: 250%;
+}
+#fullNav {
+	display:none;
+}
+#jumpToNav {
+    margin-top: 20px;
+    border: 1px solid white;
+    padding: 5px;
+    text-decoration: none;
+    color: white;
+    display: block;
+}    
+#jumpToNav:hover {
+    text-decoration: none;
+    background-color: white;
+    color: #339966;
+}
+article {
+    background-image: url('mountain.png');
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+article h1 {
+	font-size: 200%;
+}
+article p {
+    font-size: 110%;
+}
+img {
+    margin-top: 43px;
+}
+h2 {
+    text-align: center;
+}
+#aboutImg {
+    margin-top: 0;
+    border: 3px solid white;
+    border-radius: 10px;
+    width: 100%;
+}
+h3 {
+    text-decoration: underline;
+    text-decoration-color: white;
+}
+ul {
+    padding: 0;
+}
+nav {
+    clear: both;
+    border-top: 1px solid white;
+}
+nav a:not(#anchor) {
+    border: 1px solid white;
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+    display: block;
+}
+nav ul li > a {
+    font-size: 130%;
+}
+nav ul li {
+    list-style-type:none; 
+    text-decoration: none;
+    margin-top: 10px;
+}
+nav ul li ul {
+    margin-top: 10px;
+}
+.level1 > li a {
+    font-size: 120%;
+    width: 80%;
+}
+.level2 > li a {
+    width: 60%;
+    font-size: 80%;
+}

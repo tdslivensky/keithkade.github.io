@@ -1,0 +1,167 @@
+body {
+	margin:0; 
+	padding: 0;
+	background: #339966;
+	font-family: helvetica, arial, sans-serif; 
+}
+#wrapper {
+	margin: 3%;	
+    max-width: 1500px;
+}
+header {
+    height: 200px;
+    width: 106%;
+    margin-left: -3%;
+    border-top: 7px solid white;
+    border-bottom: 7px solid white;
+    text-align: center;
+    background-size: 100%;
+    background-repeat: none;
+    background-position: center;
+    background-image: url('header.jpg');
+}
+header h1 {
+    padding-top: .5em;
+    font-size: 350%;
+    color: white;
+	font-family: trebuchet, arial, sans-serif; 
+}
+#jumpToNav {
+    display: none;
+}
+#mobileNav {
+    display: none;
+}
+#anchor {
+    display: none;
+}
+@media (min-width: 1500px) {
+    #wrapper {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+@media (max-width: 900px) {
+    header h1 {
+        padding-top: .8em;
+        font-size: 300%;
+    }
+}
+@media (max-width: 735px) {
+    header h1 {
+        padding-top: 0;
+        font-size: 300%;
+    }
+}
+nav {
+	margin-top: 10px;
+}
+.arrow {
+	font-size: .5em;
+	position: absolute;
+	top: .8em;
+	right: .3em;
+}
+nav a {
+	color: #339966; 							
+	background-color: white; 					
+	padding: .1em .8em;	
+	margin-left: .1em;
+	text-decoration:none;
+	display:block;
+}  						
+nav a:hover {
+	color: white; 							
+	background-color: #0099FF;				
+}
+nav li {
+	list-style-type:none; 
+    width: 5em;
+}
+
+/* level 1 */
+nav * {
+	margin:0; 
+	padding:0;
+	z-index: 10;
+}
+nav li {  
+	float:left;
+	position:relative; 
+	}
+/* level 2*/
+nav li ul {
+	display:none; 
+	position:absolute; 
+	left:0;
+	top:100%;
+}
+nav li:hover > ul {
+	display:block;
+}
+nav li li {
+	position:relative; 
+	float:none; 
+	border-top: 1px solid #0099FF; 
+    width: 6em;
+}
+nav li li ul {
+	position:absolute; 
+	left:100%;
+	top:-210%;
+}
+#longerList li{
+	width: 7.5em;
+}
+
+article {
+    border-right: 2px solid black;
+    padding-right: .5em;
+	clear: left;
+	float: left;
+	width: 61%;
+    background-image: url('mountain.png');
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+article h1 {
+	font-size: 200%;
+}
+article p {
+    font-size: 110%;
+}
+aside {
+	float: right;
+	width: 37%;
+}
+
+img {
+    margin-top: 43px;
+}
+
+@media all and (min-width: 1400px) {
+	#mainText{
+		-webkit-column-count: 2; 
+	    -moz-column-count: 2;
+	    column-count: 2;
+	}
+}
+h2 {
+    text-align: center;
+}
+
+#aboutImg {
+    margin-top: 0;
+    border: 3px solid white;
+    border-radius: 10px;
+    width: 100%;
+}
+
+h3 {
+    text-decoration: underline;
+    text-decoration-color: white;
+}
+
+.dropImage {
+    height: 300px;
+}
