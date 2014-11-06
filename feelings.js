@@ -25,7 +25,7 @@ function search(){
     else
         bySentimentString = "False";
 
-    var theUrl = "http://162.242.240.131:4001?city="+city+"&bySentiment="+bySentimentString;
+    var theUrl = "http://104.131.175.100:4001?city="+city+"&bySentiment="+bySentimentString;
     console.log(theUrl);
     xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", theUrl, true);
