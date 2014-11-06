@@ -1,48 +1,8 @@
+/*global console, document, XMLHttpRequest*/
 // GLOBAL VARIABLES
-bySentiment = false;
-globalSnips = {}
-globalBizs = {}
-
-reviews = [
-    {
-      "business_id": "vcNAWiLM4dR7D2nwwJ7nCA",
-      "full_address": "4840 E Indian School Rd\nSte 101\nPhoenix, AZ 85018",
-      "categories": [
-        "Doctors",
-        "Health & Medical"
-      ],
-       "snippets": [
-        "asdkfljasd;lf asdf make this longer. so much longer. longer longer longer longer",
-        "asdfasdf  asdf"
-      ],
-      "name": "Eric Goldberg, MD",
-      "stars": 3,
-      "sentiment": 5
-    },
-    {
-      "business_id": "vcNAWiLM4dR7D2nwwJ7nC2",
-      "full_address": "4840 E Indian School Rd\nSte 101\nPhoenix, AZ 85018",
-      "categories": [
-        "Doctors",
-        "Health & Medical"
-      ],
-       "snippets": [
-        "asdkfljasd lf asdf2",
-        "asdfasdf  asdf2"
-      ],
-      "name": "Other Goldberg, MD",
-      "stars": 5,
-      "sentiment": 4
-    }
-]
-
-window.onload = setup(document);
-
-function setup(document)
-{
-	// start
-}
-
+var bySentiment = false;
+var globalSnips = {};
+var globalBizs = {};
 var xmlHttp = null;    
 
 function search(){
@@ -61,11 +21,11 @@ function search(){
     var bySentimentString = "";
     //fix later
     if (bySentiment)
-        bySentimentString = "True"
+        bySentimentString = "True";
     else
-        bySentimentString = "False"
+        bySentimentString = "False";
 
-    theUrl = "http://162.242.240.131:4001?city="+city+"&bySentiment="+bySentimentString;
+    var theUrl = "http://162.242.240.131:4001?city="+city+"&bySentiment="+bySentimentString;
     console.log(theUrl);
     xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", theUrl, true);
@@ -74,11 +34,11 @@ function search(){
             while(reviewsDiv.firstChild){ 
                 reviewsDiv.removeChild(reviewsDiv.firstChild);
             }
-            reviews = JSON.parse(xmlHttp.responseText);
+            var reviews = JSON.parse(xmlHttp.responseText);
             console.log(xmlHttp.responseText);
             populate(reviews);
         }
-    }
+    };
     xmlHttp.send(null);
     var loadingP = document.createElement('p');
     loadingP.innerHTML = "Loading Businesses..";
@@ -86,7 +46,7 @@ function search(){
 }
 
 function onSpanMouseOver(businessID){
-    if (document.getElementById(businessID) != null){
+    if (document.getElementById(businessID) !== null){
         var elem = document.getElementById(businessID).childNodes;
         elem[0].style.display = "none";
         elem[1].style.display = "inline";
@@ -94,7 +54,7 @@ function onSpanMouseOver(businessID){
 }
 
 function onSpanMouseOut(businessID){
-    if (document.getElementById(businessID) != null){
+    if (document.getElementById(businessID) !== null){
         var elem = document.getElementById(businessID).childNodes;
         elem[0].style.display = "inline";
         elem[1].style.display = "none";
@@ -104,13 +64,13 @@ function onSpanMouseOut(businessID){
 function populate(bizs){
     globalBizs = bizs;
     var bigBizDiv = document.getElementById('resultsArea');
-    for (i in bizs){
-        curBiz = bizs[i];
+    for (var i in bizs){
+        var curBiz = bizs[i];
         var singleBizDiv = document.createElement('div');
         singleBizDiv.style.width = "900px";
         
         var name = document.createElement('h1');
-        name.style.width = "500px"
+        name.style.width = "500px";
         name.style.margin = "10px";
         name.innerHTML = curBiz.name;
         
@@ -128,7 +88,7 @@ function populate(bizs){
         var inner = "";
         if (curBiz.categories.length > 0)
             inner += "Categories: ";
-        for (j in curBiz.categories){
+        for (var j in curBiz.categories){
             inner += curBiz.categories[j] + ", ";
         }
         inner = inner.substring(0, inner.length - 2);
@@ -177,8 +137,9 @@ function makeStars(biz){
     var rateImg = getStarImg(biz.stars);
     rateStars.setAttribute('src',rateImg);    
     
+    var title, title2 = "";
     if (bySentiment){
-        var title = document.createElement('h3');
+        title = document.createElement('h3');
         title.innerHTML = "Feels:";
         title.style.display = 'inline';
         title.style.fontWeight = 'normal';
@@ -187,8 +148,8 @@ function makeStars(biz){
         sentimentStars.style.width = '200px';
         starDiv.appendChild(sentimentStars);
         
-        var title2 = document.createElement('h3');
-        title2.innerHTML = "Ratings:"
+        title2 = document.createElement('h3');
+        title2.innerHTML = "Ratings:";
         title2.style.fontWeight = 'normal';
         title2.style.display = 'inline';
         starDiv.appendChild(title2);
@@ -198,8 +159,8 @@ function makeStars(biz){
         starDiv.appendChild(rateStars);
     }
     else{
-        var title = document.createElement('h3');
-        title.innerHTML = "Ratings:"
+        title = document.createElement('h3');
+        title.innerHTML = "Ratings:";
         title.style.fontWeight = 'normal';
         title.style.display = 'inline';
         starDiv.appendChild(title);
@@ -207,7 +168,7 @@ function makeStars(biz){
         rateStars.style.width = '200px';
         starDiv.appendChild(rateStars);
         
-        var title2 = document.createElement('h3');
+        title2 = document.createElement('h3');
         title2.innerHTML = "Feels:";
         title2.style.display = 'inline';
         title2.style.fontWeight = 'normal';
