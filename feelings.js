@@ -41,7 +41,7 @@ function search(){
     };
     xmlHttp.send(null);
     var loadingP = document.createElement('p');
-    loadingP.innerHTML = "Loading Businesses..";
+    loadingP.innerHTML = "Loading Businesses.. (It can take about a minute)";
     reviewsDiv.appendChild(loadingP);
 }
 

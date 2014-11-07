@@ -1,5 +1,5 @@
 body {
-	margin:0; 
+	margin: 0; 
 	padding: 0;
 	background: #333333 ;
     color: white;
@@ -11,24 +11,23 @@ body {
     min-width: 740px;
 }
 header {
-    background-image: url(img/head.png);
-    background-size: 110% auto;
-    background-position: -50px -100px;
-    text-align: center;
-    height: 300px;
-    border-radius: 25px;
+    height: 160px;
+}
+header img {
+    display: inline;
+    height: 150px;
+    float: left;
+    border: 5px solid white;
+    border-radius: 50%;
 }
 header h1 {
-    font-size: 500%;
-    position: relative;
-    left: 100px;
-    top: 50px;
+    font-size: 300%;
+    padding-left: 180px;
+    padding-top: 50px;
 }
-#subtitle {
-    font-family: "Lucida Console", monospace;
-}
-#subtitle  h1{
-    text-align: center;
+#email {
+    padding-left: 182px;
+    margin-top: -36px;
 }
 nav{
     list-style:none;
@@ -37,20 +36,35 @@ nav{
     text-align:center;
     font-size: 130%;
 }
+nav ul {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+    border: 2px solid #66CCFF;
+    border-radius: 6px;
+    width: 400px;
+}
 nav li{
-    display:inline;
+    display: inline;
 }
 nav a{
-    display:inline-block;
+    display: inline-block;
     padding: 10px;
 }
 nav a:link {
-    color: white;
+    color: #66CCFF;
     text-decoration: none;
 }
 nav a:visited {
-    color: white;
+    color: #66CCFF;
 }
 nav a:hover {
-    color: #FF00FF;
+    color: white;
+    background-color: #4C4C4C;
+}
+article {
+    font-family: 'Pontano Sans', sans-serif;
+}
+article h2 {
+    color: #66CCFF;
 }
