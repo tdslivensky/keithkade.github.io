@@ -1,0 +1,120 @@
+body {
+	margin:0; 
+	padding: 0;
+	background: #002100;
+    color: white;
+	font-family: "Trebuchet MS", Helvetica, sans-serif; 
+}
+#wrapper {
+	margin: 3%;
+    max-width: 1400px;
+    min-width: 1050px;
+}
+article {
+	float: left;
+	width: 60%;
+}
+header {
+    display: block;
+    height: 80px;
+}
+header img {
+    float: left;
+    height: 80px;
+}
+header h1 {
+    position: relative;
+    left: 10px;
+    top: 20px;
+    font-size: 230%;
+    transition: all .5s ease-in-out;
+}
+header h1:hover { 
+    transform: scale(1.2);
+    left: 80px;
+}
+article #tipWord {
+    color: #66CCFF;
+    position: relative;
+}
+.textTooltip {
+    display: none;
+}
+article #tipWord:hover .textTooltip {
+    display: block;
+    position: absolute;
+    top: 1.5em;
+    right: 0em;
+    background-color: #333;
+    width: 9em;
+    padding: .2em;
+    z-index: 10;
+    color: white;
+    border: 2px solid #66CCFF;
+}
+.imgTooltip {
+    display: none;
+}
+article #tipWord:hover .imgTooltip {
+    display: block;
+    position: absolute;
+    width: 100px;
+    z-index: 10;
+}
+.comboTooltip {
+    display: none;
+}
+article #tipWord .comboTooltip img{
+    height: 40px;
+    float: left;
+    margin-right: 10px;
+}
+article #tipWord:hover .comboTooltip {
+    display: block;
+    position: absolute;
+    top: 1.5em;
+    right: 0em;
+    background-color: #333;
+    width: 9em;
+    padding: .2em;
+    z-index: 10;
+    color: white;
+    border: 2px solid #66CCFF;
+}
+aside {
+	float: right;
+	width: 36%;
+    padding-left: 1em;
+    border-left: 2px solid #66CCFF;
+}
+aside #course {
+    display: relative;
+}
+aside #course img {
+    width: 95%;
+}
+aside #course:hover .textTooltip {
+    display: block;
+    position: absolute;
+    text-align: right;
+    right: 60px;
+    background-color: #333;
+    width: 8em;
+    padding: .2em;
+    z-index: 10;
+    color: white;
+    border: 2px solid #66CCFF;
+}
+aside .grow {
+    height: 100px;
+    transition: all .05s linear;
+}
+aside .grow:hover	{
+	-webkit-transform:scale(1.8);
+	-moz-transform:scale(1.8);
+	-ms-transform:scale(1.8);
+	transform::scale(1.8);
+    position: relative;
+    left: 65px;
+    bottom: 40px;
+}
