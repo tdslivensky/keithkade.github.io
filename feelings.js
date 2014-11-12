@@ -7,25 +7,16 @@ var xmlHttp = null;
 
 function search(){
     var reviewsDiv = document.getElementById('resultsArea');
-    var city = "";
     while (reviewsDiv.firstChild){
         reviewsDiv.removeChild(reviewsDiv.firstChild);
     }
-    if (document.getElementById('phoenixRadio').checked){
-        city = "Phoenix";
-    }
-    else { //default to Vegas
-        city = "Las Vegas";
-    }
-    bySentiment = document.getElementById('feelRadio').checked;
-    var bySentimentString = "";
-    //fix later
-    if (bySentiment)
-        bySentimentString = "True";
-    else
-        bySentimentString = "False";
 
-    var theUrl = "http://104.131.175.100:4001?city="+city+"&bySentiment="+bySentimentString;
+    var city = document.getElementById("city");
+    var cityStr = city.options[city.selectedIndex].innerHTML;
+    var sort = document.getElementById("sort");
+    var sortStr = sort.options[sort.selectedIndex].innerHTML;
+    
+    var theUrl = "http://104.131.175.100:4001?city="+cityStr+"&sort="+sortStr;
     console.log(theUrl);
     xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", theUrl, true);
