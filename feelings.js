@@ -1,6 +1,6 @@
 /*global console, document, XMLHttpRequest*/
 // GLOBAL VARIABLES
-var bySentiment = false;
+var bySentiment = true;
 var globalSnips = {};
 var globalBizs = {};
 var xmlHttp = null;    
@@ -15,6 +15,9 @@ function search(){
     var cityStr = city.options[city.selectedIndex].innerHTML;
     var sort = document.getElementById("sort");
     var sortStr = sort.options[sort.selectedIndex].innerHTML;
+    if (sortStr === "Highest Rating" || sortStr === "Lowest Rating"){
+        bySentiment = false;
+    }
     
     var theUrl = "http://104.131.175.100:4001?city="+cityStr+"&sort="+sortStr;
     console.log(theUrl);
@@ -128,21 +131,23 @@ function makeStars(biz){
     var rateImg = getStarImg(biz.stars);
     rateStars.setAttribute('src',rateImg);    
     
-    var title, title2 = "";
+    var title = document.createElement('h3');
+    title.style.fontWeight = 'normal';
+    title.style.display = 'inline';
+    
+    var title2 = document.createElement('h3');
+    title2.style.fontWeight = 'normal';
+    title2.style.display = 'inline';
+    
     if (bySentiment){
-        title = document.createElement('h3');
         title.innerHTML = "Feels:";
-        title.style.display = 'inline';
-        title.style.fontWeight = 'normal';
         starDiv.appendChild(title);
         
         sentimentStars.style.width = '200px';
         starDiv.appendChild(sentimentStars);
         
-        title2 = document.createElement('h3');
         title2.innerHTML = "Ratings:";
-        title2.style.fontWeight = 'normal';
-        title2.style.display = 'inline';
+        
         starDiv.appendChild(title2);
         
         rateStars.style.opacity = 0.5;
@@ -150,19 +155,14 @@ function makeStars(biz){
         starDiv.appendChild(rateStars);
     }
     else{
-        title = document.createElement('h3');
         title.innerHTML = "Ratings:";
-        title.style.fontWeight = 'normal';
-        title.style.display = 'inline';
+
         starDiv.appendChild(title);
         
         rateStars.style.width = '200px';
         starDiv.appendChild(rateStars);
         
-        title2 = document.createElement('h3');
         title2.innerHTML = "Feels:";
-        title2.style.display = 'inline';
-        title2.style.fontWeight = 'normal';
         starDiv.appendChild(title2);
         
         sentimentStars.style.width = '150px';
