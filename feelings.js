@@ -15,9 +15,11 @@ function search(){
     var cityStr = city.options[city.selectedIndex].innerHTML;
     var sort = document.getElementById("sort");
     var sortStr = sort.options[sort.selectedIndex].innerHTML;
-    if (sortStr === "Highest Rating" || sortStr === "Lowest Rating"){
+    if (sortStr == "Highest Rating" || sortStr == "Lowest Rating"){
         bySentiment = false;
     }
+    else bySentiment = true;
+
     
     var theUrl = "http://104.131.175.100:4001?city="+cityStr+"&sort="+sortStr;
     console.log(theUrl);
