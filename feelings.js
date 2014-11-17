@@ -19,7 +19,6 @@ function search(){
         bySentiment = false;
     }
     else bySentiment = true;
-
     
     var theUrl = "http://104.131.175.100:4001?city="+cityStr+"&sort="+sortStr;
     console.log(theUrl);
@@ -30,8 +29,8 @@ function search(){
             while(reviewsDiv.firstChild){ 
                 reviewsDiv.removeChild(reviewsDiv.firstChild);
             }
-            var reviews = JSON.parse(xmlHttp.responseText);
             console.log(xmlHttp.responseText);
+            var reviews = JSON.parse(xmlHttp.responseText);
             populate(reviews);
         }
     };
@@ -41,20 +40,16 @@ function search(){
     reviewsDiv.appendChild(loadingP);
 }
 
-function onSpanMouseOver(businessID){
-    if (document.getElementById(businessID) !== null){
-        var elem = document.getElementById(businessID).childNodes;
-        elem[0].style.display = "none";
-        elem[1].style.display = "inline";
-    }
+function onSpanMouseOver(reviewID){
+    var elem = reviewID.childNodes;
+    elem[0].style.display = "none";
+    elem[1].style.display = "inline";
 }
 
-function onSpanMouseOut(businessID){
-    if (document.getElementById(businessID) !== null){
-        var elem = document.getElementById(businessID).childNodes;
-        elem[0].style.display = "inline";
-        elem[1].style.display = "none";
-    }
+function onSpanMouseOut(reviewID){
+    var elem = reviewID.childNodes;
+    elem[0].style.display = "inline";
+    elem[1].style.display = "none";
 }
 
 function populate(bizs){
@@ -91,9 +86,10 @@ function populate(bizs){
         cats.innerHTML = inner;
 
         var reviewSnips = document.createElement('p');
+        var uniqueID = 0;
         for (j in curBiz.snippets){
             var reviewSnipSpan = document.createElement('span');
-            reviewSnipSpan.id = curBiz.business_id;
+            reviewSnipSpan.id = curBiz.business_id+uniqueID;
             var reviewSnipfull = document.createElement('span');
             reviewSnipfull.style.display = "none";
             var reviewSniptrim = document.createElement('span');
@@ -101,13 +97,14 @@ function populate(bizs){
             reviewSnipfull.innerHTML = "\"" + curBiz.snippets[j] + "<br>";
             reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,50) + "...\"" + "<br>";
 
-            reviewSnipSpan.onmouseover = onSpanMouseOver(curBiz.business_id); 
-            reviewSnipSpan.onmouseout = onSpanMouseOut(curBiz.business_id); 
+            reviewSnipSpan.setAttribute("onmouseover", "onSpanMouseOver("+curBiz.business_id+uniqueID+")"); 
+            reviewSnipSpan.setAttribute("onmouseout", "onSpanMouseOut("+curBiz.business_id+uniqueID+")"); 
 
             reviewSnipSpan.appendChild(reviewSniptrim);
             reviewSnipSpan.appendChild(reviewSnipfull);
 
             reviewSnips.appendChild(reviewSnipSpan);
+            uniqueID++;
         }
 
         singleBizDiv.appendChild(name);
