@@ -41,13 +41,13 @@ function search(){
 }
 
 function onSpanMouseOver(reviewID){
-    var elem = reviewID.childNodes;
+    var elem = document.getElementById(reviewID).childNodes;
     elem[0].style.display = "none";
     elem[1].style.display = "inline";
 }
 
 function onSpanMouseOut(reviewID){
-    var elem = reviewID.childNodes;
+    var elem = document.getElementById(reviewID).childNodes;
     elem[0].style.display = "inline";
     elem[1].style.display = "none";
 }
@@ -97,8 +97,8 @@ function populate(bizs){
             reviewSnipfull.innerHTML = "\"" + curBiz.snippets[j] + "<br>";
             reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,50) + "...\"" + "<br>";
 
-            reviewSnipSpan.setAttribute("onmouseover", "onSpanMouseOver("+curBiz.business_id+uniqueID+")"); 
-            reviewSnipSpan.setAttribute("onmouseout", "onSpanMouseOut("+curBiz.business_id+uniqueID+")"); 
+            reviewSnipSpan.setAttribute("onmouseover", "onSpanMouseOver(\""+curBiz.business_id+uniqueID+"\")"); 
+            reviewSnipSpan.setAttribute("onmouseout", "onSpanMouseOut(\""+curBiz.business_id+uniqueID+"\")"); 
 
             reviewSnipSpan.appendChild(reviewSniptrim);
             reviewSnipSpan.appendChild(reviewSnipfull);
