@@ -431,6 +431,14 @@ a {
     }
 }
 @media only screen and (max-width: 480px) {
+    #pageHeader h1{
+        top: 55px;        
+        padding-right: 0;
+        margin-right: 10px;
+        background-image: none;
+        font-size: 200%;
+        opacity: .95;
+    }
     #linkList #linkList2 #lselect ul li{
         padding-bottom: 10px;
     }
@@ -448,8 +456,15 @@ a {
     #linkList #larchives ul li a{
         padding: 3em;
     }
+    #footer a{
+        display: inline;
+        padding: .7em;
+    }
     #extraDiv2 {
         display: none;
+    }
+    #linkList #larchives ul li a{
+        padding: 2em;
     }
     #linkList #lresources ul{
         text-align: center;
