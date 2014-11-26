@@ -11,19 +11,29 @@
 			margin: 0;
 			padding: 0;
 		}
+        #wrapper {
+            margin-left: auto;
+            margin-right: auto;
+            width: 900px;
+		}
+		p {
+			margin-left: 10px;
+		}
 		#title {
 			font-size:300%;
 			color: #c41200;
-			padding-bottom: 10px;
+			padding-bottom: 8px;
 			border-bottom: 1px solid black;
 			width: 480px;
 		}
+        #left {
+            float: left;
+        }
 		#hamster {
-			position: absolute;
-			top: 10px;
 			height: 200px;
-			left: 610px;
 			border: 4px solid #c41200;
+            margin-left: 110px;
+            margin-top: 30px;
 		}
 		h4 {
 			margin-bottom: 2px;
@@ -36,48 +46,38 @@
             float: left;
             margin-left: 10px;
         }
-		#goButton {
-			margin-left: 10px;
-            margin-top: 45px;
-		}
 		#resultsArea {
 			margin-top: 40px;
-		}
-		#wrapper {
-			margin: 3%;
-		}
-		p {
-			margin-left: 10px;
 		}
 		</style>
 	</head>
 	<body>
 		<div id="wrapper">
-			<h1 id="title">Eat Your Feelings</h1>
-			<img id="hamster" src="img/hamster.png"/> 
-			<div class="option">
-                <h4>City:</h5>
-                <select id="city">
-                    <option>Las Vegas</option>
-                    <option>Phoenix</option>
-                    <option>Madison</option>
-                    <option>Waterloo</option>
-                    <option>Edinburgh</option>
-                </select>
-            </div>
-            <div class="option">
-                <h4>Sort by:</h5>
-                <select id="sort">
-                    <option>Most Controversial</option>
-                    <option>Highest Sentiment</option>
-                    <option>Lowest Sentiment</option>
-                    <option>Highest Rating</option>
-                    <option>Lowest Rating</option>
-                </select>
-            </div>
-            
-            <input type="button" id="goButton" name="go" value="Go!" onclick="search()"></input>
-			
+            <div id ="left">
+                <h1 id="title">Eat Your Feelings</h1>
+
+                <div class="option">
+                    <h4>City:</h5>
+                    <select id="city" onchange="search()">
+                        <option>Las Vegas</option>
+                        <option>Phoenix</option>
+                        <option>Madison</option>
+                        <option>Waterloo</option>
+                        <option>Edinburgh</option>
+                    </select>
+                </div>
+                <div class="option">
+                    <h4>Sort by:</h5>
+                    <select id="sort" onchange="search()">
+                        <option>Highest Sentiment</option>
+                        <option>Lowest Sentiment</option>
+                        <option>Highest Rating</option>
+                        <option>Lowest Rating</option>
+                        <option>Most Controversial</option>
+                    </select>
+                </div>
+			</div>
+            <img id="hamster" src="img/hamster.png"/> 
             <div id="resultsArea"></div>
 		</div>
 	</body>

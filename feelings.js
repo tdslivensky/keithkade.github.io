@@ -1,9 +1,13 @@
-/*global console, document, XMLHttpRequest*/
+/*global console, document, XMLHttpRequest, window*/
 // GLOBAL VARIABLES
 var bySentiment = true;
 var globalSnips = {};
 var globalBizs = {};
 var xmlHttp = null;    
+
+window.onload = function (){
+    search();
+};
 
 function search(){
     var reviewsDiv = document.getElementById('resultsArea');
@@ -36,7 +40,7 @@ function search(){
     };
     xmlHttp.send(null);
     var loadingP = document.createElement('p');
-    loadingP.innerHTML = "Loading Businesses.. (It can take about a minute)";
+    loadingP.innerHTML = "Loading Businesses.. (It can take a few seconds)";
     reviewsDiv.appendChild(loadingP);
 }
 
