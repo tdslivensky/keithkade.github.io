@@ -4,6 +4,9 @@ var bySentiment = true;
 var globalSnips = {};
 var globalBizs = {};
 var xmlHttp = null;    
+var posWords = ["happy","alive","good","understanding","great","playful","calm","confident","courageous","peaceful","reliable","joyous","energetic","easy","lucky","liberated","comfortable","amazed","fortunate","optimistic","pleased","delighted","encouraged","sympathetic","overjoyed","clever","gleeful","satisfied","thankful","content","receptive","important","accepting","festive","spirited","certain","kind","ecstatic","thrilled","relaxed","satisfied","wonderful","serene","glad","free","easy ","cheerful","bright","sunny","blessed","merry","reassured ","elated","jubilant","love","interested","positive","loving","eager","considerate","affectionate","fascinated","devoted","inquisitive","inspired","attracted","determined","dynamic","passionate","excited","tenacious","admiration","engrossed","enthusiastic","hardy","warm","curious","bold","secure","touched ","brave","sympathy","close","challenged","loved","optimistic","comforted","confident","hopeful"];
+var negWords = ["angry","depressed","confused","helpless","irritated","lousy","upset","incapable","enraged","disappointed","doubtful","alone","hostile","discouraged","uncertain","paralyzed","insulting","ashamed","indecisive","fatigued","sore","powerless","perplexed","useless","annoyed","diminished","embarrassed","inferior","upset","guilty","hesitant","vulnerable","hateful","dissatisfied","shy","empty","unpleasant","miserable","stupefied","forced","offensive","detestable","disillusioned","hesitant","bitter","repugnant","unbelieving","despair","aggressive","despicable","skeptical","frustrated","resentful","disgusting","distrustful","distressed","inflamed","abominable","misgiving","woeful","provoked","terrible","lost","pathetic","unsure","tragic","infuriated","sulky","uneasy","cross","bad","pessimistic","dominated","loss","tense","boiling","fuming","indignant","indifferent","afraid","hurt","sad","insensitive","fearful","crushed","tearful","dull","terrified","tormented","sorrowful","nonchalant","suspicious","deprived","pained","neutral","anxious","pained","grief","reserved","alarmed","tortured","anguish","weary","panic","dejected","desolate","bored","nervous","rejected","desperate","preoccupied","scared","injured","pessimistic","cold","worried","offended","unhappy","disinterested","frightened","afflicted","lonely","lifeless","timid","aching","grieved","shaky","victimized","mournful","restless","heartbroken","dismayed","doubtful","agonized","threatened","appalled","cowardly","humiliated","quaking","wronged","menaced","alienated","wary","horrible","worst","scam","bullshit"];
+
 
 window.onload = function (){
     search();
@@ -91,15 +94,51 @@ function populate(bizs){
 
         var reviewSnips = document.createElement('p');
         var uniqueID = 0;
+        var curWord, index, index2, choppedStr;
         for (j in curBiz.snippets){
+            var wordList = curBiz.snippets[j].split(" ");
+            for (var wi in wordList){
+                curWord = wordList[wi];
+                for (var wp in posWords){
+                    if (curWord.toLowerCase() == posWords[wp]){
+                        index = curBiz.snippets[j].indexOf(curWord);
+                        index2 = index+curWord.length+1;
+                        choppedStr = curBiz.snippets[j].split("");
+                        choppedStr.splice(index, 0, "<span class=\"posWord\">");
+                        choppedStr.splice(index2, 0, "</span>");
+                        curBiz.snippets[j] = choppedStr.join("");
+                    }
+                }
+                for (var wn in negWords){
+                    if (curWord.toLowerCase() == negWords[wn]){
+                        index = curBiz.snippets[j].indexOf(curWord);
+                        index2 = index+curWord.length+1;
+                        choppedStr = curBiz.snippets[j].split("");
+                        choppedStr.splice(index, 0, "<span class=\"negWord\">");
+                        choppedStr.splice(index2, 0, "</span>");
+                        curBiz.snippets[j] = choppedStr.join("");
+                    }
+                }                
+            }
+            
             var reviewSnipSpan = document.createElement('span');
             reviewSnipSpan.id = curBiz.business_id+uniqueID;
             var reviewSnipfull = document.createElement('span');
             reviewSnipfull.style.display = "none";
             var reviewSniptrim = document.createElement('span');
 
-            reviewSnipfull.innerHTML = "\"" + curBiz.snippets[j] + "<br>";
-            reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,50) + "...\"" + "<br>";
+            reviewSnipfull.innerHTML = "\"" + curBiz.snippets[j] + "\"" + "<br>";
+            //make sure we don't trim in the middle of a span
+            if (curBiz.snippets[j].indexOf("<", 40) != -1 && curBiz.snippets[j].indexOf("<", 40) <= 50){
+                reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,curBiz.snippets[j].indexOf("<\/span>", 40)+7) + "...\"" + "<br>";
+            }
+            //if there is a span encased trim less
+            else if (curBiz.snippets[j].indexOf("<") != -1){
+                reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,curBiz.snippets[j].indexOf(" ", 70)) + "...\"" + "<br>";
+            }
+            else {
+                reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,curBiz.snippets[j].indexOf(" ", 50)) + "...\"" + "<br>";
+            }
 
             reviewSnipSpan.setAttribute("onmouseover", "onSpanMouseOver(\""+curBiz.business_id+uniqueID+"\")"); 
             reviewSnipSpan.setAttribute("onmouseout", "onSpanMouseOut(\""+curBiz.business_id+uniqueID+"\")"); 
