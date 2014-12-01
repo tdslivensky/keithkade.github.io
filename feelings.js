@@ -133,9 +133,9 @@ function populate(bizs){
                 reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,curBiz.snippets[j].indexOf("<\/span>", 40)+7) + "...\"" + "<br>";
             }
             //if there is a span encased trim less
-            else if (curBiz.snippets[j].indexOf("<") != -1){
-                reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,curBiz.snippets[j].indexOf(" ", 70)) + "...\"" + "<br>";
-            }
+            //else if (curBiz.snippets[j].indexOf("<") != -1){
+            //    reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,curBiz.snippets[j].indexOf(" ", 70)) + "...\"" + "<br>";
+            //}
             else {
                 reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,curBiz.snippets[j].indexOf(" ", 50)) + "...\"" + "<br>";
             }
