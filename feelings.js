@@ -93,6 +93,7 @@ function populate(bizs){
         cats.innerHTML = inner;
 
         var reviewSnips = document.createElement('p');
+        reviewSnips.className = "reviewSnips";
         var uniqueID = 0;
         var curWord, index, index2, choppedStr;
         for (j in curBiz.snippets){
@@ -121,8 +122,8 @@ function populate(bizs){
                 }                
             }
             
-            var reviewSnipSpan = document.createElement('span');
-            reviewSnipSpan.id = curBiz.business_id+uniqueID;
+            var reviewSnipDiv = document.createElement('div');
+            reviewSnipDiv.id = curBiz.business_id+uniqueID;
             var reviewSnipfull = document.createElement('span');
             reviewSnipfull.style.display = "none";
             var reviewSniptrim = document.createElement('span');
@@ -133,20 +134,26 @@ function populate(bizs){
                 reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,curBiz.snippets[j].indexOf("<\/span>", 40)+7) + "...\"" + "<br>";
             }
             //if there is a span encased trim less
-            //else if (curBiz.snippets[j].indexOf("<") != -1){
-            //    reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,curBiz.snippets[j].indexOf(" ", 70)) + "...\"" + "<br>";
-            //}
+            else if (curBiz.snippets[j].indexOf("<") != -1 && curBiz.snippets[j].indexOf("<") < 50){
+                //still make sure we dont trim in middle of span
+                if (curBiz.snippets[j].indexOf("<", 60) != -1 && curBiz.snippets[j].indexOf("<", 60) <= 70){
+                    reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,curBiz.snippets[j].indexOf("<\/span>", 40)+7) + "...\"" + "<br>";
+                }
+                else {
+                    reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,curBiz.snippets[j].indexOf(" ", 70)) + "...\"" + "<br>";
+                }
+            }
             else {
                 reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,curBiz.snippets[j].indexOf(" ", 50)) + "...\"" + "<br>";
             }
 
-            reviewSnipSpan.setAttribute("onmouseover", "onSpanMouseOver(\""+curBiz.business_id+uniqueID+"\")"); 
-            reviewSnipSpan.setAttribute("onmouseout", "onSpanMouseOut(\""+curBiz.business_id+uniqueID+"\")"); 
+            reviewSnipDiv.setAttribute("onmouseover", "onSpanMouseOver(\""+curBiz.business_id+uniqueID+"\")"); 
+            reviewSnipDiv.setAttribute("onmouseout", "onSpanMouseOut(\""+curBiz.business_id+uniqueID+"\")"); 
 
-            reviewSnipSpan.appendChild(reviewSniptrim);
-            reviewSnipSpan.appendChild(reviewSnipfull);
+            reviewSnipDiv.appendChild(reviewSniptrim);
+            reviewSnipDiv.appendChild(reviewSnipfull);
 
-            reviewSnips.appendChild(reviewSnipSpan);
+            reviewSnips.appendChild(reviewSnipDiv);
             uniqueID++;
         }
 
