@@ -9,9 +9,9 @@ body {
 	margin: 4%;	
     min-width: 450px;
 }
-@media (min-width: 1200px) {
+@media (min-width: 1100px) {
     #wrapper {
-        width: 1100px;
+        width: 1000px;
         margin-left: auto;
         margin-right: auto;
     }
@@ -64,11 +64,11 @@ nav a{
     display: inline-block;
     padding: 10px;
 }
-nav a:link {
+a {
     color: #66CCFF;
     text-decoration: none;
 }
-nav a:visited {
+a:visited {
     color: #66CCFF;
 }
 nav a:hover {
@@ -76,7 +76,7 @@ nav a:hover {
     background-color: #4C4C4C;
 }
 article {
-    font-family: 'Pontano Sans', sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 article h2 {
     color: #66CCFF;
