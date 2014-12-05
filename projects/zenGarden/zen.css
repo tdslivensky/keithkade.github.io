@@ -81,7 +81,7 @@ a {
     -webkit-transform: rotate(90deg);
     transform: rotate(90deg);
 }
-@media (min-width: 1280px) and (max-width: 1500px) {
+@media (min-width: 1280px) {
     #extraDiv1 {
         display: none
     }
