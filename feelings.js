@@ -144,6 +144,9 @@ function populate(bizs){
                 if (curBiz.snippets[j].indexOf("<", 60) != -1 && curBiz.snippets[j].indexOf("<", 60) <= 70){
                     reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,curBiz.snippets[j].indexOf("<\/span>", 40)+7) + "...\"" + "<br>";
                 }
+                else if (curBiz.snippets[j].length < 80){
+                    reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j] + "\"" + "<br>";
+                }
                 else {
                     reviewSniptrim.innerHTML = "\"" + curBiz.snippets[j].substring(0,curBiz.snippets[j].indexOf(" ", 70)) + "...\"" + "<br>";
                 }
