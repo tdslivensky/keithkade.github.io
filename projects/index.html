@@ -7,6 +7,7 @@
     <link rel="icon" href="../img/kFavicon.png">
     <link rel="stylesheet" type="text/css" href="../style.css">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <script src="../slider.js"></script>
 </head>
 <style type="text/css">
     .project {
@@ -53,78 +54,95 @@
         height: 100px;
         width: 100px;
     }
-    span.tooltip {
-        text-decoration: underline;
+    @media (max-width: 560px) {
+        .project {
+            
+        }
+        .project img{
+            float: none;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .project p {
+            margin-left: 10px;
+            margin-top: 10px;
+        }
     }
-    span.tooltip span {
-        z-index: 10;
-        display: none; 
-        padding: 4px;
-    }
-    span.tooltip:hover span{
-        display: inline; 
-        position: absolute; 
-        margin-top: 20px;
-        color: #333333;
-        border: 1px solid #333333;
-        border-radius: 4px;
-        background: white;
-    }
-    
 </style>
 <body>
-    <div id="wrapper">
-        <header>
-            <a href="../index.html"><img src="../img/headCircle.png"/>
-            <h1>Kade Keith</h1></a>
-            <p id="email">keithkade@gmail.com</p>
-        </header>
-        <nav>
-            <ul>
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="../resume.html">Resume</a></li>
-                <li><a href="/projects/">Projects</a></li>
-                <li><a href="../research.html">Research</a></li>
-                <li><a target="_blank" href="http://reallyimpressivetitle.blogspot.com/">Blog</a></li>
-            </ul>
-        </nav>
-        <article>
-            <div class="project">
-            <a class="projectTitle" target="_blank" href="https://www.youtube.com/watch?v=1_Y-zk_Jgrg"><h2>Fantegio</h2>
-                <img id="fantegioImg" src="../img/commander.png"/></a>
-                <p>
-                    This is a multiplayer web game based on the board game Stratego. I led a team consisting of myself, Matthew Saari, Richa Surbhi, and Ryan Ledbetter to make this. We used Create.js for graphics/animation and websockets for communication between clients/server. The server ran node.js. I created all of the graphics and wrote a good portion of the client-side javascript. The server was temporarily hosted by the university and is unfortunately no longer live, but we do have a gameplay <a target="_blank" href="https://www.youtube.com/watch?v=1_Y-zk_Jgrg">video</a>. 
-                </p>
-                <p>
-                    <a target="_blank" href="https://github.com/keithkade/Fantegio">Github Source</a>
-                </p>
-            </div>
-            <div class="project">
-            <a class="projectTitle" target="_blank" href="../feelings.html"><h2>Eat Your Feelings</h2>
-                <img id="hamsterImg" src="../img/hamster.png"/></a>
-                <p>
-                I am currently working on this project with John Goen for my Information Storage and Retrieval class as well as the Yelp dataset challenge. In it, we conduct sentiment analysis on the review text of Yelp business reviews from the Yelp academic dataset. We do this in hopes of finding differences in the way people talk about businesses and the way people rate them. Our app allows users to sort by either the original rating or by sentiment (feels). We use Naive Bayes, which has been trained on a set of pre-classified documents to assign positivity scores to reviews. We then separate the scores into tiers to mirror the standard star ratings. 
-                </p>
-                <p>
-                    <a target="_blank" href="https://github.com/keithkade/yelpFeelings">Github Source</a>
-                </p>
-            </div>
-            <div class="project">
-            <a class="projectTitle" target="_blank" href="http://people.tamu.edu/~keithkade/vnuateklipuycate.html"><h2>vnuate klipuycate</h2>
-                <img id="pugImg" src="http://i.imgur.com/TkZb2ok.gif"/></a>
-                <p>
-                    An exercise in 
-                    <span class="tooltip">SEO<span>Search Engine Optimization</span></span> for my Information Storage and Retrieval class. Each student was tasked with making a web page for the nonsense term "vnuate klipuycate". To climb to the top, I used schema, meta tags, and links to/from peers sites to collectively boost my PageRank. As of 11-12-14 I am the top <a target="_blank" href="https://www.google.com/search?q=vnuate%20klipuycate">Google Search for vnuate klipuycate</a> out of a class of 30+ students. 
-                </p>
-            </div>
-            <div class="project">
-                <a class="projectTitle" target="_blank" href="/projects/zenGarden/"><h2>CSS Zen Garden</h2>
-                <img id="zenImg" src="zenGarden/flowerWhite.png"/></a>
-                <p>
-                    My take on the CSS Zen Garden Challenge. In it, you are given just a <a target="_blank" href="zenGarden/zenNoStyle.html">html file</a> and your task is to style it using CSS. You are not allowed to modify the html in any way outside of linking to your own stylesheet.
-                </P>
-            </div>
-        </article>
+    <div id="navPanel">
+        <div id="navCanvas">
+                <nav>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../resume.html">Resume</a></li>
+                        <li><a href="/projects/">Projects</a></li>
+                        <li><a href="../research.html">Research</a></li>
+                        <li><a target="_blank" href="http://reallyimpressivetitle.blogspot.com/">Blog</a></li>
+                    </ul>
+                </nav>
+        </div>
+    </div>
+    <div id="mainContent">    
+        <div id="wrapper">
+            <header>
+                <a href="../index.html"><img src="../img/headCircle.png"/>
+                <h1>Kade Keith</h1></a>
+                <p id="email">keithkade@gmail.com</p>
+            </header>
+            <nav>
+                <div onclick="toggleSlide();" id="navButton">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../resume.html">Resume</a></li>
+                    <li><a href="/projects/">Projects</a></li>
+                    <li><a href="../research.html">Research</a></li>
+                    <li><a target="_blank" href="http://reallyimpressivetitle.blogspot.com/">Blog</a></li>
+                </ul>
+            </nav>
+            <article>
+                <div class="project">
+                <a class="projectTitle" target="_blank" href="https://www.youtube.com/watch?v=1_Y-zk_Jgrg"><h2>Fantegio</h2>
+                    <img id="fantegioImg" src="../img/commander.png"/></a>
+                    <p>
+                        This is a multiplayer web game based on the board game Stratego. I led a team consisting of myself, Matthew Saari, Richa Surbhi, and Ryan Ledbetter to make this. We used Create.js for graphics/animation and websockets for communication between clients/server. The server ran node.js. I created all of the graphics and wrote a good portion of the client-side javascript. The server was temporarily hosted by the university and is unfortunately no longer live, but we do have a gameplay <a target="_blank" href="https://www.youtube.com/watch?v=1_Y-zk_Jgrg">video</a>. 
+                    </p>
+                    <p>
+                        <a target="_blank" href="https://github.com/keithkade/Fantegio">Github Source</a>
+                    </p>
+                </div>
+                <div class="project">
+                <a class="projectTitle" target="_blank" href="../feelings.html"><h2>Eat Your Feelings</h2>
+                    <img id="hamsterImg" src="../img/hamster.png"/></a>
+                    <p>
+                    I am currently working on this project with John Goen for my Information Storage and Retrieval class as well as the Yelp dataset challenge. In it, we conduct sentiment analysis on the review text of Yelp business reviews from the Yelp academic dataset. We do this in hopes of finding differences in the way people talk about businesses and the way people rate them. Our app allows users to sort by either the original rating or by sentiment (feels). We use Naive Bayes, which has been trained on a set of pre-classified documents to assign positivity scores to reviews. We then separate the scores into tiers to mirror the standard star ratings. 
+                    </p>
+                    <p>
+                        <a target="_blank" href="https://github.com/keithkade/yelpFeelings">Github Source</a>
+                    </p>
+                </div>
+                <div class="project">
+                <a class="projectTitle" target="_blank" href="http://people.tamu.edu/~keithkade/vnuateklipuycate.html"><h2>vnuate klipuycate</h2>
+                    <img id="pugImg" src="http://i.imgur.com/TkZb2ok.gif"/></a>
+                    <p>
+                        An exercise in 
+                        <span class="tooltip">SEO<span>Search Engine Optimization</span></span> for my Information Storage and Retrieval class. Each student was tasked with making a web page for the nonsense term "vnuate klipuycate". To climb to the top, I used schema, meta tags, and links to/from peers sites to collectively boost my PageRank. As of 11-12-14 I am the top <a target="_blank" href="https://www.google.com/search?q=vnuate%20klipuycate">Google Search for vnuate klipuycate</a> out of a class of 30+ students. 
+                    </p>
+                </div>
+                <div class="project">
+                    <a class="projectTitle" target="_blank" href="/projects/zenGarden/"><h2>CSS Zen Garden</h2>
+                    <img id="zenImg" src="zenGarden/flowerWhite.png"/></a>
+                    <p>
+                        My take on the CSS Zen Garden Challenge. In it, you are given just a <a target="_blank" href="zenGarden/zenNoStyle.html">html file</a> and your task is to style it using CSS. You are not allowed to modify the html in any way outside of linking to your own stylesheet.
+                    </P>
+                </div>
+            </article>
+        </div>
     </div>
 </body>
 </html>
