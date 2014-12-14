@@ -97,7 +97,7 @@ span.tooltip {
     text-decoration: underline;
 }
 span.tooltip span {
-    z-index: 10;
+    z-index: 25;
     display: none; 
     padding: 4px;
 }

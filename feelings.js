@@ -5,6 +5,13 @@ Elevator Pitch:
 
 In our project, we conducted sentiment analysis on the text of Yelp reviews. We did this in hopes of finding differences in the way people talk about businesses and the way people rate them. We used Naive Bayes, which we trained on a set of hand-classified reviews to assign positivity scores. We then seperated the scores into tiers to mirror the standard star ratings. The words you see highlighted are some of the more polarizing words from our training set.
 
+We filtered out some categories that naive bayes fails on such as automotive, health, and services. 
+
+Confidence is based on the difference between the positive and negative score for reviews. So if a review has lots of positive and negative reviews we aren't very confident. 
+
+Madison - Lowest Sentiment - McDonalds
+Waterloo - Highest Sentiment - Starbucks
+
 */
 
 var bySentiment = true;
