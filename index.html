@@ -17,6 +17,19 @@
         border: none;
         background: none;
     }
+    header {
+        -webkit-animation: dropdown 2s;
+        animation: dropdown 2s;
+        position: relative;
+    }
+    @keyframes dropdown {
+      from {bottom: 210px;}
+      to {bottom: 0px;}
+    }
+    @-webkit-keyframes dropdown {
+      from {bottom: 210px;}
+      to {bottom: 0px;}
+    }
 </style>
 <body>
     <div id="navPanel">
