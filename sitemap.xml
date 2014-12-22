@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+<url>
+  <loc>http://kadekeith.me/</loc>
+  <lastmod>2014-12-18T06:15:58+00:00</lastmod>
+</url>
+<url>
+  <loc>http://kadekeith.me/index.html</loc>
+  <lastmod>2014-12-18T06:15:58+00:00</lastmod>
+</url>
+<url>
+  <loc>http://kadekeith.me/resume.html</loc>
+  <lastmod>2014-12-18T06:15:58+00:00</lastmod>
+</url>
+<url>
+  <loc>http://kadekeith.me/projects/</loc>
+  <lastmod>2014-12-18T06:15:58+00:00</lastmod>
+</url>
+<url>
+  <loc>http://kadekeith.me/research.html</loc>
+  <lastmod>2014-12-18T06:15:58+00:00</lastmod>
+</url>
+<url>
+  <loc>http://kadekeith.me/feelings.html</loc>
+  <lastmod>2014-12-18T06:15:58+00:00</lastmod>
+</url>
+<url>
+  <loc>http://kadekeith.me/projects/zenGarden/</loc>
+  <lastmod>2014-12-18T06:15:58+00:00</lastmod>
+</url>
+<url>
+  <loc>http://kadekeith.me/projects/zenGarden/zenNoStyle.html</loc>
+  <lastmod>2014-12-18T06:15:58+00:00</lastmod>
+</url>
+</urlset>
