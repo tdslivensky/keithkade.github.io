@@ -5,20 +5,13 @@ Elevator Pitch:
 
 In our project, we conducted sentiment analysis on the text of Yelp reviews. We did this in hopes of finding differences in the way people talk about businesses and the way people rate them. We used Naive Bayes, which we trained on a set of hand-classified reviews to assign positivity scores. We then seperated the scores into tiers to mirror the standard star ratings. The words you see highlighted are some of the more polarizing words from our training set.
 
-We filtered out some categories that naive bayes fails on such as automotive, health, and services. 
-
-Confidence is based on the difference between the positive and negative score for reviews. So if a review has lots of positive and negative reviews we aren't very confident. 
-
-Madison - Lowest Sentiment - McDonalds
-Waterloo - Highest Sentiment - Starbucks
-
 */
 
 var bySentiment = true;
 var globalSnips = {};
 var globalBizs = {};
 var xmlHttp = null;    
-var emoWords = ["worst","returned","mediocre","horrible","overcooked","worse","money","bites","empty","employees","dirty","answer","terrible","wonderful","rude","tasty","lacked","card","shit","crap","waited","woman","dry","15","manager","received","complained","uncomfortable","raw","dollars","returning","handle","cheesy","what's","basically","gonna","gas","charged","sent","original","phone","poor","until","unless","apparently","overpriced","avoid","delicious","paid","30","nasty","blah","sick","mins","soul","40","express","currently","correct","anymore","fed","employee","send","suck","entered","voice","foot","apologize","spoke","ran","begin","eggs","favorite","customer","club","due","awful","excited","cream","minutes","calling","sucks","helping","none","possibly","giving","excellent","bill","hostess","wrong","asked","buffet","receive","asks","deliver","vote","upset","poorly","respect","pricing","fail","thru","deliver","became","=","mcdonald's","jar","olives","fire","calls","listen","respect","apologized","crappy","sea","changing","threw","vicinity","poorly","safe","planned","pretentious","require","dried","pictures","figured","seasoning","browns","bell","mother","putting","living","hill","chaleenge","grill","mail","fell","$100","sits","workers","costs","9","concert","awkward","grace","results","sat","taking","should","bland","joke","sad","watched","co-worker","changed","total","hand","co-workers","style","nearly","establishment","weird","told","taco","orders","her","business","customers","call","10","twice","entire","attitude","except","normally","above","corn","waitress","lack","clearly","45","alright","disappointing","appreciate","imperial","easy","helpful","bad","help","later","checks","soggy","system","turn","shouldn't","complaining","speed","drunk","we'd","purchase","person","wonder","present"];
+var emoWords = [["worst","neg"],["returned","neg"],["mediocre","neg"],["horrible","neg"],["overcooked","neg"],["worse","neg"],["money","neg"],["bites","neg"],["empty","neg"],["employees","neg"],["dirty","neg"],["answer","neg"],["terrible","neg"],["wonderful","pos"],["rude","neg"],["tasty","pos"],["lacked","neg"],["card","neg"],["shit","neg"],["crap","neg"],["waited","neg"],["woman","neg"],["dry","neg"],["15","neg"],["manager","neg"],["received","neg"],["complained","neg"],["uncomfortable","neg"],["gas","neg"],["raw","neg"],["dollars","neg"],["returning","neg"],["charged","neg"],["cheesy","neg"],["handle","neg"],["what's","neg"],["basically","neg"],["gonna","neg"],["sent","neg"],["original","neg"],["phone","neg"],["poor","neg"],["until","neg"],["unless","neg"],["apparently","neg"],["overpriced","neg"],["avoid","neg"],["delicious","pos"],["paid","neg"],["30","neg"],["nasty","neg"],["blah","neg"],["ran","neg"],["sick","neg"],["mins","neg"],["soul","neg"],["40","neg"],["express","neg"],["currently","neg"],["correct","neg"],["anymore","neg"],["fed","neg"],["employee","neg"],["send","neg"],["suck","neg"],["entered","neg"],["voice","neg"],["foot","neg"],["apologize","neg"],["spoke","neg"],["begin","neg"],["eggs","pos"],["favorite","pos"],["customer","neg"],["club","pos"],["excited","neg"],["due","neg"],["awful","neg"],["cream","pos"],["minutes","neg"],["calling","neg"],["possibly","neg"],["sucks","neg"],["helping","neg"],["none","neg"],["giving","neg"],["excellent","pos"],["bill","neg"],["hostess","neg"],["wrong","neg"],["asked","neg"],["buffet","pos"],["receive","neg"],["asks","neg"],["vote","neg"],["upset","neg"],["pricing","neg"],["fail","neg"],["thru","neg"],["deliver","neg"],["became","neg"],["=","neg"],["mcdonald's","neg"],["jar","neg"],["olives","neg"],["listen","neg"],["pretentious","neg"],["respect","neg"],["living","neg"],["calls","neg"],["apologized","neg"],["crappy","neg"],["costs","neg"],["sea","neg"],["pictures","neg"],["threw","neg"],["vicinity","neg"],["results","neg"],["poorly","neg"],["safe","neg"],["planned","neg"],["fire","neg"],["require","neg"],["dried","neg"],["concert","neg"],["figured","neg"],["seasoning","neg"],["browns","neg"],["bell","neg"],["mother","neg"],["putting","neg"],["changing","neg"],["hill","neg"],["challenge","neg"],["awkward","neg"],["grill","neg"],["mail","neg"],["fell","neg"],["$100","neg"],["sits","neg"],["workers","neg"],["9","neg"],["grace","neg"],["taking","neg"],["sat","neg"],["should","neg"],["bland","neg"],["joke","neg"],["total","neg"],["co-worker","neg"],["sad","neg"],["watched","neg"],["changed","neg"],["hand","neg"],["co-workers","neg"],["style","pos"],["nearly","neg"],["establishment","neg"],["weird","neg"],["told","neg"],["taco","neg"],["orders","neg"],["her","neg"],["business","neg"],["customers","neg"],["call","neg"],["10","neg"],["twice","neg"],["entire","neg"],["attitude","neg"],["except","neg"],["normally","neg"],["above","pos"],["corn","pos"],["waitress","neg"],["appreciate","neg"],["lack","neg"],["clearly","neg"],["45","neg"],["alright","neg"],["disappointing","neg"],["imperial","neg"],["easy","pos"],["helpful","pos"],["bad","neg"],["help","neg"],["later","neg"],["soggy","neg"],["system","neg"],["turn","neg"],["shouldn't","neg"],["complaining","neg"],["drunk","neg"],["we'd","neg"],["purchase","neg"],["speed","neg"],["would've","neg"],["person","neg"],["reservations","neg"],["bag","neg"]];
 
 window.onload = function (){
     search();
@@ -122,12 +115,18 @@ function populate(bizs){
             for (var wi in wordList){
                 curWord = wordList[wi];
                 for (var w in emoWords){
-                    if (sanitize(curWord) == emoWords[w]){
+                    if (sanitize(curWord) == emoWords[w][0]){
                         index = curBiz.snippets[j].indexOf(curWord, lastIndex);
                         index2 = index+curWord.length+1;
                         choppedStr = curBiz.snippets[j].split("");
-                        choppedStr.splice(index, 0, "<span class=\"emoWord\">");
-                        choppedStr.splice(index2, 0, "</span>");
+                        if (emoWords[w][1] == "neg"){
+                            choppedStr.splice(index, 0, "<span class=\"negWord\">");
+                            choppedStr.splice(index2, 0, "</span>");
+                        }
+                        else{
+                            choppedStr.splice(index, 0, "<span class=\"posWord\">");
+                            choppedStr.splice(index2, 0, "</span>");
+                        }
                         curBiz.snippets[j] = choppedStr.join("");
                         lastIndex = index+1;
                     }
