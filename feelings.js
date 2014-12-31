@@ -239,7 +239,7 @@ function makeStars(biz){
     var confidence = document.createElement('p');
     confidence.className = "confidence";
     //oops, should not have reversed the list
-    confidence.innerHTML = "We are <b>" + (100-biz.confidence) + "</b>% confident in the feels score";
+    confidence.innerHTML = "We are <b>" + (100-biz.confidence) + "</b>% confident in the feels score<span class=\"confTip\">Confidence is determined by the difference in probablilities of a review being positive and negative. A higher difference makes us more confident.</span>";
     starDiv.appendChild(confidence);
     
     return starDiv; 

@@ -72,6 +72,20 @@
             display: inline;
             padding-left: 185px;
             font-size: 90%;
+            position: relative;
+        }
+        .confidence .confTip{
+            display: none;
+        }
+        .confidence:hover .confTip{
+            display: inline;
+            position: absolute;
+            margin-top: 50px;
+            padding: 5px;
+            margin-left: -260px;
+            width: 220px;
+            border: 1px solid black;
+            border-radius: 3px;
         }
         #footerPadding {    
             height: 400px;
@@ -85,7 +99,7 @@
 		<div id="wrapper">
             <div id ="left">
                 <h1 id="title">Eat Your Feelings</h1>
-                <p id="synopsis">Sort and filter businesses from the <a href="http://www.yelp.com/dataset_challenge" target="_blank">Yelp academic dataset</a> based on sentiment analysis of review text in addition to standard ratings. You can also filter out users that give ratings that contradict the sentiment of their reviews.</p>
+                <p id="synopsis">Sort and filter businesses from the <a href="http://www.yelp.com/dataset_challenge" target="_blank">Yelp academic dataset</a> based on sentiment analysis of review text in addition to standard ratings. We also filter out users that often give ratings that contradict the sentiment of their reviews.</p>
                 <div class="option">
                     <h4>City:</h5>
                     <select id="city" onchange="search()">
