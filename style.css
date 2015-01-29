@@ -28,6 +28,7 @@ header img {
 }
 header h1 {
     font-size: 300%;
+    font-weight: 400;
     padding-left: 180px;
     padding-top: 50px;
 }
