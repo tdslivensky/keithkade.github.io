@@ -4,6 +4,14 @@ $myBlue: #69D2E7;
 $myGreen: #A7DBD8;
 $mySand: #E0E4CC;
 $myOrange: #F38630;
+$leftCol: 250px;
+$objTop: 130px;
+$eduTop: 165px;
+$expTop: 250px;
+$skiTop: 670px;
+$proTop: 825px;
+$honTop: 960px;
+
 
 body {
 	margin: 0; 
@@ -75,44 +83,61 @@ a {
     }
     
     #left {
-        float: left;
-        width: 18%;
-        text-align: right;
+        position: absolute;
+        top: 0;
+        left: 0;
         
         h3 {
             font-weight: 500;
+            width: $leftCol - 15px;
+            margin: 0;
+            text-align: right;
+        }
+        
+        #objHead {
+            position: absolute;
+            top: $objTop;
+        }
+        
+        #eduHead {
+            position: absolute;
+            top: $eduTop;
         }
         
         #expHead {
-            margin-top: 57px;
+            position: absolute;
+            top: $expTop;
         }
         
         #skiHead {
-            margin-top: 396px;
+            position: absolute;
+            top: $skiTop;
         }
         #proHead {
-            margin-top: 126px;
+            position: absolute;
+            top: $proTop;
         }
         #honHead {
-            margin-top: 116px;
+            position: absolute;
+            top: $honTop;
         }
         
     }
     #right {
         float: left;
-        width: 72%;
-        margin-left: 20px;
+        width: 630px;
     
-        #objectivePara {
-            margin: 20px 0 0 0;
+        div {
+            width: 630px
         }
         
         p {
-                margin: 3px 0 3px 0;
+            
+                margin: 0px 0 6px 0;
         }
         
         h4 {
-                margin: 20px 0 3px 0;
+                margin: 0px 0 3px 0;
         } 
         
         .time {
@@ -122,26 +147,35 @@ a {
         ul {
             padding-left: 22px;
             margin-bottom: 0;
+            margin-top: 0;
             clear: both;
             li {
                 margin: 3px 0 3px 0;
             }
         }
         
-        #eduDiv {    
+        #objectivePara {
+            position: absolute;
+            top: $objTop;
+            left: $leftCol;
+        }
+        
+        #eduDiv {
+            position: absolute;
+            top: $eduTop;
+            left: $leftCol;
             #university {
                 float: left;
-                margin: 20px 0 3px 0;
-            }
-            #gpa {
-                margin-top: 20px;
             }
             #degree {
                 clear: both;
             }
         }
         
-        #expDiv {    
+        #expDiv {
+            position: absolute;
+            top: $expTop;
+            left: $leftCol;
             .company {
                 float: left;
             }
@@ -163,8 +197,9 @@ a {
         }
         
         #skillsDiv {
-            clear: both;
-            padding-top: 7px;
+            position: absolute;
+            top: $skiTop;
+            left: $leftCol;
             ul {
                 list-style: none;
                 padding-left: 0;
@@ -286,16 +321,25 @@ a {
             }
         }
         
-        #projectList {
-            list-style: none;
-            padding-left: 0;
-            margin-top: 22px;
-        }  
+        #projectDiv {
+            position: absolute;
+            top: $proTop;
+            left: $leftCol;
+            #projectList {
+                list-style: none;
+                padding-left: 0;
+            }  
+        }
         
-        #honorsList {
-            list-style: none;
-            padding-left: 0;
-            margin-top: 22px;
-        }   
+        #honorsDiv {
+            position: absolute;
+            top: $honTop;
+            left: $leftCol;
+
+            #honorsList {
+                list-style: none;
+                padding-left: 0;
+            }   
+        }
     }
 }
