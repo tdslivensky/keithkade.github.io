@@ -1,0 +1,301 @@
+$myGrey: #333333;
+$fontStack: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$myBlue: #69D2E7;
+$myGreen: #A7DBD8;
+$mySand: #E0E4CC;
+$myOrange: #F38630;
+
+body {
+	margin: 0; 
+	padding: 0;
+	background: $myGrey;
+    color: white;
+	font-family: $fontStack; 
+    font-weight: 300;
+    font-size: 15px;
+}
+h1 {
+    -webkit-margin-before: 0em;
+    -webkit-margin-after: 0em;
+    line-height: 100%;
+}
+a {
+    color: #013d79;
+}
+#resume {    
+    margin-left: auto;
+    margin-right: auto;
+	width: 850px;
+    height: 1100px;
+    
+    background: white;
+    color: $myGrey;
+    
+    .link {
+        font-size: 11px;
+    }
+    
+    header {
+        height: 100px;
+        background-color: $myGrey;
+        color: white;
+
+        h1 {
+            margin: 20px 0px 0px 30px;
+            font-weight: 300;
+            font-size: 60px;
+            float: left;
+            width: 500px;
+        }
+        
+        p {
+            margin: 15px 30px 0px 0px;
+            float: right;
+            text-align: right;
+        }
+    }  
+    
+    #stripe {
+        height: 8px;
+        width: 100%;
+        position: relative;
+        bottom: 9px;
+        left: 2px;
+        div {
+            width: 208px;
+            height: 6px;
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+        }
+        #blue {background-color: $myBlue;}
+        #green {background-color: $myGreen;}
+        #sand {background-color: $mySand;}
+        #orange {background-color: $myOrange;}
+    }
+    
+    #left {
+        float: left;
+        width: 18%;
+        text-align: right;
+        
+        h3 {
+            font-weight: 500;
+        }
+        
+        #expHead {
+            margin-top: 57px;
+        }
+        
+        #skiHead {
+            margin-top: 390px;
+        }
+        #proHead {
+            margin-top: 130px;
+        }
+        #honHead {
+            margin-top: 117px;
+        }
+        
+    }
+    #right {
+        float: left;
+        width: 72%;
+        margin-left: 20px;
+    
+        #objectivePara {
+            margin: 20px 0 0 0;
+        }
+        
+        p {
+                margin: 3px 0 3px 0;
+        }
+        
+        h4 {
+                margin: 20px 0 3px 0;
+        } 
+        
+        .time {
+                float: right;
+        }
+        
+        ul {
+            padding-left: 22px;
+            margin-bottom: 0;
+            clear: both;
+            li {
+                margin: 3px 0 3px 0;
+            }
+        }
+        
+        #eduDiv {    
+            #university {
+                float: left;
+                margin: 20px 0 3px 0;
+            }
+            #gpa {
+                margin-top: 20px;
+            }
+            #degree {
+                clear: both;
+            }
+        }
+        
+        #expDiv {    
+            .company {
+                float: left;
+            }
+            .triCol {
+                h4 {
+                    margin-top: 5px;
+                }
+            }
+            #extracurricular {
+                margin-top: 3px;
+                width: 45%;
+                float: left;
+            }
+            #leadership {
+                margin-top: 3px;
+                width: 45%;
+                float: left;
+            }
+        }
+        
+        #skillsDiv {
+            clear: both;
+            padding-top: 7px;
+            ul {
+                list-style: none;
+                padding-left: 0;
+                font-size: 14px;
+                li {
+                    margin-top: 10px;
+                }
+                .bar {
+                    margin-left: -5px;
+                }
+                .label {
+                    /*float: right;*/
+                    position: relative;
+                    bottom: 1px;
+                    left: 5px;
+                    font-size: 12px;
+                }
+                #cppBar {
+                    padding: 2px 110px 2px 3px;
+                    background-color: $myBlue;
+                    margin-left: 0px;
+                }
+                #javaBar {
+                    padding: 2px 90px 2px 3px;
+                    background-color: $myGreen;	
+                }
+                #pythonBar {
+                    padding: 2px 70px 2px 3px;
+                    background-color: $mySand;
+                }
+                #jsBar {
+                    padding: 2px 130px 2px 3px;
+                    background-color: $myBlue;
+                    margin-left: 0px;
+                }
+                #HTML5Bar {
+                    padding: 2px 50px 2px 3px;
+                    background-color: $myGreen;	
+                }
+                #cssBar {
+                    padding: 2px 45px 2px 3px;
+                    background-color: $mySand;
+                }
+                #gwtBar {
+                    padding: 2px 45px 2px 3px;
+                    background-color: $myOrange;
+                } 
+                #sassBar {
+                    padding: 2px 20px 2px 3px;
+                    background-color: $myBlue;
+                }
+                #mapBar {
+                    padding: 2px 4px 2px 3px;
+                    background-color: $myBlue;
+                    margin-left: 0px;
+                }
+                #restBar {
+                    padding: 2px 30px 2px 3px;
+                    background-color: $myGreen;	
+                }
+                #d3Bar {
+                    padding: 2px 20px 2px 3px;
+                    background-color: $mySand;
+                }
+                #awsBar {
+                    padding: 2px 10px 2px 3px;
+                    background-color: $myOrange;
+                } 
+                #creBar {
+                    padding: 2px 6px 2px 3px;
+                    background-color: $myBlue;
+                }
+                #wordBar {
+                    padding: 2px 6px 2px 3px;
+                    background-color: $myGreen;	
+                } 
+                #chromeBar {
+                    padding: 2px 10px 2px 3px;
+                    background-color: $myBlue;
+                    margin-left: 0px;
+                }
+                #gitBar {
+                    padding: 2px 70px 2px 3px;
+                    background-color: $myGreen;	
+                }
+                #nixBar {
+                    padding: 2px 10px 2px 3px;
+                    background-color: $mySand;
+                }
+                #eclBar {
+                    padding: 2px 10px 2px 3px;
+                    background-color: $myOrange;
+                }
+                #psdBar {
+                    padding: 2px 30px 2px 3px;
+                    background-color: $myBlue;
+                    margin-left: 0px;
+                }
+                #gimpBar {
+                    padding: 2px 10px 2px 3px;
+                    background-color: $myGreen;	
+                }
+                #imovieBar {
+                    padding: 2px 10px 2px 3px;
+                    background-color: $mySand;
+                }
+                #osxBar {
+                    padding: 2px 30px 2px 3px;
+                    background-color: $myOrange;
+                }
+                #winBar {
+                    padding: 2px 6px 2px 3px;
+                    background-color: $myBlue;
+                }
+                #ubuBar {
+                    padding: 2px 6px 2px 3px;
+                    background-color: $myGreen;	
+                }
+            }
+        }
+        
+        #projectList {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 22px;
+        }  
+        
+        #honorsList {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 22px;
+        }   
+    }
+}

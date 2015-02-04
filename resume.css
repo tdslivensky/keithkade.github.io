@@ -1,0 +1,280 @@
+/* line 8, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+body {
+  margin: 0;
+  padding: 0;
+  background: #333333;
+  color: white;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  font-size: 15px; }
+
+/* line 17, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+h1 {
+  -webkit-margin-before: 0em;
+  -webkit-margin-after: 0em;
+  line-height: 100%; }
+
+/* line 22, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+a {
+  color: #013d79; }
+
+/* line 25, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+#resume {
+  margin-left: auto;
+  margin-right: auto;
+  width: 850px;
+  height: 1100px;
+  background: white;
+  color: #333333; }
+  /* line 34, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+  #resume .link {
+    font-size: 11px; }
+  /* line 38, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+  #resume header {
+    height: 100px;
+    background-color: #333333;
+    color: white; }
+    /* line 43, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume header h1 {
+      margin: 20px 0px 0px 30px;
+      font-weight: 300;
+      font-size: 60px;
+      float: left;
+      width: 500px; }
+    /* line 51, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume header p {
+      margin: 15px 30px 0px 0px;
+      float: right;
+      text-align: right; }
+  /* line 58, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+  #resume #stripe {
+    height: 8px;
+    width: 100%;
+    position: relative;
+    bottom: 9px;
+    left: 2px; }
+    /* line 64, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #stripe div {
+      width: 208px;
+      height: 6px;
+      display: inline-block;
+      margin: 0;
+      padding: 0; }
+    /* line 71, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #stripe #blue {
+      background-color: #69D2E7; }
+    /* line 72, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #stripe #green {
+      background-color: #A7DBD8; }
+    /* line 73, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #stripe #sand {
+      background-color: #E0E4CC; }
+    /* line 74, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #stripe #orange {
+      background-color: #F38630; }
+  /* line 77, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+  #resume #left {
+    float: left;
+    width: 18%;
+    text-align: right; }
+    /* line 82, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #left h3 {
+      font-weight: 500; }
+    /* line 86, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #left #expHead {
+      margin-top: 57px; }
+    /* line 90, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #left #skiHead {
+      margin-top: 390px; }
+    /* line 93, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #left #proHead {
+      margin-top: 130px; }
+    /* line 96, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #left #honHead {
+      margin-top: 117px; }
+  /* line 101, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+  #resume #right {
+    float: left;
+    width: 72%;
+    margin-left: 20px; }
+    /* line 106, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #right #objectivePara {
+      margin: 20px 0 0 0; }
+    /* line 110, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #right p {
+      margin: 3px 0 3px 0; }
+    /* line 114, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #right h4 {
+      margin: 20px 0 3px 0; }
+    /* line 118, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #right .time {
+      float: right; }
+    /* line 122, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #right ul {
+      padding-left: 22px;
+      margin-bottom: 0;
+      clear: both; }
+      /* line 126, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+      #resume #right ul li {
+        margin: 3px 0 3px 0; }
+    /* line 132, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #right #eduDiv #university {
+      float: left;
+      margin: 20px 0 3px 0; }
+    /* line 136, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #right #eduDiv #gpa {
+      margin-top: 20px; }
+    /* line 139, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #right #eduDiv #degree {
+      clear: both; }
+    /* line 145, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #right #expDiv .company {
+      float: left; }
+    /* line 149, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #right #expDiv .triCol h4 {
+      margin-top: 5px; }
+    /* line 153, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #right #expDiv #extracurricular {
+      margin-top: 3px;
+      width: 45%;
+      float: left; }
+    /* line 158, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #right #expDiv #leadership {
+      margin-top: 3px;
+      width: 45%;
+      float: left; }
+    /* line 165, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #right #skillsDiv {
+      clear: both;
+      padding-top: 7px; }
+      /* line 168, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+      #resume #right #skillsDiv ul {
+        list-style: none;
+        padding-left: 0;
+        font-size: 14px; }
+        /* line 172, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul li {
+          margin-top: 10px; }
+        /* line 175, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul .bar {
+          margin-left: -5px; }
+        /* line 178, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul .label {
+          /*float: right;*/
+          position: relative;
+          bottom: 1px;
+          left: 5px;
+          font-size: 12px; }
+        /* line 185, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #cppBar {
+          padding: 2px 110px 2px 3px;
+          background-color: #69D2E7;
+          margin-left: 0px; }
+        /* line 190, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #javaBar {
+          padding: 2px 90px 2px 3px;
+          background-color: #A7DBD8; }
+        /* line 194, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #pythonBar {
+          padding: 2px 70px 2px 3px;
+          background-color: #E0E4CC; }
+        /* line 198, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #jsBar {
+          padding: 2px 130px 2px 3px;
+          background-color: #69D2E7;
+          margin-left: 0px; }
+        /* line 203, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #HTML5Bar {
+          padding: 2px 50px 2px 3px;
+          background-color: #A7DBD8; }
+        /* line 207, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #cssBar {
+          padding: 2px 45px 2px 3px;
+          background-color: #E0E4CC; }
+        /* line 211, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #gwtBar {
+          padding: 2px 45px 2px 3px;
+          background-color: #F38630; }
+        /* line 215, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #sassBar {
+          padding: 2px 20px 2px 3px;
+          background-color: #69D2E7; }
+        /* line 219, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #mapBar {
+          padding: 2px 4px 2px 3px;
+          background-color: #69D2E7;
+          margin-left: 0px; }
+        /* line 224, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #restBar {
+          padding: 2px 30px 2px 3px;
+          background-color: #A7DBD8; }
+        /* line 228, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #d3Bar {
+          padding: 2px 20px 2px 3px;
+          background-color: #E0E4CC; }
+        /* line 232, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #awsBar {
+          padding: 2px 10px 2px 3px;
+          background-color: #F38630; }
+        /* line 236, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #creBar {
+          padding: 2px 6px 2px 3px;
+          background-color: #69D2E7; }
+        /* line 240, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #wordBar {
+          padding: 2px 6px 2px 3px;
+          background-color: #A7DBD8; }
+        /* line 244, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #chromeBar {
+          padding: 2px 10px 2px 3px;
+          background-color: #69D2E7;
+          margin-left: 0px; }
+        /* line 249, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #gitBar {
+          padding: 2px 70px 2px 3px;
+          background-color: #A7DBD8; }
+        /* line 253, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #nixBar {
+          padding: 2px 10px 2px 3px;
+          background-color: #E0E4CC; }
+        /* line 257, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #eclBar {
+          padding: 2px 10px 2px 3px;
+          background-color: #F38630; }
+        /* line 261, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #psdBar {
+          padding: 2px 30px 2px 3px;
+          background-color: #69D2E7;
+          margin-left: 0px; }
+        /* line 266, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #gimpBar {
+          padding: 2px 10px 2px 3px;
+          background-color: #A7DBD8; }
+        /* line 270, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #imovieBar {
+          padding: 2px 10px 2px 3px;
+          background-color: #E0E4CC; }
+        /* line 274, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #osxBar {
+          padding: 2px 30px 2px 3px;
+          background-color: #F38630; }
+        /* line 278, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #winBar {
+          padding: 2px 6px 2px 3px;
+          background-color: #69D2E7; }
+        /* line 282, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+        #resume #right #skillsDiv ul #ubuBar {
+          padding: 2px 6px 2px 3px;
+          background-color: #A7DBD8; }
+    /* line 289, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #right #projectList {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 22px; }
+    /* line 295, /Users/kadekeith/Desktop/keithkade.github.io/resume.scss */
+    #resume #right #honorsList {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 22px; }
+
+/*# sourceMappingURL=resume.css.map */
