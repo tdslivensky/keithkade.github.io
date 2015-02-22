@@ -1,0 +1,198 @@
+body { 
+    padding-top: 40px;
+    font-family: "Helvetica Neue", Helvetica,Arial, sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+}
+
+.row {
+    position: absolute;
+  	top: 0px; 
+  	left: 10px;
+    margin-left: 0;
+    z-index: 5;
+}
+
+
+div.span9.content {
+    /*currently toying with*/
+    width: 500px;
+	overflow: hidden;
+
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #E1E1E8;
+	
+	overflow-y: scroll;
+    scrollbar-base-color: #369;
+	max-height: 300px;
+    margin-left: 0;
+    
+}
+
+div.span9.content::-webkit-scrollbar { 
+    width: 5px; 
+}
+
+div.span9.content::-webkit-scrollbar-thumb {    
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(93, 93, 93, 0.7); 
+}
+
+#backButton{
+    position: relative;
+    top: -30px;
+    left: -50px;
+}
+
+#nodesLoading p{
+	display: inline;
+}
+
+#historyWrapper {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+    z-index: 10;
+}
+
+#historyWrapper h5{
+	margin: 10px 0 0 0;
+}
+
+#status{
+    position: absolute;
+    left: 600px;
+    top: 9px;
+    width: 300px;
+}
+
+
+.urlSubmit input{
+    display: inline;
+    width: 380px;
+    margin: 5px 0 5px 0;
+    font-size: 12px;
+}
+
+.urlSubmit button{
+    display: inline;
+    font-size: 12px;
+}
+
+#pause {
+    display: inline;
+    margin-left: 15px;
+    margin-bottom: 0px;
+    width: 20px;
+    height: 20px;
+}
+label {
+    display: inline;
+    position: relative;
+    font-weight: 300;
+    font-size: 12px;
+}
+
+#historyArea {
+    overflow-y: auto;
+}
+
+#historyArea::-webkit-scrollbar { 
+}
+
+#historyArea div {
+    -webkit-animation: toHistory 2s;
+    position: relative;
+    display: inline-block;
+    float: left;
+    clear: left;
+}
+
+@keyframes toHistory {
+  from {top: 200px; left: 0px; opacity: .01}
+  to {top: 0px; left: 0px; opacity: 1}
+}
+@-webkit-keyframes toHistory {
+  from {top: 200px; left: 0px; opacity: .01}
+  to {top: 0px; left: 0px; opacity: 1}
+}
+
+form {
+    margin: 0;
+    display: inline;
+}
+
+#typeArea {
+	position: absolute;
+	top: 500px;
+	left: 550px;
+    z-index: 5;
+}
+
+#graphArea {
+	position: absolute;
+	top: 0;
+	left: 550px;
+	right: 0;
+	bottom: 0;
+}
+
+#lineSVG {
+	position: absolute;
+	left: 0;
+    top: 0;
+    z-index: 4;
+}
+
+#loadingBar {
+	position: absolute;
+	top: 0;
+	left: 1000px;
+}
+
+.nodes div {
+    position: absolute;
+    white-space: nowrap;
+    transition: .5s;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+@keyframes fadeIn {
+  from {opacity: .01}
+  to {opacity: .7}
+}
+@-webkit-keyframes fadeIn {
+  from {opacity: .01}
+  to {opacity: .7}
+}
+
+.nodes div img {
+    float: left;
+    position: relative;
+    z-index: 1;
+    opacity: .75;
+}
+
+.nodeText {
+	display: inline;
+    position: relative;
+    z-index: 4;
+    padding: 2px 3px 2px 3px;
+    border-radius: 3px;
+}
+
+.nodes div:hover img {
+    z-index: 3;
+}
+
+.nodes div:hover .nodeText {
+    font-size: 120%;
+}
+
+.nodes div:hover {
+    z-index: 10000 !important;
+    opacity: .99 !important;
+}

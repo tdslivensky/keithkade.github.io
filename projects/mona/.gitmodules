@@ -1,0 +1,4 @@
+[submodule "BigSemanticsJavaScript"]
+	path = BigSemanticsJavaScript
+	url = https://github.com/ecologylab/BigSemanticsJavaScript
+	branch = bsjsRestructure
