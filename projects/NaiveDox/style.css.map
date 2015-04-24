@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "style.css",
+  "sources": [
+    "style.scss"
+  ],
+  "sourcesContent": [],
+  "mappings": "AAiBA;AAEA,AAAM;EACF,AAAQ;EACR,AAAS;EACT,AAAQ;EACR,AArBQ;EAsBR,AAAW;EACX,AAzBK;EA0BL,AAzBO;;;AA4BX;EACI,AAAQ;;EACZ,AAAS;IACD,AAAW",
+  "names": []
+}

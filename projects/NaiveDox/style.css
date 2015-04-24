@@ -1,0 +1,19 @@
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:300);
+/* line 20, /Users/kadekeith/Desktop/keithkade.github.io/projects/NaiveDox/style.scss */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 18px;
+  background: #2b243e;
+  color: #fffcea; }
+
+/* line 30, /Users/kadekeith/Desktop/keithkade.github.io/projects/NaiveDox/style.scss */
+#wrapper {
+  margin: 3%; }
+  /* line 32, /Users/kadekeith/Desktop/keithkade.github.io/projects/NaiveDox/style.scss */
+  #wrapper h1 {
+    font-size: 50px; }
+
+/*# sourceMappingURL=style.css.map */
