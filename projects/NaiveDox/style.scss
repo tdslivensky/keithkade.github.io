@@ -32,4 +32,35 @@ html, body {
     h1 {
         font-size: 50px;
     }
+    
+    a {
+        color: $offwhite;
+    }
+    
+    p {
+        line-height: 140%;
+    }
+
+    #dawg {
+        float: right;
+        display: inline;
+        padding: 0 0 15px 15px;
+    }
+    
+    #quest {
+        float: left;
+        display: inline;
+        padding: 0 15px 15px 0;
+        width: 300px;
+    }
+    
+    /* For Iphone */
+@media (max-width: 700px) { 
+    #dawg, #quest  { 
+        width: 100%;
+        padding: 10px;
+        float: none;
+    }
+}
+    
 }
