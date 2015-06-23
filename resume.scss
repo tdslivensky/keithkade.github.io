@@ -4,18 +4,13 @@ $myBlue: #69D2E7;
 $myGreen: #A7DBD8;
 $mySand: #E0E4CC;
 $myOrange: #F38630;
-$leftCol: 150px;
-$objTop: 130px;
-$eduTop: 165px;
-$expTop: 250px;
-$skiTop: 670px;
-$proTop: 825px;
-$honTop: 960px;
 
+* {
+	margin: 0; 
+    padding: 0;
+}
 
 body {
-	margin: 0; 
-	padding: 0;
 	background: $myGrey;
     color: white;
 	font-family: $fontStack; 
@@ -83,264 +78,213 @@ a {
         #orange {background-color: $myOrange;}
     }
     
-    #left {
-        position: absolute;
-        top: 0;
-        left: 0;
-        
-        h3 {
-            font-weight: 500;
-            width: $leftCol - 15px;
-            margin: 0;
-            text-align: right;
-        }
-        
-        #objHead {
-            position: absolute;
-            top: $objTop;
-        }
-        
-        #eduHead {
-            position: absolute;
-            top: $eduTop;
-        }
-        
-        #expHead {
-            position: absolute;
-            top: $expTop;
-        }
-        
-        #skiHead {
-            position: absolute;
-            top: $skiTop;
-        }
-        #proHead {
-            position: absolute;
-            top: $proTop;
-        }
-        #honHead {
-            position: absolute;
-            top: $honTop;
-        }
-        
+    p {
+        margin: 0px 0 6px 0;
     }
-    #right {
-        float: left;
-        width: 630px;
+
+    h4 {
+        margin: 0px 0 3px 0;
+    } 
+
+    .time {
+        float: right;
+    }
+
+    ul {
+        padding-left: 22px;
+        margin-bottom: 0;
+        margin-top: 0;
+        clear: both;
+        li {
+            margin: 3px 0 3px 0;
+        }
+    }
+
+    b {
+        font-weight: 500;
+    }
     
-        div {
-            width: 630px
+    dl {
+        dt {
+            width: 120px;
+            text-align: right;
+            float: left;
+            position: relative;
+            top: 10px;
+            font-size: 16px;
+            font-weight: 500;
         }
-        
-        p {
-            
-                margin: 0px 0 6px 0;
-        }
-        
-        h4 {
-                margin: 0px 0 3px 0;
+          
+        .clear {
+            height: 12px;
+            border: none;
         } 
         
-        .time {
-                float: right;
+        dd {
+            width: 670px;
+            float: right;
+            padding-right: 30px;
+            border-left: 1px solid #898989;
+            padding-left: 16px;
         }
-        
-        ul {
-            padding-left: 22px;
-            margin-bottom: 0;
-            margin-top: 0;
+
+    }
+    
+    #eduDiv {
+        #university {
+            float: left;
+        }
+        #degree {
             clear: both;
-            li {
-                margin: 3px 0 3px 0;
-            }
+        }
+    }
+
+    #expDiv {
+        .company {
+            float: left;
+            margin-top: 4px;
+            margin-bottom: 0px;
         }
         
-        #objectivePara {
-            position: absolute;
-            top: $objTop;
-            left: $leftCol;
-        }
-        
-        #eduDiv {
-            position: absolute;
-            top: $eduTop;
-            left: $leftCol;
-            #university {
-                float: left;
+        .triCol {
+            h4 {
+                margin-top: 5px;
             }
-            #degree {
-                clear: both;
-            }
-        }
-        
-        #expDiv {
-            position: absolute;
-            top: $expTop;
-            left: $leftCol;
-            .company {
-                float: left;
-            }
-            .triCol {
-                h4 {
-                    margin-top: 5px;
-                }
-            }
-            #extracurricular {
-                margin-top: 3px;
-                width: 45%;
-                float: left;
-            }
-            #leadership {
-                margin-top: 3px;
-                width: 45%;
-                float: left;
-            }
-        }
-        
-        #skillsDiv {
-            position: absolute;
-            top: $skiTop;
-            left: $leftCol;
             ul {
                 list-style: none;
                 padding-left: 0;
-                font-size: 14px;
-                li {
-                    margin-top: 10px;
-                }
-                .bar {
-                    margin-left: -5px;
-                }
-                .label {
-                    /*float: right;*/
-                    position: relative;
-                    bottom: 1px;
-                    left: 5px;
-                    font-size: 12px;
-                }
-                #cppBar {
-                    padding: 2px 110px 2px 3px;
-                    background-color: $myBlue;
-                    margin-left: 0px;
-                }
-                #javaBar {
-                    padding: 2px 90px 2px 3px;
-                    background-color: $myGreen;	
-                }
-                #pythonBar {
-                    padding: 2px 70px 2px 3px;
-                    background-color: $mySand;
-                }
-                #jsBar {
-                    padding: 2px 130px 2px 3px;
-                    background-color: $myBlue;
-                    margin-left: 0px;
-                }
-                #HTML5Bar {
-                    padding: 2px 50px 2px 3px;
-                    background-color: $myGreen;	
-                }
-                #cssBar {
-                    padding: 2px 45px 2px 3px;
-                    background-color: $mySand;
-                }
-                #gwtBar {
-                    padding: 2px 45px 2px 3px;
-                    background-color: $myOrange;
-                } 
-                #sassBar {
-                    padding: 2px 20px 2px 3px;
-                    background-color: $myBlue;
-                }
-                #mapBar {
-                    padding: 2px 4px 2px 3px;
-                    background-color: $myBlue;
-                    margin-left: 0px;
-                }
-                #restBar {
-                    padding: 2px 30px 2px 3px;
-                    background-color: $myGreen;	
-                }
-                #d3Bar {
-                    padding: 2px 20px 2px 3px;
-                    background-color: $mySand;
-                }
-                #awsBar {
-                    padding: 2px 10px 2px 3px;
-                    background-color: $myOrange;
-                } 
-                #creBar {
-                    padding: 2px 6px 2px 3px;
-                    background-color: $myBlue;
-                }
-                #wordBar {
-                    padding: 2px 6px 2px 3px;
-                    background-color: $myGreen;	
-                } 
-                #chromeBar {
-                    padding: 2px 10px 2px 3px;
-                    background-color: $myBlue;
-                    margin-left: 0px;
-                }
-                #gitBar {
-                    padding: 2px 70px 2px 3px;
-                    background-color: $myGreen;	
-                }
-                #nixBar {
-                    padding: 2px 10px 2px 3px;
-                    background-color: $mySand;
-                }
-                #eclBar {
-                    padding: 2px 10px 2px 3px;
-                    background-color: $myOrange;
-                }
-                #psdBar {
-                    padding: 2px 30px 2px 3px;
-                    background-color: $myBlue;
-                    margin-left: 0px;
-                }
-                #gimpBar {
-                    padding: 2px 10px 2px 3px;
-                    background-color: $myGreen;	
-                }
-                #imovieBar {
-                    padding: 2px 10px 2px 3px;
-                    background-color: $mySand;
-                }
-                #osxBar {
-                    padding: 2px 30px 2px 3px;
-                    background-color: $myOrange;
-                }
-                #winBar {
-                    padding: 2px 6px 2px 3px;
-                    background-color: $myBlue;
-                }
-                #ubuBar {
-                    padding: 2px 6px 2px 3px;
-                    background-color: $myGreen;	
-                }
+                
             }
         }
-        
-        #projectDiv {
-            position: absolute;
-            top: $proTop;
-            left: $leftCol;
-            #projectList {
-                list-style: none;
-                padding-left: 0;
-            }  
+        #extracurricular {
+            margin-top: 3px;
+            width: 45%;
+            float: left;
         }
-        
-        #honorsDiv {
-            position: absolute;
-            top: $honTop;
-            left: $leftCol;
+        #leadership {
+            margin-top: 3px;
+            width: 51%;
+            float: left;
+        }
+    }
 
-            #honorsList {
-                list-style: none;
-                padding-left: 0;
-            }   
+    #skillsDiv {
+        ul {
+            list-style: none;
+            padding-left: 0;
+            font-size: 14px;
+            li {
+                margin-top: 10px;
+            }
+            span {
+                margin-left: -5px;
+                padding: 2px 3px 2px 3px;
+            }
+            span:first-child {
+                margin-left: 0;
+            }
+            .bar1 {
+                background-color: $myBlue;
+            }
+            .bar2  {
+                background-color: $myGreen;
+            }
+            .bar3  {
+                background-color: $mySand;                
+            }
+            .bar4  {
+                background-color: $myOrange;
+            }            
+            .label {
+                /*float: right;*/
+                position: relative;
+                bottom: 1px;
+                left: 5px;
+                font-size: 12px;
+            }
+            #cppBar {
+                padding-right: 110px
+            }
+            #javaBar {
+                padding-right: 90px;
+            }
+            #pythonBar {
+                padding-right: 70px;
+            }
+            #jsBar {
+                padding-right: 150px;
+            }
+            #HTML5Bar {
+                padding-right: 90px;
+            }
+            #cssBar {
+                padding-right: 80px;
+            }
+            #gwtBar {
+                padding-right: 20px;
+            } 
+            #sassBar {
+                padding-right: 50px;
+            }
+            #mapBar {
+                padding-right: 6px;
+            }
+            #restBar {
+                padding-right: 20px;
+            }
+            #xpathBar {
+                padding-right: 30px;
+            }
+            #d3Bar {
+                padding-right: 95px;
+            }
+            #creBar {
+                padding-right: 6px;
+            }
+            #wordBar {
+                padding-right: 6px;
+            } 
+            #chromeBar {
+                padding-right: 30px;
+            }
+            #gitBar {
+                padding-right: 70px;
+            }
+            #nixBar {
+                padding-right: 10px;
+            }
+            #blmBar {
+                padding-right: 20px;            
+            }
+            #eclBar {
+                padding-right: 10px;
+            }
+            #psdBar {
+                padding-right: 40px;
+            }
+            #prmBar {
+                padding-right: 30px;
+            }            
+            #gimpBar {
+                padding-right: 30px;
+            }
+            #imovieBar {
+                padding-right: 10px;
+            }
         }
+    }
+
+    #projectDiv {
+        #projectList {
+            list-style: none;
+            padding-left: 0;
+        }  
+    }
+
+    #honorsDiv {
+        #honorsList {
+            list-style: none;
+            padding-left: 0;
+        }   
     }
 }
