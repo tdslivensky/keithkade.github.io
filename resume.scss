@@ -1,5 +1,5 @@
 $myGrey: #333333;
-$fontStack: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$fontStack: 'Lato', 'Helvetica Nueue', Helvetica, Arial, sans-serif;
 $myBlue: #69D2E7;
 $myGreen: #A7DBD8;
 $mySand: #E0E4CC;
@@ -11,7 +11,7 @@ $myOrange: #F38630;
 }
 
 body {
-	background: $myGrey;
+	background: white;
     color: white;
 	font-family: $fontStack; 
     font-weight: 300;
