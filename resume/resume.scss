@@ -15,7 +15,7 @@ body {
     color: white;
 	font-family: $fontStack; 
     font-weight: 300;
-    font-size: 15px;
+    font-size: 16px;
 }
 h1 {
     -webkit-margin-before: 0em;
@@ -55,7 +55,7 @@ a {
         }
         
         p {
-            margin: 15px 30px 0px 0px;
+            margin: 8px 30px 0px 0px;
             float: right;
             text-align: right;
         }
@@ -65,7 +65,7 @@ a {
         height: 8px;
         width: 100%;
         position: relative;
-        bottom: 9px;
+        bottom: 10px;
         left: 4px;
         div {
             width: 208px;
@@ -108,7 +108,7 @@ a {
     
     dl {
         dt {
-            width: 120px;
+            width: 100px;
             text-align: right;
             float: left;
             position: relative;
@@ -123,9 +123,9 @@ a {
         } 
         
         dd {
-            width: 670px;
+            width: 710px;
             float: right;
-            padding-right: 30px;
+            padding-right: 10px;
             border-left: 1px solid #898989;
             padding-left: 16px;
         }
@@ -174,13 +174,13 @@ a {
         ul {
             list-style: none;
             padding-left: 0;
-            font-size: 14px;
+            font-size: 16px;
             li {
                 margin-top: 10px;
             }
             span {
                 margin-left: -5px;
-                padding: 2px 3px 2px 3px;
+                padding: 2px 4px 2px 4px;
             }
             span:first-child {
                 margin-left: 0;
@@ -202,7 +202,7 @@ a {
                 position: relative;
                 bottom: 1px;
                 left: 5px;
-                font-size: 12px;
+                font-size: 14px;
             }
             #cppBar {
                 padding-right: 110px
@@ -226,7 +226,7 @@ a {
                 padding-right: 20px;
             } 
             #sassBar {
-                padding-right: 30px;
+                padding-right: 28px;
             }
             #mapBar {
                 padding-right: 6px;
@@ -235,7 +235,7 @@ a {
                 padding-right: 20px;
             }
             #xpathBar {
-                padding-right: 8px;
+                padding-right: 10px;
             }
             #d3Bar {
                 padding-right: 90px;
