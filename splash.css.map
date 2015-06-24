@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "splash.css",
+  "sources": [
+    "splash.scss"
+  ],
+  "sourcesContent": [],
+  "mappings": ";AAAA;EACI,AAAkB;EAClB,AAAa;;;AAGjB;EACI,AAAO;;EAEX,AAAS;IACD,AAAO;IACP,AAAY;IACZ,AAAS;IACT,AAAW;;WAMR;;EACX;IAAW,AAAO;;;EAClB;IAAS,AAAO",
+  "names": []
+}

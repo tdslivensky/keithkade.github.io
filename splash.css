@@ -1,0 +1,25 @@
+/* line 1, /Users/kadekeith/Desktop/keithkade.github.io/splash.scss */
+body {
+  background-color: black;
+  font-family: monospace; }
+
+/* line 6, /Users/kadekeith/Desktop/keithkade.github.io/splash.scss */
+#console {
+  color: #0aff00; }
+  /* line 9, /Users/kadekeith/Desktop/keithkade.github.io/splash.scss */
+  #console #console-text {
+    width: 85px;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: type 3s steps(11, end); }
+
+@keyframes type {
+  /* line 20, /Users/kadekeith/Desktop/keithkade.github.io/splash.scss */
+  from {
+    width: 0; }
+
+  /* line 21, /Users/kadekeith/Desktop/keithkade.github.io/splash.scss */
+  to {
+    width: 85px; } }
+
+/*# sourceMappingURL=splash.css.map */

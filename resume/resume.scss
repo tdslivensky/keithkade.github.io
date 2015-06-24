@@ -32,6 +32,8 @@ a {
     height: 1100px;
     position: relative;
     
+    //border: 1px solid red;
+    
     background: white;
     color: $myGrey;
     
@@ -64,7 +66,7 @@ a {
         width: 100%;
         position: relative;
         bottom: 9px;
-        left: 2px;
+        left: 4px;
         div {
             width: 208px;
             height: 6px;
@@ -218,13 +220,13 @@ a {
                 padding-right: 90px;
             }
             #cssBar {
-                padding-right: 80px;
+                padding-right: 55px;
             }
             #gwtBar {
                 padding-right: 20px;
             } 
             #sassBar {
-                padding-right: 45px;
+                padding-right: 30px;
             }
             #mapBar {
                 padding-right: 6px;
@@ -233,7 +235,7 @@ a {
                 padding-right: 20px;
             }
             #xpathBar {
-                padding-right: 30px;
+                padding-right: 8px;
             }
             #d3Bar {
                 padding-right: 90px;
@@ -251,7 +253,7 @@ a {
                 padding-right: 10px;
             }
             #blmBar {
-                padding-right: 20px;            
+                padding-right: 15px;            
             }
             #eclBar {
                 padding-right: 10px;
@@ -260,7 +262,7 @@ a {
                 padding-right: 40px;
             }
             #prmBar {
-                padding-right: 30px;
+                padding-right: 10px;
             }            
             #gimpBar {
                 padding-right: 30px;
@@ -275,6 +277,9 @@ a {
         #projectList {
             list-style: none;
             padding-left: 0;
+            li {
+                margin-top: 6px;  
+            }
         }  
     }
 

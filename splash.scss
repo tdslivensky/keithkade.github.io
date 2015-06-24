@@ -1,0 +1,22 @@
+body {
+    background-color: black;
+    font-family: monospace;
+}
+
+#console {
+    color: #0aff00;
+    
+    #console-text {
+        width: 85px;
+        white-space:nowrap;
+        overflow:hidden;
+        animation: type 3s steps(11, end);
+        //animation: type;
+        //animation-duration: 1s;
+    }
+}
+
+@keyframes type {
+    from { width: 0 }
+    to { width: 85px }
+}

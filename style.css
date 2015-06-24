@@ -1,16 +1,16 @@
 body {
 	margin: 0; 
 	padding: 0;
-	background: #333333;
+	background: #212121;
     color: white;
-	font-family: helvetica, arial, sans-serif; 
+	font-family: 'Lato', arial, sans-serif; 
 }
 #wrapper {
 	margin: 2% 4% 2% 4%;	
     min-width: 300px;
 }
 header {
-    height: 160px;
+    height: 130px;
 }
 header a:link {
     text-decoration: none;
@@ -21,16 +21,16 @@ header a:visited {
 }
 header img {
     display: inline;
-    height: 150px;
+    height: 120px;
     float: left;
-    border: 5px solid white;
+    border: 3px solid white;
     border-radius: 50%;
 }
 header h1 {
     font-size: 300%;
-    font-weight: 400;
-    padding-left: 180px;
-    padding-top: 50px;
+    font-weight: 300;
+    padding-left: 140px;
+    padding-top: 32px;
 }
 #email {
     padding-left: 182px;
@@ -49,18 +49,20 @@ header h1 {
 }
 /* Nav Styles */
 nav{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
     list-style:none;
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
     text-align:center;
     font-size: 130%;
 }
 nav ul {
-    margin-left: auto;
-    margin-right: auto;
     padding: 0;
-    border: 1px solid white;
-    border-radius: 6px;
+    margin: 0 auto 0 auto;
+    background-color: #777777;
     width: 490px;
 }
 nav li{
