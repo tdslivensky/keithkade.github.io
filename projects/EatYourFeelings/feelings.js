@@ -248,22 +248,22 @@ function makeStars(biz){
 function getStarImg(numStar){
 
     if (numStar < 5.1 && numStar >= 4.5)
-            return 'img/5stars.png';
+            return '/img/5stars.png';
     else if (numStar < 4.5 && numStar >= 4)
-            return 'img/45stars.png';
+            return '/img/45stars.png';
     else if (numStar < 4 && numStar >= 3.5)
-            return 'img/4stars.png';
+            return '/img/4stars.png';
     else if (numStar < 3.5 && numStar >= 3)
-            return 'img/35stars.png';
+            return '/img/35stars.png';
     else if (numStar < 3 && numStar >= 2.5)
-            return 'img/3stars.png';
+            return '/img/3stars.png';
     else if (numStar < 2.5 && numStar >= 2)
-            return 'img/25stars.png';
+            return '/img/25stars.png';
     else if (numStar < 2 && numStar >= 1.5)
-            return 'img/2stars.png';
+            return '/img/2stars.png';
     else if (numStar < 1.5 && numStar >= 1)
-            return 'img/15stars.png';
+            return '/img/15stars.png';
     else
-            return 'img/1stars.png';
+            return '/img/1stars.png';
   
 }
