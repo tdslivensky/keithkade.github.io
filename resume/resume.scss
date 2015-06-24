@@ -3,7 +3,7 @@ $fontStack: 'Lato', 'Helvetica Nueue', Helvetica, Arial, sans-serif;
 $myBlue: #69D2E7;
 $myGreen: #A7DBD8;
 $mySand: #E0E4CC;
-$myOrange: #F38630;
+$myOrange: #ffb378;
 
 * {
 	margin: 0; 
@@ -176,26 +176,30 @@ a {
             padding-left: 0;
             font-size: 16px;
             li {
-                margin-top: 10px;
+                margin-top: 12px;
             }
             span {
-                margin-left: -5px;
+                margin-left: -3px;
                 padding: 2px 4px 2px 4px;
             }
             span:first-child {
                 margin-left: 0;
             }
             .bar1 {
-                background-color: $myBlue;
+                //background-color: $myBlue;
+                border: 3px solid $myBlue;
             }
             .bar2  {
-                background-color: $myGreen;
+                //background-color: $myGreen;
+                border: 3px solid $myGreen;
             }
             .bar3  {
-                background-color: $mySand;                
+                //background-color: $mySand;
+                border: 3px solid $mySand;                
             }
             .bar4  {
-                background-color: $myOrange;
+                //background-color: $myOrange;
+                border: 3px solid $myOrange;                
             }            
             .label {
                 /*float: right;*/
@@ -214,7 +218,7 @@ a {
                 padding-right: 70px;
             }
             #jsBar {
-                padding-right: 150px;
+                padding-right: 140px;
             }
             #HTML5Bar {
                 padding-right: 90px;

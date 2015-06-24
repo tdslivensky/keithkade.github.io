@@ -75,7 +75,7 @@ a {
       background-color: #E0E4CC; }
     /* line 80, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #stripe #orange {
-      background-color: #F38630; }
+      background-color: #ffb378; }
   /* line 83, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
   #resume p {
     margin: 0px 0 6px 0; }
@@ -152,107 +152,107 @@ a {
     font-size: 16px; }
     /* line 178, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul li {
-      margin-top: 10px; }
+      margin-top: 12px; }
     /* line 181, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul span {
-      margin-left: -5px;
+      margin-left: -3px;
       padding: 2px 4px 2px 4px; }
     /* line 185, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul span:first-child {
       margin-left: 0; }
     /* line 188, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul .bar1 {
-      background-color: #69D2E7; }
-    /* line 191, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+      border: 3px solid #69D2E7; }
+    /* line 192, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul .bar2 {
-      background-color: #A7DBD8; }
-    /* line 194, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+      border: 3px solid #A7DBD8; }
+    /* line 196, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul .bar3 {
-      background-color: #E0E4CC; }
-    /* line 197, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
-    #resume #skillsDiv ul .bar4 {
-      background-color: #F38630; }
+      border: 3px solid #E0E4CC; }
     /* line 200, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    #resume #skillsDiv ul .bar4 {
+      border: 3px solid #ffb378; }
+    /* line 204, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul .label {
       /*float: right;*/
       position: relative;
       bottom: 1px;
       left: 5px;
       font-size: 14px; }
-    /* line 207, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 211, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #cppBar {
       padding-right: 110px; }
-    /* line 210, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 214, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #javaBar {
       padding-right: 90px; }
-    /* line 213, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 217, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #pythonBar {
       padding-right: 70px; }
-    /* line 216, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 220, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #jsBar {
-      padding-right: 150px; }
-    /* line 219, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+      padding-right: 140px; }
+    /* line 223, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #HTML5Bar {
       padding-right: 90px; }
-    /* line 222, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 226, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #cssBar {
       padding-right: 55px; }
-    /* line 225, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 229, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #gwtBar {
       padding-right: 20px; }
-    /* line 228, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 232, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #sassBar {
       padding-right: 28px; }
-    /* line 231, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 235, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #mapBar {
       padding-right: 6px; }
-    /* line 234, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 238, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #restBar {
       padding-right: 20px; }
-    /* line 237, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 241, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #xpathBar {
       padding-right: 10px; }
-    /* line 240, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 244, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #d3Bar {
       padding-right: 90px; }
-    /* line 243, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 247, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #creBar {
       padding-right: 6px; }
-    /* line 246, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 250, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #chromeBar {
       padding-right: 30px; }
-    /* line 249, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 253, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #gitBar {
       padding-right: 70px; }
-    /* line 252, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 256, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #nixBar {
       padding-right: 10px; }
-    /* line 255, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 259, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #blmBar {
       padding-right: 15px; }
-    /* line 258, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 262, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #eclBar {
       padding-right: 10px; }
-    /* line 261, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 265, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #psdBar {
       padding-right: 40px; }
-    /* line 264, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 268, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #prmBar {
       padding-right: 10px; }
-    /* line 267, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 271, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #gimpBar {
       padding-right: 30px; }
-    /* line 270, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 274, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #skillsDiv ul #imovieBar {
       padding-right: 10px; }
-  /* line 277, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+  /* line 281, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
   #resume #projectDiv #projectList {
     list-style: none;
     padding-left: 0; }
-    /* line 280, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+    /* line 284, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
     #resume #projectDiv #projectList li {
       margin-top: 6px; }
-  /* line 287, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
+  /* line 291, C:/Users/IBM_ADMIN/Desktop/keithkade.github.io/resume/resume.scss */
   #resume #honorsDiv #honorsList {
     list-style: none;
     padding-left: 0; }
