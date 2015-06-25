@@ -1,22 +1,79 @@
+html {
+    height: 100%;
+}
+
 body {
-    background-color: black;
-    font-family: monospace;
-}
-
-#console {
-    color: #0aff00;
+    font-family: 'Lato', sans-serif;
+    height: 100%;
     
-    #console-text {
-        width: 85px;
-        white-space:nowrap;
-        overflow:hidden;
-        animation: type 3s steps(11, end);
-        //animation: type;
-        //animation-duration: 1s;
-    }
+    background: url(img/backgroundEdit.png) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
-@keyframes type {
-    from { width: 0 }
-    to { width: 85px }
+@mixin vertical-align {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+@mixin horizontal-align {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h1 {
+    font-weight: 300;
+    font-size: 60px;
+    margin-left: 96px;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+p {
+    margin-left: 100px; 
+    font-size: 30px;
+    font-weight: 300;
+    margin-top:2px;
+}
+
+#splash-nav {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    list-style:none;
+    margin: 0;
+    padding: 0;
+    text-align:center;
+    font-size: 130%;
+    top: auto;
+    animation: fadein 1s;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to { opacity:  1; }
+}
+
+@media (max-width: 560px) {
+    h1 {
+        margin-left: 16px;
+        font-size: 40px;
+    }
+    p {
+        margin-left: 20px;
+        font-size: 20px;
+    }
+    #mainContent	{
+        background: url(img/backgroundEdit.png) no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
 }

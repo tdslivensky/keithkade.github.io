@@ -3,36 +3,23 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width; initial-scale=1.0">
-    <title>Kade Keith | About</title>
-    <link rel="icon" href="/img/kFavicon.png">
+    <title>Kade Keith</title>
+    <link rel="icon" href="img/kFavicon.png">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>    
-    <script src="slider.js"></script>
+    <link rel="stylesheet" type="text/css" href="splash.css">    
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+    <script src="/slider.js"></script>
 </head>
-<style type="text/css">
-    #rorshac {
-        width: 100px;
-    }
-    span.tooltip:hover span{
-        border: none;
-        background: none;
-    }
-    header {
-        /*-webkit-animation: dropdown 2s;
-        animation: dropdown 2s;*/
-        position: relative;
-    }
-    @keyframes dropdown {
-      from {bottom: 210px;}
-      to {bottom: 0px;}
-    }
-    @-webkit-keyframes dropdown {
-      from {bottom: 210px;}
-      to {bottom: 0px;}
-    }
-</style>
+    <style>
+        @media (max-width: 560px) {
+            #splash-nav {
+                text-align: left;
+                position: static; 
+            }
+        }
+    </style>
 <body>
+
     <div id="navPanel">
         <div id="navCanvas">
                 <nav>
@@ -46,43 +33,26 @@
                 </nav>
         </div>
     </div>
-    <div id="mainContent">    
-        <div id="wrapper">
-            <header>
-                <a href="index.html"><img src="img/headCircle.png"/>
-                <h1>Kade Keith</h1></a>
-            </header>
-            <nav>
-                <div onclick="toggleSlide();" id="navButton">
-                    <div class="line"></div>
-                    <div class="line"></div>
-                    <div class="line"></div>
-                </div>
-                <ul>
-                    <li><a href="/about/">About</a>|</li>
-                    <li><a target="_blank" href="/resume/">Resume</a>|</li>
-                    <li><a href="/projects/">Projects</a>|</li>
-                    <li><a href="/research/">Research</a>|</li>
-                    <li><a target="_blank" href="http://reallyimpressivetitle.blogspot.com/">Blog</a></li>
-                </ul>
-            </nav>
-            <article>  
-                <h2>Welcome</h2>
-                <p>
-                I am a computer scientist attending Texas A&amp;M University in College Station, TX. I'm specializing in Human Computer Interaction and Intelligent Information Systems. That means I think software should be smart and look good too. Thus, I am taking electives such as Artificial Intelligence, Info Storage and Retrieval, and Design for the Web. I also work at the Interface Ecology lab, where we develop next gen human/computer interfaces. Between my research work and a summer internship with Verizon, I have 1.5 years <a href="resume.html">experience</a> working on software development teams outside of the classroom. I've worked on major projects in Javascript/HTML5, C++, Python, and Java.
-                </P>
-                <p>
-                In addition to computers, I love politics, golf, and comic books. I don't have as much time to <span class="tooltip">draw<span><img id="rorshac" src="img/rorshac.png"/></span></span> as I would like, but you can see some of my work on this <a target="_blank" href="http://kade-keith.tumblr.com/">tumblr</a>.
-                </P>
-                <p>
-                You can also connect with me on <a target="_blank" href="https://www.linkedin.com/profile/view?id=312421498">LinkedIn</a>. Most of my code is on <a target="_blank" href="https://github.com/keithkade/">GitHub</a>
-                </p>
-                <h2>Future</h2>
-                <p>
-                For the current summer, I am interning at IBM's <a href="http://www-01.ibm.com/employment/us/extremeblue/">Extreme Blue</a> program. I'll be working at the RTP office, so I'm looking forward to a summer of tees, trees, and phds! Oh, and I'll probably write some code while I'm at it :)   
-                </p>
-            </article>
-        </div>
+
+    <div id="mainContent">
+        
+        <h1>Kade Keith</h1>
+        <p>Front End Developer/Designer</p>
+        
+        <nav id="splash-nav">
+            <div onclick="toggleSlide();" id="navButton">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>            
+            <ul>
+                <li><a href="/about/">About</a>|</li>
+                <li><a target="_blank" href="/resume/">Resume</a>|</li>
+                <li><a href="/projects/">Projects</a>|</li>
+                <li><a href="/research/">Research</a>|</li>
+                <li><a target="_blank" href="http://reallyimpressivetitle.blogspot.com/">Blog</a></li>
+            </ul>
+        </nav>
     </div>
 </body>
 </html>

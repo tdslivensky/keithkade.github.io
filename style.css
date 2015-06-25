@@ -122,6 +122,10 @@ span.tooltip:hover span{
     display: none;
 }
 @media (max-width: 560px) {
+    nav {
+        position: static;
+    }
+    
     header {
         height: 80px;
         text-align: right;
@@ -145,6 +149,7 @@ span.tooltip:hover span{
     }
     #navPanel nav ul{
         width: 250px;
+        background-color: transparent;
         border: none;
     }
     #navPanel nav li{
@@ -189,7 +194,7 @@ span.tooltip:hover span{
         left: 0px;
         top: 0px;
         bottom: 0px;
-        background: #333333;
+        background: #212121;
         z-index: 20;
         overflow: auto;
         transition: left 500ms;
