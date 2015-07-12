@@ -10,6 +10,13 @@ $myOrange: #ffb378;
     padding: 0;
 }
 
+//safari tries to scale things willy nilly
+@media screen and (max-device-width: 667px){
+  body{
+    -webkit-text-size-adjust: none;
+  }
+}
+
 body {
 	background: white;
     color: white;
