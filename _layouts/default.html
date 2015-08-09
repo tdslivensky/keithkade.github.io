@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+    {% include head.html %}
+    
+    {% if page.url == "/index.html" %}
+        <link rel="stylesheet" href="{{ "/css/splash.css" | prepend: site.baseurl }}">
+    {% endif %}
+  <body>
+
+    {% include nav.html %}
+
+    <div id="mainContent">    
+        <div id="wrapper">
+            {{ content }}
+        </div>
+    </div>
+      
+  </body>
+
+</html>

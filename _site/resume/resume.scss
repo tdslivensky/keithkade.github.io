@@ -1,0 +1,303 @@
+$myGrey: #333333;
+$fontStack: 'Lato', 'Helvetica Nueue', Helvetica, Arial, sans-serif;
+$myBlue: #69D2E7;
+$myGreen: #A7DBD8;
+$mySand: #E0E4CC;
+$myOrange: #ffb378;
+
+* {
+	margin: 0; 
+    padding: 0;
+}
+
+//safari tries to scale things willy nilly
+@media screen and (max-device-width: 667px){
+  body{
+    -webkit-text-size-adjust: none;
+  }
+}
+
+body {
+	background: white;
+    color: white;
+	font-family: $fontStack; 
+    font-weight: 300;
+    font-size: 16px;
+}
+h1 {
+    -webkit-margin-before: 0em;
+    -webkit-margin-after: 0em;
+    line-height: 100%;
+}
+a {
+    color: #013d79;
+}
+#resume {    
+    margin-left: auto;
+    margin-right: auto;
+	width: 850px;
+    height: 1100px;
+    position: relative;
+    
+    //border: 1px solid red;
+    
+    background: white;
+    color: $myGrey;
+    
+    .link {
+        font-size: 11px;
+    }
+    
+    header {
+        height: 100px;
+        background-color: $myGrey;
+        color: white;
+
+        h1 {
+            margin: 20px 0px 0px 30px;
+            font-weight: 300;
+            font-size: 60px;
+            float: left;
+            width: 500px;
+        }
+        
+        p {
+            margin: 8px 30px 0px 0px;
+            float: right;
+            text-align: right;
+        }
+    }  
+    
+    #stripe {
+        height: 8px;
+        width: 100%;
+        position: relative;
+        bottom: 10px;
+        left: 4px;
+        div {
+            width: 208px;
+            height: 6px;
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+        }
+        #blue {background-color: $myBlue;}
+        #green {background-color: $myGreen;}
+        #sand {background-color: $mySand;}
+        #orange {background-color: $myOrange;}
+    }
+    
+    p {
+        margin: 0px 0 6px 0;
+    }
+
+    h4 {
+        margin: 0px 0 3px 0;
+    } 
+
+    .time {
+        float: right;
+    }
+
+    ul {
+        padding-left: 22px;
+        margin-bottom: 0;
+        margin-top: 0;
+        clear: both;
+        li {
+            margin: 3px 0 3px 0;
+        }
+    }
+
+    b {
+        font-weight: 500;
+    }
+    
+    dl {
+        dt {
+            width: 100px;
+            text-align: right;
+            float: left;
+            position: relative;
+            top: 10px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+          
+        .clear {
+            height: 12px;
+            border: none;
+        } 
+        
+        dd {
+            width: 710px;
+            float: right;
+            padding-right: 10px;
+            border-left: 1px solid #898989;
+            padding-left: 16px;
+        }
+
+    }
+    
+    #eduDiv {
+        #university {
+            float: left;
+        }
+        #degree {
+            clear: both;
+        }
+    }
+
+    #expDiv {
+        .company {
+            float: left;
+            margin-top: 4px;
+            margin-bottom: 0px;
+        }
+        
+        .triCol {
+            h4 {
+                margin-top: 5px;
+            }
+            ul {
+                list-style: none;
+                padding-left: 0;
+                
+            }
+        }
+        #extracurricular {
+            margin-top: 3px;
+            width: 45%;
+            float: left;
+        }
+        #leadership {
+            margin-top: 3px;
+            width: 54%;
+            float: left;
+        }
+    }
+
+    #skillsDiv {
+        ul {
+            list-style: none;
+            padding-left: 0;
+            font-size: 16px;
+            li {
+                margin-top: 12px;
+            }
+            span {
+                margin-left: -3px;
+                padding: 2px 4px 2px 4px;
+            }
+            span:first-child {
+                margin-left: 0;
+            }
+            .bar1 {
+                //background-color: $myBlue;
+                border: 3px solid $myBlue;
+            }
+            .bar2  {
+                //background-color: $myGreen;
+                border: 3px solid $myGreen;
+            }
+            .bar3  {
+                //background-color: $mySand;
+                border: 3px solid $mySand;                
+            }
+            .bar4  {
+                //background-color: $myOrange;
+                border: 3px solid $myOrange;                
+            }            
+            .label {
+                /*float: right;*/
+                position: relative;
+                bottom: 1px;
+                left: 5px;
+                font-size: 14px;
+            }
+            #cppBar {
+                padding-right: 114px
+            }
+            #javaBar {
+                padding-right: 104px;
+            }
+            #pythonBar {
+                padding-right: 104px;
+            }
+            #jsBar {
+                padding-right: 140px;
+            }
+            #HTML5Bar {
+                padding-right: 90px;
+            }
+            #cssBar {
+                padding-right: 55px;
+            }
+            #gwtBar {
+                //padding-right: 5px;
+            } 
+            #sassBar {
+                padding-right: 28px;
+            }
+            #mapBar {
+                padding-right: 6px;
+            }
+            #restBar {
+                padding-right: 24px;
+            }
+            #xpathBar {
+                padding-right: 10px;
+            }
+            #d3Bar {
+                padding-right: 90px;
+            }
+            #creBar {
+                padding-right: 6px;
+            }
+            #chromeBar {
+                padding-right: 30px;
+            }
+            #gitBar {
+                padding-right: 70px;
+            }
+            #nixBar {
+                padding-right: 10px;
+            }
+            #blmBar {
+                padding-right: 15px;            
+            }
+            #eclBar {
+                padding-right: 10px;
+            }
+            #psdBar {
+                padding-right: 40px;
+            }
+            #prmBar {
+                padding-right: 10px;
+            }            
+            #gimpBar {
+                padding-right: 30px;
+            }
+            #imovieBar {
+                padding-right: 10px;
+            }
+        }
+    }
+
+    #projectDiv {
+        #projectList {
+            list-style: none;
+            padding-left: 0;
+            li {
+                margin-top: 6px;  
+            }
+        }  
+    }
+
+    #honorsDiv {
+        #honorsList {
+            list-style: none;
+            padding-left: 0;
+        }   
+    }
+}

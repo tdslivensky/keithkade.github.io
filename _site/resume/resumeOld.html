@@ -1,0 +1,71 @@
+<html>
+<head>
+    <meta http-equiv=Content-Type content="text/html; charset=UTF-8">
+    <title>Kade Keith | Resume</title>
+    <link rel="icon" href="img/kFavicon.png">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <script src="slider.js"></script>
+    <style type="text/css">
+        #resume {
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: white;
+        }
+        #resume img{
+            width: 100%;
+        } 
+        @media print {
+            header, nav {
+                display: none;
+            }
+        }
+        @media (max-width: 560px) {
+            #resume {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="navPanel">
+        <div id="navCanvas">
+                <nav>
+                    <ul>
+                        <li><a href="../home/">Home</a></li>
+                        <li><a href="../resume/">Resume</a></li>
+                        <li><a href="../projects/">Projects</a></li>
+                        <li><a href="../research/">Research</a></li>
+                        <li><a target="_blank" href="http://reallyimpressivetitle.blogspot.com/">Blog</a></li>
+                    </ul>
+                </nav>
+        </div>
+    </div>
+    <div id="mainContent">
+        <div id="wrapper">
+            <header>
+                <a href="index.html"><img src="img/headCircle.png"/>
+                <h1>Kade Keith</h1></a>
+                <p id="email">keithkade@gmail.com</p>
+            </header>
+            <nav>
+                <div onclick="toggleSlide();" id="navButton">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>  
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="resume.html">Resume</a></li>
+                    <li><a href="/projects/">Projects</a></li>
+                    <li><a href="research.html">Research</a></li>
+                    <li><a target="_blank" href="http://reallyimpressivetitle.blogspot.com/">Blog</a></li>
+                </ul>
+            </nav>
+            <div id="resume">
+                <img src="img/ResumeKRK.png"/>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

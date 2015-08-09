@@ -7,4 +7,10 @@ var toggleSlide = function() {
     } else {
         main.className = '';
     }
+	var btn = document.getElementById('navButton');
+    if (!btn.className) {
+        btn.className = 'out';
+    } else {
+        btn.className = '';
+    }    
 };

@@ -1,0 +1,43 @@
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:300);
+/* line 20, /Users/kadekeith/Desktop/keithkade.github.io/projects/NaiveDox/style.scss */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Ubuntu", sans-serif;
+  font-size: 18px;
+  background: #2b243e;
+  color: #fffcea; }
+
+/* line 30, /Users/kadekeith/Desktop/keithkade.github.io/projects/NaiveDox/style.scss */
+#wrapper {
+  margin: 3%;
+  /* For Iphone */ }
+  /* line 32, /Users/kadekeith/Desktop/keithkade.github.io/projects/NaiveDox/style.scss */
+  #wrapper h1 {
+    font-size: 50px; }
+  /* line 36, /Users/kadekeith/Desktop/keithkade.github.io/projects/NaiveDox/style.scss */
+  #wrapper a {
+    color: #fffcea; }
+  /* line 40, /Users/kadekeith/Desktop/keithkade.github.io/projects/NaiveDox/style.scss */
+  #wrapper p {
+    line-height: 140%; }
+  /* line 44, /Users/kadekeith/Desktop/keithkade.github.io/projects/NaiveDox/style.scss */
+  #wrapper #dawg {
+    float: right;
+    display: inline;
+    padding: 0 0 15px 15px; }
+  /* line 50, /Users/kadekeith/Desktop/keithkade.github.io/projects/NaiveDox/style.scss */
+  #wrapper #quest {
+    float: left;
+    display: inline;
+    padding: 0 15px 15px 0;
+    width: 300px; }
+  @media (max-width: 700px) {
+    /* line 59, /Users/kadekeith/Desktop/keithkade.github.io/projects/NaiveDox/style.scss */
+    #wrapper #dawg, #wrapper #quest {
+      width: 100%;
+      padding: 10px;
+      float: none; } }
+
+/*# sourceMappingURL=style.css.map */

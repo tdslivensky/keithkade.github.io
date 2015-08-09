@@ -1,0 +1,66 @@
+$purple: #2b243e;
+$offwhite: #fffcea;
+$fontStack: 'Ubuntu', sans-serif;
+
+@mixin vertical-align {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+@mixin horizontal-align {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:300);
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: $fontStack;
+    font-size: 18px;
+    background: $purple;
+    color: $offwhite;
+}
+
+#wrapper {
+    margin: 3%;
+    h1 {
+        font-size: 50px;
+    }
+    
+    a {
+        color: $offwhite;
+    }
+    
+    p {
+        line-height: 140%;
+    }
+
+    #dawg {
+        float: right;
+        display: inline;
+        padding: 0 0 15px 15px;
+    }
+    
+    #quest {
+        float: left;
+        display: inline;
+        padding: 0 15px 15px 0;
+        width: 300px;
+    }
+    
+    /* For Iphone */
+@media (max-width: 700px) { 
+    #dawg, #quest  { 
+        width: 100%;
+        padding: 10px;
+        float: none;
+    }
+}
+    
+}
