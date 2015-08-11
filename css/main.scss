@@ -4,9 +4,9 @@
 $slate: #212121;
 $green: #00ff6c;
 $purple: #81479f;
-$light-blue: #66CCFF;
-$medium-blue: #478FB2;
-$light-grey: #777777;
+$light-blue: #35b8fa;
+$medium-blue: #2076a0;
+$light-grey: #484848;
 
 /* about */
 
@@ -168,9 +168,6 @@ span.tooltip:hover span{
         font-size: 300%;
         padding: 0;
     }
-    #email {
-        padding: 0;
-    }
     #mainContent nav {
         display: block;
         height: 50px;
@@ -187,11 +184,11 @@ span.tooltip:hover span{
         display: block;
         width: 250px;
         border: 1px solid white;
-        border-radius: 6px;
         margin-top: 10px;
     }
     #navPanel nav li a{
         width: 230px;
+        color: white;
     }
     #navPanel	{
         display: block;

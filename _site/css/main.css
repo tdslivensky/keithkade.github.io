@@ -61,7 +61,7 @@ nav {
 nav ul {
   padding: 0;
   margin: 0 auto 0 auto;
-  background-color: #777777;
+  background-color: #484848;
   width: 490px; }
 
 nav li {
@@ -80,7 +80,7 @@ article {
 
 /* Link Styles */
 a {
-  color: #66CCFF;
+  color: #35b8fa;
   text-decoration: none; }
 
 nav a {
@@ -94,7 +94,7 @@ article a:hover {
   text-decoration: underline; }
 
 article a:visited {
-  color: #478FB2; }
+  color: #2076a0; }
 
 /* Tooltips */
 span.tooltip {
@@ -136,9 +136,6 @@ span.tooltip:hover span {
     font-size: 300%;
     padding: 0; }
 
-  #email {
-    padding: 0; }
-
   #mainContent nav {
     display: block;
     height: 50px; }
@@ -155,11 +152,11 @@ span.tooltip:hover span {
     display: block;
     width: 250px;
     border: 1px solid white;
-    border-radius: 6px;
     margin-top: 10px; }
 
   #navPanel nav li a {
-    width: 230px; }
+    width: 230px;
+    color: white; }
 
   #navPanel {
     display: block;
