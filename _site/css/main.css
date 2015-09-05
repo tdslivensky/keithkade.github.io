@@ -62,7 +62,7 @@ nav ul {
   padding: 0;
   margin: 0 auto 0 auto;
   background-color: #484848;
-  width: 490px; }
+  width: 580px; }
 
 nav li {
   display: inline; }
@@ -80,7 +80,7 @@ article {
 
 /* Link Styles */
 a {
-  color: #35b8fa;
+  color: #60c6f8;
   text-decoration: none; }
 
 nav a {
@@ -94,7 +94,7 @@ article a:hover {
   text-decoration: underline; }
 
 article a:visited {
-  color: #2076a0; }
+  color: #7a94ce; }
 
 /* Tooltips */
 span.tooltip {
@@ -121,7 +121,7 @@ span.tooltip:hover span {
 #navPanel {
   display: none; }
 
-@media (max-width: 560px) {
+@media (max-width: 580px) {
   nav {
     position: static; }
 
