@@ -1,6 +1,7 @@
 /*
     light green : 809a80
     dark green : 81815a
+    yellow : ffffcc 
 */
 
 * {
@@ -43,4 +44,17 @@ body {
 .right-col {
     background-color: red;
     width: 567px;
+}
+
+/* footer styles */
+footer {
+    font-family: Helvetica, sans-serif;
+    font-size: 11px;
+    color: #ffffcc;
+    margin-left: 190px;
+    margin-top: 15px;
+}
+
+footer a {
+    color: white;
 }
