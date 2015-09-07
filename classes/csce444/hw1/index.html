@@ -9,12 +9,28 @@
     <title>Kade Keith | CSCE 444 HW 1</title>
     <link rel="icon" href="img/kFavicon.png">
     <link rel="stylesheet" href="style.css">
+
+    <script>
+        var imageShown = false;
+        function toggleImage(){
+            if (imageShown){
+                document.body.style.backgroundColor = '#809a80';
+                document.body.style.backgroundImage = 'none';
+                imageShown = false;
+            }
+            else {
+                document.body.style.backgroundColor = 'none';
+                document.body.style.backgroundImage = 'url(METhomepage.png)';
+                imageShown = true;
+            }
+        }
+    </script>
     
 </head>
 
     
 <body>
-
+    <button class="toggle" onclick="toggleImage()">Toggle Original</button>
 </body>
 
 </html>
