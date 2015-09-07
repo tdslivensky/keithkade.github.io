@@ -11,12 +11,36 @@
 body {
     width: 100%;
     height: 100%;
-    background-color: #809a80;
+    /* background-color: #809a80; */
+    background-image: url(METhomepage.png); 
     background-repeat: no-repeat;
 }
 
+/* The toggle button button for the background image*/
 .toggle {
     position: fixed;
     top: 5px;
     right: 10px;
+}
+
+.header {
+    display: block;
+}
+
+/* column styles */
+.col {
+    display: inline-block;
+    height: 542px;
+    opacity: .5;
+}
+
+.left-col {
+    background-color: blue;
+    width: 141px;
+    margin-left: 19px;
+}
+
+.right-col {
+    background-color: red;
+    width: 567px;
 }
