@@ -31,8 +31,8 @@ p{
 /* The toggle button button for the background image*/
 .toggle {
     position: fixed;
-    top: 5px;
-    right: 10px;
+    bottom: 5px;
+    left: 10px;
 }
 
 .header {
