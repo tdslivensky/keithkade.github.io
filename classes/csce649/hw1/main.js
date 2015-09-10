@@ -16,7 +16,7 @@ var SCENE_WIDTH = 650;
 var SCENE_HEIGHT = 650;
 var CUBE_LEN = 250;
 var G = new $V([0, -9.81, 0]); //the accel due to gravity in m/s^2 -9.81
-var H = 1; // in seconds. Step time
+var H = 0.01; // in seconds. Step time
 var H_MILLI = H * 1000; 
 
 
