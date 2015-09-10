@@ -157,7 +157,7 @@ span.tooltip:hover span{
 }
 @media (max-width: $nav-width) {
     nav {
-        position: static;
+        z-index: 25;
     }
     header {
         height: 80px;
@@ -170,11 +170,7 @@ span.tooltip:hover span{
         font-size: 300%;
         padding: 0;
     }
-    #mainContent nav {
-        display: block;
-        height: 50px;
-    }
-    #mainContent nav ul {
+    #main-nav ul {
         display: none;
     }
     #navPanel nav ul{

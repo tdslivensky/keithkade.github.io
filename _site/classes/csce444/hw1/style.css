@@ -1,3 +1,12 @@
+/*
+    light green : 809980
+    bar green : rgba(87, 99, 81, .5);
+    dark green : rgba(87, 99, 81, .5);
+    yellow : ffffcc 
+
+    I developed this on chrome on mac, so that is what the background screenshot is from. mileage varies slightly on windows
+*/
+
 * {
     margin: 0;
     padding; 0;
@@ -6,6 +15,190 @@
 body {
     width: 100%;
     height: 100%;
-    background-image: url(METhomepage.png);
+     background-color: #809980; 
+    /* background-image: url(img/METhomepage.png); */
     background-repeat: no-repeat;
+    /* A note about fonts
+     * Helvetica seemed to be the best match I could find to the left nav column. 
+     * Helvetica isn't on windows though so windows will show it as arial making the line spacing off
+     * Genava works well for the body text
+     */
+    font-family: Geneva, sans-serif;
+    font-size: 10px;
+}
+
+a {
+    color: white;
+}
+
+p{
+    color: #ffffcc;
+}
+
+/* The toggle button button for the background image and my exhibition variant */
+#toggle-background {
+    position: fixed;
+    bottom: 5px;
+    right: 10px;
+}
+
+#toggle-tweets {
+    position: fixed;
+    bottom: 5px;
+    right: 190px;
+}
+
+.header {
+    display: block;
+}
+
+/* column styles */
+.col {
+    display: inline-block;
+    height: 542px;
+    opacity: 1;
+    color: white;
+    float: left;
+}
+
+.left-col {
+    width: 141px;
+    margin-left: 19px;
+    font-family: Helvetica, sans-serif;
+}
+
+.right-col {
+    width: 567px;
+    margin: 0 0 0 3px;
+}
+
+.col-bar {
+    background-color: rgba(80, 120, 71, 0.3);;
+    margin-bottom: 4px;
+}
+
+.left-col .col-bar {
+    padding: 1px 0 1px 5px;
+}
+
+.right-col .col-bar {
+    padding: 1px 0 1px 16px;
+}
+
+/* left nav colum */
+
+nav {
+    background-color: rgba(87, 99, 81, .5);
+    height: 523px;
+}
+
+nav ul {
+    list-style: none;
+}
+
+nav .main-nav {
+    margin: 0;
+    padding: 9px 0 0 5px;
+    font-size: 14px;
+}
+
+nav .main-nav li{
+    margin: 4px 0 0 0; 
+    cursor: pointer;
+}
+
+nav .sub-nav {
+    padding: 0 0 0 10px;
+    font-size: 12px;
+}
+
+nav .search {
+    margin: 10px 0 0 5px;
+    font-size: 14px;
+}
+
+nav input {
+    margin: 5px 0 0 5px;
+    width: 53px;
+}
+
+.left-col img {
+    cursor: pointer;
+}
+
+/* right column/main content */
+
+article {
+    background-color: rgba(87, 99, 81, .5);
+    height: 298px;
+    margin-bottom: 2px;
+}
+
+.special-exhibition {
+    width: 150px;
+    display: inline-block;
+    margin: 8px 0 0 29px;
+    float: left;
+    line-height: 135%;
+}
+
+.special-exhibition img {
+    margin: 0 0 2px 0;
+}
+
+.special-more {
+    clear: both;
+    float: right;
+    margin: 8px 26px 0 0;
+}
+
+section {
+    background-color: rgba(87, 99, 81, .5);
+    height: 202px;
+    font-size: 14px;
+    line-height: 125%;
+    padding: 0 0 0 8px;
+}
+
+.selected-highlight {
+    width: 173px;
+    margin: 2px 0 12px 10px;
+    display: inline-block;
+    float: left;
+}
+
+.selected-highlight img {
+    float: left;
+}
+
+.selected-highlight div {
+    width: 114px;
+    float: left;
+    display: inline-block;
+    margin: 0 0 0 4px;
+}
+
+/* footer styles */
+footer {
+    margin-left: 190px;
+    padding-top: 14px;
+    clear: both;
+    color: white;
+}
+
+/* kade's special exhibition */
+
+#replacable-special-exhibition {
+    display: inline-block;
+}
+
+#as-kade-may-think {
+    display: none;
+}
+
+iframe {
+    width: 150px !important;
+    height: 200px !important; 
+    min-width: 150px !important; 
+    min-height: 200px !important;
 }
