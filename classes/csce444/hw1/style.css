@@ -16,8 +16,13 @@ body {
      background-color: #809980; 
     /* background-image: url(img/METhomepage.png); */
     background-repeat: no-repeat;
-    font-family: Helvetica, sans-serif;
-    font-size: 11px;
+    /* A note about fonts
+     * Helvetica seemed to be the best match I could find to the left nav column. 
+     * Helvetica isn't on windows though so windows will show it as arial making the line spacing off
+     * Genava works well for the body text
+     */
+    font-family: Geneva, sans-serif;
+    font-size: 10px;
 }
 
 a {
@@ -38,7 +43,7 @@ p{
 #toggle-tweets {
     position: fixed;
     bottom: 5px;
-    right: 184px;
+    right: 190px;
 }
 
 .header {
@@ -57,6 +62,7 @@ p{
 .left-col {
     width: 141px;
     margin-left: 19px;
+    font-family: Helvetica, sans-serif;
 }
 
 .right-col {
@@ -134,21 +140,27 @@ article {
     line-height: 135%;
 }
 
+.special-exhibition img {
+    margin: 0 0 2px 0;
+}
+
 .special-more {
     clear: both;
     float: right;
-    margin: 6px 20px 0 0;
+    margin: 8px 26px 0 0;
 }
 
 section {
     background-color: rgba(87, 99, 81, .5);
-    height: 204px;
+    height: 202px;
     font-size: 14px;
+    line-height: 125%;
+    padding: 0 0 0 8px;
 }
 
 .selected-highlight {
-    width: 163px;
-    margin: 6px 0 12px 20px;
+    width: 173px;
+    margin: 2px 0 12px 10px;
     display: inline-block;
     float: left;
 }
@@ -158,7 +170,7 @@ section {
 }
 
 .selected-highlight div {
-    width: 104px;
+    width: 114px;
     float: left;
     display: inline-block;
     margin: 0 0 0 4px;
@@ -167,7 +179,7 @@ section {
 /* footer styles */
 footer {
     margin-left: 190px;
-    padding-top: 15px;
+    padding-top: 14px;
     clear: both;
     color: white;
 }
