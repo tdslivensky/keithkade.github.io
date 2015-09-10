@@ -28,11 +28,17 @@ p{
     color: #ffffcc;
 }
 
-/* The toggle button button for the background image*/
-.toggle {
+/* The toggle button button for the background image and my exhibition variant */
+#toggle-background {
     position: fixed;
     bottom: 5px;
-    left: 10px;
+    right: 10px;
+}
+
+#toggle-tweets {
+    position: fixed;
+    bottom: 5px;
+    right: 184px;
 }
 
 .header {
@@ -164,4 +170,21 @@ footer {
     padding-top: 15px;
     clear: both;
     color: white;
+}
+
+/* kade's special exhibition */
+
+#replacable-special-exhibition {
+    display: inline-block;
+}
+
+#as-kade-may-think {
+    display: none;
+}
+
+iframe {
+    width: 150px !important;
+    height: 200px !important; 
+    min-width: 150px !important; 
+    min-height: 200px !important;
 }

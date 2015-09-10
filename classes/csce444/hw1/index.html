@@ -14,14 +14,26 @@
         var imageShown = false;
         function toggleImage(){
             if (imageShown){
-                document.body.style.backgroundColor = '#809a80';
                 document.body.style.backgroundImage = 'none';
                 imageShown = false;
             }
             else {
-                document.body.style.backgroundColor = 'none';
                 document.body.style.backgroundImage = 'url(img/METhomepage.png)';
                 imageShown = true;
+            }
+        }
+        
+        var tweetsShown = false;
+        function toggleTweets(){
+            if (tweetsShown){
+                document.getElementById('as-kade-may-think').style.display = 'none';
+                document.getElementById('replacable-special-exhibition').style.display = 'inline-block';
+                tweetsShown = false;
+            }
+            else {
+                document.getElementById('as-kade-may-think').style.display = 'inline-block';
+                document.getElementById('replacable-special-exhibition').style.display = 'none';                
+                tweetsShown = true;
             }
         }
     </script>
@@ -30,7 +42,8 @@
 
     
 <body>
-    <button class="toggle" onclick="toggleImage()">Toggle Original</button>
+    <button id="toggle-background" onclick="toggleImage()">Toggle Original Background</button>
+    <button id="toggle-tweets" onclick="toggleTweets()">Toggle Exhibition Variant</button>
     
     <img class="header" src="img/ho_green_mast1.gif"/>
     
@@ -86,11 +99,21 @@
                     Painting of the Middle Ages and Renaissance</a></p>
                 <p>Through March 21, 2004</p>
             </div>   
-            <div class="special-exhibition">
+            <div class="special-exhibition" id="replacable-special-exhibition">
                 <img src="img/gifford.jpg"/>
                 <p><a href="#">Hudson River School Visions: The Landscapes 
                     of Sanford R. Gifford</a></p>
                 <p>Through February 8, 2004</p>
+            </div> 
+            <div class="special-exhibition" id="as-kade-may-think">
+                <a class="twitter-timeline" href="https://twitter.com/kade_keith" data-widget-id="641429105649385472">Tweets by @kade_keith</a>
+            
+                <script>
+                    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+                </script>
+                
+                <p><a href="#">As Kade May Think: A Live Twitter Feed</a></p>
+                <p>Indefinitely</p>
             </div> 
             <p class="special-more"><a href="#">More Special Exhibitions</a></p>
         </article>
