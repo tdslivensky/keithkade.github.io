@@ -15,11 +15,6 @@ var doc = document; //shorthand
 var SCENE_WIDTH = 650;
 var SCENE_HEIGHT = 650;
 var CUBE_LEN = 250;
-var G = new $V([0, -9.81, 0]); //the accel due to gravity in m/s^2 -9.81
-var H = 0.01; // in seconds. Step time
-var H_MILLI = H * 1000; 
-
-
 
 var VIEW_ANGLE = 45;
 var ASPECT = SCENE_WIDTH / SCENE_HEIGHT;
@@ -83,21 +78,45 @@ var camera = initCamera();
 var light = initLight();
 var cube = initCube();
 
-var sphere = new Sphere(scene, [CUBE_LEN/2, 100, CUBE_LEN/2], [10,30,0]);
+
 
 /************* Assignment specific code begins here *************/
 
-var clock = new THREE.Clock();
-clock.start();
+//variables that the user will be able to adjust
+var G = new $V([0, -10, 0]); //the accel due to gravity in m/s^2 -9.81
+var D = 0.4;
+var H = 0.01; // in seconds. Step time
+var H_MILLI = H * 1000; 
+
+var sphere, clock;
+function initMotion(){
+    sphere = new Sphere(scene, [CUBE_LEN/2, 100, CUBE_LEN/2], [30, 50, 0]);
+    //sphere = new Sphere(scene, [0, 100, 0], [10,0,30]);
+    clock = new THREE.Clock();
+    clock.start();
+    clock.getDelta();
+    simulate();
+    render();
+}
+initMotion();
 
 function simulate(){
-    //Euler integration
-    var vNew = sphere.v.add(G.multiply(H));
+    //Euler integration for acceleration due to gravity accounting for air resistence
+    //a = g - (d/m)v
+    var acceleration = G.subtract(sphere.v.multiply(D/sphere.mass));
+    var vNew = sphere.v.add(acceleration.multiply(H));
+    
+    //old just gravity
+    //var vNew = sphere.v.add(G.multiply(H));
+
     var xNew = sphere.x.add(sphere.v.multiply(H));
     
     sphere.v = vNew;
     sphere.x = xNew;
     sphere.visual.position.set(xNew.elements[0], xNew.elements[1], xNew.elements[2]);    
+    
+    //console.log(vNew.elements);
+    //console.log(xNew.elements);
     
     var waitTime = H_MILLI - clock.getDelta(); 
 
@@ -109,13 +128,9 @@ function simulate(){
     setTimeout(simulate, waitTime);
 }
 
-clock.getDelta();
-simulate();
-
 //smartly render
 function render() {	
     renderer.render(scene, camera); //draw it
 	requestAnimationFrame(render);  //let the browser decide the best time to redraw
 }
-render();
  
