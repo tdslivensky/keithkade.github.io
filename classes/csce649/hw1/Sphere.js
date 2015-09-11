@@ -8,6 +8,7 @@ function Sphere(scene, x, v){
     this.visual = initSphereVisual(scene, x);
     this.x = $V(x);
     this.v = $V(v);
+    this.mass = 1;
 }
 
 /** create the sphere and add it to the scene */
