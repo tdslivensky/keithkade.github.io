@@ -14,12 +14,44 @@ var doc = document; //shorthand
 
 var SCENE_WIDTH = 650;
 var SCENE_HEIGHT = 650;
-var CUBE_LEN = 250;
+var CUBE_LEN = 10;
 
 var VIEW_ANGLE = 45;
 var ASPECT = SCENE_WIDTH / SCENE_HEIGHT;
 var NEAR = 0.1;
 var FAR = 10000;
+
+var RADIUS = 1; //radius of sphere in meters
+
+//we have six planes that we check for collision, defined by a point and the normal. 
+//this data structure could be optimized
+var planes = [
+    {
+        p: $V([0,RADIUS,0]), //bottom
+        n: $V([0,1,0])
+    }, 
+    {
+        p: $V([0,CUBE_LEN-RADIUS,0]), //top
+        n: $V([0,-1,0])
+    }, 
+    {
+        p: $V([0,0,CUBE_LEN-RADIUS]), //front
+        n: $V([0,0,-1])
+    }, 
+    {
+        p: $V([0,0,RADIUS]), //back
+        n: $V([0,0,1])
+    }, 
+    {
+        p: $V([RADIUS,0,0]), //left
+        n: $V([1,0,0]),
+        id: 'temp'
+    }, 
+    {
+        p: $V([CUBE_LEN-RADIUS,0,0]), //right
+        n: $V([-1,0,0]),
+    }
+];
 
 /** create the renderer and add it to the scene */
 function initRenderer(){
@@ -87,10 +119,12 @@ var G = new $V([0, -10, 0]); //the accel due to gravity in m/s^2 -9.81
 var D = 0.4;
 var H = 0.01; // in seconds. Step time
 var H_MILLI = H * 1000; 
+var CR = 0.5;
+var CF = 0.5;
 
 var sphere, clock;
 function initMotion(){
-    sphere = new Sphere(scene, [CUBE_LEN/2, 100, CUBE_LEN/2], [30, 50, 0]);
+    sphere = new Sphere(scene, [CUBE_LEN/2, CUBE_LEN/2, CUBE_LEN/2], [60, 16, 0], RADIUS);
     //sphere = new Sphere(scene, [0, 100, 0], [10,0,30]);
     clock = new THREE.Clock();
     clock.start();
@@ -100,23 +134,46 @@ function initMotion(){
 }
 initMotion();
 
-function simulate(){
-    //Euler integration for acceleration due to gravity accounting for air resistence
-    //a = g - (d/m)v
-    var acceleration = G.subtract(sphere.v.multiply(D/sphere.mass));
-    var vNew = sphere.v.add(acceleration.multiply(H));
-    
-    //old just gravity
-    //var vNew = sphere.v.add(G.multiply(H));
+function integrate(v1, v2, timestep){
+    return v1.add(v2.multiply(timestep));
+}
 
-    var xNew = sphere.x.add(sphere.v.multiply(H));
+function simulate(){
     
-    sphere.v = vNew;
-    sphere.x = xNew;
-    sphere.visual.position.set(xNew.elements[0], xNew.elements[1], xNew.elements[2]);    
+    //TODO Collision Determination
+    //TODO Collision Response
     
-    //console.log(vNew.elements);
-    //console.log(xNew.elements);
+    var timestepRemain = H;
+    var timestep = timestepRemain; // We try to simulate a full timestep 
+    while (timestepRemain > 0) {
+        
+        //Euler integration for acceleration due to gravity accounting for air resistence
+        //a = g - (d/m)v
+        var acceleration = G.subtract(sphere.v.multiply(D/sphere.mass));
+        
+        var vNew = integrate(sphere.v, acceleration, timestep);
+        var xNew = integrate(sphere.x, sphere.v, timestep);
+        
+        //old just gravity
+        //var vNew = sphere.v.add(G.multiply(H));
+        
+        var collision = collisionFraction(sphere.x, xNew);
+        if (collision){
+            timestep = collision.fraction * timestep;
+            vNew = integrate(sphere.v, acceleration, timestep);            
+            
+            vNew = collisionResponse(vNew, collision.normal);
+            xNew = integrate(sphere.x, sphere.v, timestep);
+        }
+        
+        timestepRemain = timestepRemain - timestep;
+
+        sphere.v = vNew;
+        sphere.x = xNew;
+        sphere.visual.position.set(xNew.elements[0], xNew.elements[1], xNew.elements[2]);
+    }
+    
+    //TODO AT REST DETECTION
     
     var waitTime = H_MILLI - clock.getDelta(); 
 
@@ -134,3 +191,36 @@ function render() {
 	requestAnimationFrame(render);  //let the browser decide the best time to redraw
 }
  
+function collisionFraction(v1, v2){
+    
+    for (var i = 0; i < planes.length; i++){
+        var plane = planes[i];
+        var dOld = v1.subtract(plane.p).dot(plane.n);
+        var dNew = v2.subtract(plane.p).dot(plane.n);
+                    
+        //check if they have the same sign
+        //if dOld is zero then a collision just happened and we don't want to detect it again
+        if (dOld*dNew > 0 || dOld === 0){
+            continue;
+        }
+        else {
+            return { 
+                fraction: dOld / (dOld-dNew),
+                normal: plane.n
+            };
+        }
+    }
+    
+    return false;
+}
+
+function collisionResponse(vOld, n){
+    var vNormalOld = n.multiply(vOld.dot(n));
+    var vTanOld = vOld.subtract(vNormalOld);
+
+    var vNormalNew = n.multiply(-1 * CR * (vOld.dot(n)));
+    //TODO use the coulomb 
+    var vTanNew = vOld.subtract(vNormalOld).multiply(1-CF);
+    
+    return vNormalNew.add(vTanNew);
+}
