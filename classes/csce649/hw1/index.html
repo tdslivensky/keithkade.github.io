@@ -12,13 +12,26 @@
     
 </head>    
 <body>
-    <div id="container"></div>
+    <div id="control-panel">
+        <h3>Inital Position/Velocity</h3>
+        <ul>
+            <li>Position</li>
+            <li>X: <input id="p.x" type="number" value="6"> </li>
+            <li>Y: <input id="p.y" type="number" value="5"> </li>
+            <li>Z: <input id="p.z" type="number" value="4"> </li>
+            <li>Velocity</li>
+            <li>X: <input id="v.x" type="number" value="4"> </li>
+            <li>Y: <input id="v.y" type="number" value="5"> </li>
+            <li>Z: <input id="v.z" type="number" value="6"> </li>
+        </ul>
+        <button onclick="initMotion()">Restart Simulation</button>
+    </div>
+    <div id="webgl-container"></div>
 </body>
     
 <script src="three.min.js"></script>
 <script src="sylvester.js"></script>
 <script src="Sphere.js"></script>
-
 <script src="main.js"></script>
     
 </html>
