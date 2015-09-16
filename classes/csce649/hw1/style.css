@@ -3,7 +3,7 @@ html, body {
     padding: 0;
     height: 100%;
     width: 100%;
-    background-color: #D4D4D4;
+    background-color: #e8e8d6;
     font-family: monospace;
 }
 
@@ -29,6 +29,14 @@ ul {
     list-style: none;
 }
 
+li {
+    font-size: 14px;
+}
+
 input {
-    width: 50px;
+    width: 36px;
+}
+
+.slider {
+    width: 100px;
 }

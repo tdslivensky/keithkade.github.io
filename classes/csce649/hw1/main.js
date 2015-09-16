@@ -56,7 +56,7 @@ var planes = [
 /** create the renderer and add it to the scene */
 function initRenderer(){
     var renderer = new THREE.WebGLRenderer({ alpha: true });
-    renderer.setClearColor(0xD4D4D4 , 1); //make the background grey
+    renderer.setClearColor(0xe8e8d6 , 1); //make the background grey
 
     renderer.setSize(SCENE_WIDTH, SCENE_HEIGHT);
     doc.getElementById('webgl-container').appendChild(renderer.domElement);
@@ -112,28 +112,41 @@ var cube = initCube();
 
 /************* Assignment specific code begins here *************/
 
-//variables that the user will be able to adjust
 var G = new $V([0, -9.81, 0]);  // The accel due to gravity in m/s^2 
-var D = 0.4;                    // Air resitence
-var H = 0.01;                   // Step time in seconds
-var H_MILLI = H * 1000;         // In milliseconds
-var CR = 0.5;                   // coefficient of restitution
-var CF = 0.5;                   // coefficient of TODO
+var minRestV = 0.5;          // minimum velocity to declare at rest
 
-var minCollisionV = 1;          // TODO
-var minCollisionX = 1;          // TODO
+//variables that the user will be able to adjust
+var H;                  // Step time in seconds
+var H_MILLI;            // In milliseconds
+var initialX = {};
+var initialV = {};
 
-var initialX = {x: CUBE_LEN/2, y: CUBE_LEN/2, z: CUBE_LEN/2};
-var initialV = {x: 60, y: 16, z: -21};
+var D;            // Air resitence
+
+var CR = 0.5;           // coefficient of restitution. 1 is maximum bouncy
+var CF = 0.2;           // coefficient of friction. 0 is no friction
+
 
 function getUserInputs(){
-    initialX.x = parseInt(doc.getElementById("p.x").value);
-    initialX.y = parseInt(doc.getElementById("p.y").value);
-    initialX.z = parseInt(doc.getElementById("p.z").value);
+    initialX.x = parseFloat(doc.getElementById("p.x").value);
+    initialX.y = parseFloat(doc.getElementById("p.y").value);
+    initialX.z = parseFloat(doc.getElementById("p.z").value);
 
-    initialV.x = parseInt(doc.getElementById("v.x").value);
-    initialV.y = parseInt(doc.getElementById("v.y").value);
-    initialV.z = parseInt(doc.getElementById("v.z").value);    
+    initialV.x = parseFloat(doc.getElementById("v.x").value);
+    initialV.y = parseFloat(doc.getElementById("v.y").value);
+    initialV.z = parseFloat(doc.getElementById("v.z").value);    
+
+    H = parseFloat(doc.getElementById("H").value);    
+    H_MILLI = H * 1000;    
+    
+    D = parseFloat(doc.getElementById("D").value);  
+    CR = parseFloat(doc.getElementById("CR").value);    
+    CF = parseFloat(doc.getElementById("CF").value);    
+}
+
+/** update one input value with another. this binds the sliders to the text inputs */
+function update(elem, id){
+    doc.getElementById(id).value = elem.value;
 }
 
 var sphere, clock;
@@ -143,7 +156,6 @@ function initMotion(){
         scene.remove(sphere.visual);
     }
     
-    //TODO breaks on [60, 16, -20]. not sure if it a rounding error or what
     sphere = new Sphere(scene, [initialX.x, initialX.y, initialX.z], [initialV.x, initialV.y, initialV.z], RADIUS);
     clock = new THREE.Clock();
     clock.start();
@@ -161,6 +173,7 @@ function simulate(){
     
     var timestepRemain = H;
     var timestep = timestepRemain; // We try to simulate a full timestep 
+    
     while (timestepRemain > 0) {
         
         //Euler integration for acceleration due to gravity accounting for air resistence
@@ -177,7 +190,7 @@ function simulate(){
         if (collision){
 
             //If the ball is at rest stop simulation
-            if (atRest(vNew, xNew, acceleration, collision)){
+            if (atRest(vNew, acceleration, collision)){
                 return;    
             }
             
@@ -185,11 +198,15 @@ function simulate(){
             vNew = integrate(sphere.v, acceleration, timestep);            
             
             vNew = collisionResponse(vNew, collision.normal);
+            
             xNew = integrate(sphere.x, sphere.v, timestep);
         }
-        
-        timestepRemain = timestepRemain - timestep;
+        else {
+            timestep = timestepRemain;
+        }
 
+        timestepRemain = timestepRemain - timestep;
+            
         sphere.v = vNew;
         sphere.x = xNew;
         sphere.visual.position.set(xNew.elements[0], xNew.elements[1], xNew.elements[2]);
@@ -210,10 +227,11 @@ function render() {
     renderer.render(scene, camera); //draw it
 	requestAnimationFrame(render);  //redraw whenever the browser refreshes
 }
- 
 
 /** Detects at what fraction a collision occurs. Returns false if there is no collision. */
 function collisionFraction(x1, x2){
+    
+    var collisions = [];
     
     for (var i = 0; i < planes.length; i++){
         var plane = planes[i];
@@ -226,15 +244,30 @@ function collisionFraction(x1, x2){
             continue;
         }
         else {
-            return { 
+            collisions.push({ 
                 fraction: dOld / (dOld-dNew),
                 normal: plane.n,
                 point: plane.p
-            };
+            });
         }
     }
     
-    return false;
+    //return the first collision with the minimum f
+    if (collisions.length > 0){
+        var minF = 1;
+        var minIndex = 0;
+        for (var j = 0; j < collisions.length; j++){
+            //TODO when ball hits two planes at the same time it breaks (collisions[j].fraction == minF)
+            if (collisions[j].fraction < minF){
+                minF = collisions[j].fraction;
+                minIndex = j;
+            }
+        }
+        return collisions[minIndex];
+    }
+    else {
+        return false;
+    }
 }
 
 function collisionResponse(vOld, n){
@@ -250,13 +283,12 @@ function collisionResponse(vOld, n){
 
 /**
  * Criteria for it being at rest.
- * 1. velocity less than minCollisionV
- * 2. dist less than minCollisionX
+ * 1. velocity less than minRestV
+ * 2. dist less than minRestX (this is satisfied because I check during collisions. 
  * 3. acceleration is away from the surface
  */
-function atRest(v, x, a, collision){
-    var dist = x.subtract(collision.point).dot(collision.normal);
-    if (magnitude(v) < minCollisionV && dist < minCollisionX && a.dot(collision.normal) < 0){
+function atRest(v, a, collision){
+    if (magnitude(v) < minRestV && a.dot(collision.normal) < 0){
         return true;
     }
     return false;
