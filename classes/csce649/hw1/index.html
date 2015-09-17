@@ -13,7 +13,10 @@
 </head>    
 <body>
     <div id="control-panel">
-        <h2>Simulation Settings</h2>
+        <h3>Simulation Settings</h3>
+        <button onclick="resetUserInputs()">Reset</button>
+        <button onclick="randomizeUserInputs()">Randomize</button>
+
         <ul>
             <li>Start Position</li>
             <li>
@@ -75,7 +78,7 @@
             <li><input id="CF" type="number" value="0.2" step=".1" onchange="inputChange()"> - Coefficient of Friction </li>
         </ul>
         <label><input class="checkbox" type="checkbox" onclick='toggleAxes(this)'> Show XYZ Axes</label>
-        <button onclick="initMotion()">Restart Simulation</button>
+        <button class="restart-btn" onclick="initMotion()">Restart Simulation</button>
         <br><br>
         <p>The cube has sides of 20 meter length and the ball has a radius of 2 meters</p>
     </div>

@@ -198,43 +198,6 @@ var CR;             // coefficient of restitution. 1 is maximum bouncy
 var CF;             // coefficient of friction. 0 is no friction
 
 
-function getUserInputs(){
-    initialX.x = parseFloat(doc.getElementById("p.x").value);
-    initialX.y = parseFloat(doc.getElementById("p.y").value);
-    initialX.z = parseFloat(doc.getElementById("p.z").value);
-
-    initialV.x = parseFloat(doc.getElementById("v.x").value);
-    initialV.y = parseFloat(doc.getElementById("v.y").value);
-    initialV.z = parseFloat(doc.getElementById("v.z").value); 
-    
-    G.elements[0] = parseFloat(doc.getElementById("g.x").value);
-    G.elements[1] = parseFloat(doc.getElementById("g.y").value);
-    G.elements[2] = parseFloat(doc.getElementById("g.z").value); 
-
-    H = parseFloat(doc.getElementById("H").value);    
-    H_MILLI = H * 1000;    
-    
-    D = parseFloat(doc.getElementById("D").value);  
-    CR = parseFloat(doc.getElementById("CR").value);    
-    CF = parseFloat(doc.getElementById("CF").value);    
-}
-
-/** 
- * refresh the values of our constants on input change. and tell simulation to start back up if neccesary
- * also binds the sliders to the text inputs using the optional elem and id parameters
- */
-function inputChange(elem, id){
-    if (elem && id){
-        doc.getElementById(id).value = elem.value;
-    }
-    getUserInputs();
-    
-    if (!isSimulating){
-        isSimulating = true;
-        simulate();
-    }
-}
-
 /** create the sphere and set it according to user inputs, then start simulation and rendering */
 function initMotion(){
     getUserInputs();
@@ -365,7 +328,7 @@ function collisionResponse(vOld, n){
      
     var vTanNew = vOld.subtract(vNormalOld).multiply(1-CF);
     
-    //coulomb model. odd results.
+    //coulomb model. odd results. so I use the basic model
     //var vTanNew = vTanOld.subtract(vTanOld.toUnitVector().multiply(Math.max((1-CF)*magnitude(vNormalOld), magnitude(vTanOld))));
     
     return vNormalNew.add(vTanNew);
@@ -395,3 +358,124 @@ function magnitude(v){
     return Math.sqrt(sum);
 }
 
+
+/************* Functions for handling user input *************/
+
+/** 
+ * refresh the values of our constants on input change. and tell simulation to start back up if neccesary
+ * also binds the sliders to the text inputs using the optional elem and id parameters
+ */
+function inputChange(elem, id){
+    if (elem && id){
+        doc.getElementById(id).value = elem.value;
+    }
+    getUserInputs();
+    
+    if (!isSimulating){
+        isSimulating = true;
+        simulate();
+    }
+}
+
+
+function getUserInputs(){
+    initialX.x = parseFloat(doc.getElementById("p.x").value);
+    initialX.y = parseFloat(doc.getElementById("p.y").value);
+    initialX.z = parseFloat(doc.getElementById("p.z").value);
+
+    initialV.x = parseFloat(doc.getElementById("v.x").value);
+    initialV.y = parseFloat(doc.getElementById("v.y").value);
+    initialV.z = parseFloat(doc.getElementById("v.z").value); 
+    
+    G.elements[0] = parseFloat(doc.getElementById("g.x").value);
+    G.elements[1] = parseFloat(doc.getElementById("g.y").value);
+    G.elements[2] = parseFloat(doc.getElementById("g.z").value); 
+
+    H = parseFloat(doc.getElementById("H").value);    
+    H_MILLI = H * 1000;    
+    
+    D = parseFloat(doc.getElementById("D").value);  
+    CR = parseFloat(doc.getElementById("CR").value);    
+    CF = parseFloat(doc.getElementById("CF").value);    
+}
+
+/** this should be optimized. too much code */ 
+function resetUserInputs(){
+    doc.getElementById("p.x").value = 3;
+    doc.getElementById("p.y").value = 7;
+    doc.getElementById("p.z").value = 5;
+    doc.getElementById("p.x-slider").value = 3;
+    doc.getElementById("p.y-slider").value = 7;
+    doc.getElementById("p.z-slider").value = 5;
+
+    doc.getElementById("v.x").value = 30;
+    doc.getElementById("v.y").value = 4;
+    doc.getElementById("v.z").value = -10; 
+    doc.getElementById("v.x-slider").value = 30;
+    doc.getElementById("v.y-slider").value = 4;
+    doc.getElementById("v.z-slider").value = -10;     
+    
+    doc.getElementById("g.x").value = 0;
+    doc.getElementById("g.y").value = -9.81;
+    doc.getElementById("g.z").value = 0;
+    doc.getElementById("g.x-slider").value = 0;
+    doc.getElementById("g.y-slider").value = -9.81;
+    doc.getElementById("g.z-slider").value = 0;    
+
+    doc.getElementById("H").value = 0.016;    
+    H_MILLI = H * 1000;    
+    
+    doc.getElementById("D").value = 0.1;  
+    doc.getElementById("CR").value = 0.5;    
+    doc.getElementById("CF").value = 0.2;
+    getUserInputs();
+}
+
+function randomizeUserInputs(){
+    var randX = getRandomArbitrary(2,8);
+    var randY = getRandomArbitrary(2,8);
+    var randZ = getRandomArbitrary(2,8);
+
+    doc.getElementById("p.x").value = randX;
+    doc.getElementById("p.y").value = randY;
+    doc.getElementById("p.z").value = randZ;
+    doc.getElementById("p.x-slider").value = randX;
+    doc.getElementById("p.y-slider").value = randY;
+    doc.getElementById("p.z-slider").value = randZ;
+
+    randX = getRandomArbitrary(-100, 100);
+    randY = getRandomArbitrary(-100, 100);
+    randZ = getRandomArbitrary(-100, 100);
+    doc.getElementById("v.x").value = randX;
+    doc.getElementById("v.y").value = randY;
+    doc.getElementById("v.z").value = randZ; 
+    doc.getElementById("v.x-slider").value = randX;
+    doc.getElementById("v.y-slider").value = randY;
+    doc.getElementById("v.z-slider").value = randZ;     
+ 
+    randX = getRandomArbitrary(-10, 10);
+    randY = getRandomArbitrary(-10, 10);
+    randZ = getRandomArbitrary(-10, 10);
+    doc.getElementById("g.x").value = randX;
+    doc.getElementById("g.y").value = randY;
+    doc.getElementById("g.z").value = randZ;
+    doc.getElementById("g.x-slider").value = randX;
+    doc.getElementById("g.y-slider").value = randY;
+    doc.getElementById("g.z-slider").value = randZ;  
+    
+    doc.getElementById("H").value = getRandomArbitrary(0.016, 0.1);    
+    H_MILLI = H * 1000;    
+    
+    doc.getElementById("D").value = getRandomArbitrary(0, 1);  
+    doc.getElementById("CR").value = getRandomArbitrary(0, 1);    
+    doc.getElementById("CF").value = getRandomArbitrary(0, 1);
+    getUserInputs();
+}
+
+/**
+ * Returns a random number between min (inclusive) and max (exclusive). 
+ * Source https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+ */
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
+}
