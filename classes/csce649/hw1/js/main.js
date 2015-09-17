@@ -326,10 +326,11 @@ function collisionResponse(vOld, n){
 
     var vNormalNew = n.multiply(-1 * CR * (vOld.dot(n)));
      
-    var vTanNew = vOld.subtract(vNormalOld).multiply(1-CF);
+    //basic model of friction
+    //var vTanNew = vOld.subtract(vNormalOld).multiply(1-CF);
     
-    //coulomb model. odd results. so I use the basic model
-    //var vTanNew = vTanOld.subtract(vTanOld.toUnitVector().multiply(Math.max((1-CF)*magnitude(vNormalOld), magnitude(vTanOld))));
+    //coulomb model.
+    var vTanNew = vTanOld.subtract(vTanOld.toUnitVector().multiply(Math.min(CF*magnitude(vNormalOld), magnitude(vTanOld))));
     
     return vNormalNew.add(vTanNew);
 }
