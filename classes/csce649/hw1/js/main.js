@@ -7,6 +7,9 @@
  *   That contained the basics of setting up a scene, camera, light, and object
  * 
  *   For vector operations I am using Sylvestor.js http://sylvester.jcoglan.com/
+ * 
+ *   The only issue I was unable to figure out was that if you run the simulation repeatedly 
+ *   without refreshing the page, it speeds up
  *    
  *   @author: Kade Keith
  */
@@ -186,7 +189,7 @@ function initLabel(text, color, coords){
 /************* Assignment specific code begins here *************/
 
 var G = new $V([0, -9.81, 0]);  // The accel due to gravity in m/s^2 
-var minRestV = 0.1;          // minimum velocity to declare at rest
+var minRestV = 0.7;          // minimum velocity to declare at rest
 
 //variables that the user sets
 var H;              // Step time in seconds
@@ -241,6 +244,7 @@ function simulate(){
             //If the ball is at rest stop simulation
             if (atRest(vNew, acceleration, collision)){
                 isSimulating = false;
+                console.log("at rest");
                 return;    
             }
             
