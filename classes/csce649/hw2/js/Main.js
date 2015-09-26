@@ -7,6 +7,7 @@
  *   That contained the basics of setting up a scene, camera, light, and object
  * 
  *   For vector operations I am using Sylvestor.js http://sylvester.jcoglan.com/
+ *   For the gaussian distribution I am using https://www.npmjs.com/package/gaussian
  * 
  *   The only issue I was unable to figure out was that if you run the simulation repeatedly 
  *   without refreshing the page, it speeds up
@@ -46,12 +47,14 @@ var initialV = {};  // Velocity
 var D;              // Air resitence
 var CR;             // coefficient of restitution. 1 is maximum bouncy
 var CF;             // coefficient of friction. 0 is no friction
+var PPS = 10;      // particles generated per second
+
 
 /** create the sphere and set it according to user inputs, then start simulation and rendering */
 function initMotion(){
     getUserInputs();
     
-    particleSystem = new ParticleSystem(scene, $V([initialX.x, initialX.y, initialX.z]));
+    particleSystem = new ParticleSystem(scene, $V([initialX.x, initialX.y, initialX.z]), 'gaussian');
     clock = new THREE.Clock();
     clock.start();
     clock.getDelta();
@@ -60,26 +63,64 @@ function initMotion(){
     render();
 }
 initMotion();
-setInterval(particleSystem.addParticles.bind(particleSystem), 1000, 20, {v: $V([initialV.x, initialV.y, initialV.z])});
+//setInterval(particleSystem.addParticles.bind(particleSystem), 1000, 20, {v: $V([initialV.x, initialV.y, initialV.z])});
 
 /** Euler integration */
 function integrate(v1, v2, timestep){
     return v1.add(v2.multiply(timestep));
 }
 
+var particleFraction = 0;
 /** the main simulation loop. recursive */ 
 function simulate(){ 
     var timestep = H;
     
+    var particleCount = H * PPS;
+    if (particleCount < 1) {
+        particleFraction += particleCount;
+        if (particleFraction > 1){
+            particleCount = 1;
+            particleFraction = 0;
+        }
+        else {
+            particleCount = 0;
+        }
+    }
+    
+    particleSystem.generate(particleCount, {v: $V([initialV.x, initialV.y, initialV.z])});
+    
+    /* 
+
+    for each particle generator k do 
+        generator[k].GenerateParticles(particlelist, t, h);
+    end
+    
+    particlelist.TestAndDeactivate(t); 
+    particlelist.ComputeAccelerations(t); 
+    if t == output-time then
+        particlelist.Display(); 
+    end
+    particlelist.Integrate(t, h); 
+    n = n + 1;
+    t = nh;
+
+*/
+    
+  
     //for all the particles apply physics
     for (var i=0; i<particleSystem.max; i++){
         var particle = particleSystem.particles[i];
         if (particle.visual.visible){
             
-            //var xNew = integrate(sphere.x, sphere.v, timestep);
+            var acceleration = G.subtract(particle.v.multiply(D)); //I give particles a mass of one
+            var vNew = integrate(particle.v, acceleration, timestep);
             var xNew = integrate(particle.x, particle.v, timestep);
             particleSystem.moveParticle(i, xNew);
-            particleSystem.changeColor(i);
+            particleSystem.updateAge(i, timestep);
+            particleSystem.updateColor(i);
+            
+            particle.v = vNew;
+            particle.x = xNew;
         }
     }
     
@@ -234,7 +275,9 @@ function getUserInputs(){
     
     G.elements[0] = parseFloat(doc.getElementById("g.x").value);
     G.elements[1] = parseFloat(doc.getElementById("g.y").value);
-    G.elements[2] = parseFloat(doc.getElementById("g.z").value); 
+    G.elements[2] = parseFloat(doc.getElementById("g.z").value);
+    
+    PPS = parseFloat(doc.getElementById("PPS").value); 
 
     H = parseFloat(doc.getElementById("H").value);    
     H_MILLI = H * 1000;    
@@ -266,6 +309,9 @@ function resetUserInputs(){
     doc.getElementById("g.x-slider").value = 0;
     doc.getElementById("g.y-slider").value = -9.81;
     doc.getElementById("g.z-slider").value = 0;    
+
+    doc.getElementById("PPS").value = 10;
+    doc.getElementById("PPS-slider").value = 10; 
 
     doc.getElementById("H").value = 0.016;    
     H_MILLI = H * 1000;    
@@ -308,6 +354,10 @@ function randomizeUserInputs(){
     doc.getElementById("g.y-slider").value = randY;
     doc.getElementById("g.z-slider").value = randZ;  
     
+    var randPPS = Util.getRandom(1, 100);
+    doc.getElementById("PPS").value = randPPS;  
+    doc.getElementById("PPS-slider").value = randPPS;  
+
     doc.getElementById("H").value = Util.getRandom(0.016, 0.1);    
     H_MILLI = H * 1000;    
     

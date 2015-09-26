@@ -5,6 +5,7 @@ html, body {
     width: 100%;
     background-color: #e8e8d6;
     font-family: monospace;
+    //color: rgb(255, 0, 0);
 }
 
 #webgl-container {

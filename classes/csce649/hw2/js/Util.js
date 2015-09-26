@@ -4,6 +4,7 @@
  */
 var Util = {};
 
+/** uniformily distributed random numbers  */
 Util.getRandom = function (min, max) {
   return Math.random() * (max - min) + min;
 };
