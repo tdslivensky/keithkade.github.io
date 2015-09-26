@@ -12,13 +12,83 @@
     
 </head>    
 <body>
-    <div id="container"></div>
+    <div id="control-panel">
+        <h3>Simulation Settings</h3>
+        <button onclick="resetUserInputs()">Reset</button>
+        <button onclick="randomizeUserInputs()">Randomize</button>
+
+        <ul>
+            <li>Start Position</li>
+            <li>
+                X
+                <input id="p.x-slider" class="slider" type="range" value="3" step="1" min="2" max="8" width="200px" oninput="inputChange(this, 'p.x')">
+                <input id="p.x" type="number" value="3" step="any" oninput="inputChange(this, 'p.x-slider')"> 
+            </li>
+            <li>
+                Y
+                <input id="p.y-slider" class="slider" type="range" value="7" step="1" min="2" max="8" width="200px" oninput="inputChange(this, 'p.y')">
+                <input id="p.y" type="number" value="7" step="any" oninput="inputChange(this, 'p.y-slider')"> 
+            </li>
+            <li>
+                Z
+                <input id="p.z-slider" class="slider" type="range" value="5" step="1" min="2" max="8" width="200px" oninput="inputChange(this, 'p.z')">
+                <input id="p.z" type="number" value="5" step="any" oninput="inputChange(this, 'p.z-slider')">
+            </li>
+        </ul>
+        <ul>
+            <li>Start Velocity</li>
+            <li>
+                X
+                <input id="v.x-slider" class="slider" type="range" value="30" step="1" min="-100" max="100" width="200px" oninput="inputChange(this, 'v.x')">
+                <input id="v.x" type="number" value="30" step="any" oninput="inputChange(this, 'v.x-slider')">
+            </li>
+            <li>
+                Y
+                <input id="v.y-slider" class="slider" type="range" value="4" step="1" min="-100" max="100" width="200px" oninput="inputChange(this, 'v.y')">
+                <input id="v.y" type="number" value="4" step="any" oninput="inputChange(this, 'v.y-slider')">
+            </li>
+            <li>
+                Z
+                <input id="v.z-slider" class="slider" type="range" value="-10" step="1" min="-100" max="100" width="200px" oninput="inputChange(this, 'v.z')">
+                <input id="v.z" type="number" value="-10" step="any" oninput="inputChange(this, 'v.z-slider')">
+            </li>
+        </ul>
+        <ul>
+            <li>Gravity</li>
+            <li>
+                X
+                <input id="g.x-slider" class="slider" type="range" value="0" step=".01" min="-10" max="10" width="200px" oninput="inputChange(this, 'g.x')">
+                <input id="g.x" type="number" value="0" step="any" oninput="inputChange(this, 'g.x-slider')">
+            </li>
+            <li>
+                Y
+                <input id="g.y-slider" class="slider" type="range" value="-9.81" step=".01" min="-10" max="10" width="200px" oninput="inputChange(this, 'g.y')">
+                <input id="g.y" type="number" value="-9.81" step="any" oninput="inputChange(this, 'g.y-slider')">
+            </li>
+            <li>
+                Z
+                <input id="g.z-slider" class="slider" type="range" value="0" step=".01" min="-10" max="10" width="200px" oninput="inputChange(this, 'g.z')">
+                <input id="g.z" type="number" value="0" step="any" oninput="inputChange(this, 'g.z-slider')">
+            </li>
+        </ul>
+        <ul>
+            <li><input id="H" type="number" value="0.016" min=".001" step=".001" onchange="inputChange()"> - Time Step </li>
+            <li><input id="D" type="number" value="0.1" step=".01" onchange="inputChange()"> - Air Resistence</li>
+            <li><input id="CR" type="number" value="0.5" step=".1" onchange="inputChange()"> - Coefficient of Restitution </li>
+            <li><input id="CF" type="number" value="0.2" step=".1" onchange="inputChange()"> - Coefficient of Friction </li>
+        </ul>
+        <label><input class="checkbox" type="checkbox" onclick='toggleAxes(this)'> Show XYZ Axes</label>
+        <button class="restart-btn" onclick="initMotion()">Restart Simulation</button>
+        <br><br>
+        <p>The cube has sides of 20 meter length and the ball has a radius of 2 meters</p>
+    </div>
+    <div id="webgl-container"></div>
 </body>
     
-<script src="three.min.js"></script>
-<script src="sylvester.js"></script>
-<script src="Sphere.js"></script>
-
-<script src="main.js"></script>
+<script src="js/three.min.js"></script>
+<script src="js/OrbitControls.js"></script>    
+<script src="js/sylvester.js"></script>
+<script src="js/Sphere.js"></script>
+<script src="js/main.js"></script>
     
 </html>
