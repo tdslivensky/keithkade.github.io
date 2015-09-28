@@ -1,7 +1,7 @@
 /* global THREE, doc, Util, $V, gaussian */
 
 /** 
- *  My Particle System class
+ *  My Particle System class. I intentially use getters and settters so that I can be implementation agnostic. I am undecided between sprites and vertices
  */
 
 
@@ -148,4 +148,24 @@ ParticleSystem.prototype.updateColor = function(index){
         this.particles[index].visual.material.opacity = 1 - lifespanFraction;
         this.particles[index].visual.material.color.setRGB((1 - lifespanFraction), 0, 0); 
     }
+};
+
+ParticleSystem.prototype.getV = function(index){
+    return this.particles[index].v;
+};
+
+ParticleSystem.prototype.getX = function(index){
+    return this.particles[index].x;
+};
+
+ParticleSystem.prototype.setV = function(index, v){
+    this.particles[index].v = v;
+};
+
+ParticleSystem.prototype.setX = function(index, x){
+    this.particles[index].x = x;
+};
+
+ParticleSystem.prototype.isVisible = function(index){
+    return this.particles[index].visual.visible;
 };

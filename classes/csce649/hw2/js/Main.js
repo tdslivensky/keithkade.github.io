@@ -30,7 +30,7 @@ var renderer = initRenderer();
 var camera = initCamera();
 var light = initLight();
 var axes = initAxes();
-var particleSystem;
+var particleSys;
 var clock;
 var isSimulating;   //is the simulation currently running?
 
@@ -54,7 +54,7 @@ var PPS = 10;      // particles generated per second
 function initMotion(){
     getUserInputs();
     
-    particleSystem = new ParticleSystem(scene, $V([initialX.x, initialX.y, initialX.z]), 'gaussian');
+    particleSys = new ParticleSystem(scene, $V([initialX.x, initialX.y, initialX.z]), 'gaussian');
     clock = new THREE.Clock();
     clock.start();
     clock.getDelta();
@@ -87,7 +87,7 @@ function simulate(){
         }
     }
     
-    particleSystem.generate(particleCount, {v: $V([initialV.x, initialV.y, initialV.z])});
+    particleSys.generate(particleCount, {v: $V([initialV.x, initialV.y, initialV.z])});
     
     /* 
 
@@ -104,27 +104,25 @@ function simulate(){
     n = n + 1;
     t = nh;
 
-*/
-    
+    */
   
     //for all the particles apply physics
-    for (var i=0; i<particleSystem.max; i++){
-        var particle = particleSystem.particles[i];
-        if (particle.visual.visible){
+    for (var i=0; i<particleSys.max; i++){
+        if (particleSys.isVisible(i)){
+            var vOld = particleSys.getV(i);
+            var xOld = particleSys.getX(i);
+            var acceleration = G.subtract(vOld.multiply(D)); //I give particles a mass of one
+            var vNew = integrate(vOld, acceleration, timestep);
+            var xNew = integrate(xOld, vOld, timestep);
+            particleSys.moveParticle(i, xNew);
+            particleSys.updateAge(i, timestep);
+            particleSys.updateColor(i);
             
-            var acceleration = G.subtract(particle.v.multiply(D)); //I give particles a mass of one
-            var vNew = integrate(particle.v, acceleration, timestep);
-            var xNew = integrate(particle.x, particle.v, timestep);
-            particleSystem.moveParticle(i, xNew);
-            particleSystem.updateAge(i, timestep);
-            particleSystem.updateColor(i);
-            
-            particle.v = vNew;
-            particle.x = xNew;
+            particleSys.setV(i, vNew);
+            particleSys.setX(i, xNew);
         }
     }
-    
-    
+
     var waitTime = H_MILLI - clock.getDelta(); 
     //4 milliseconds is the minimum wait for most browsers
     if (waitTime < 4){
