@@ -53,6 +53,9 @@ var PPS = 10;      // particles generated per second
 /** create the sphere and set it according to user inputs, then start simulation and rendering */
 function initMotion(){
     getUserInputs();
+    if (particleSys){
+        particleSys.delete(scene);
+    }
     
     particleSys = new ParticleSystem(scene, $V([initialX.x, initialX.y, initialX.z]), 'gaussian');
     clock = new THREE.Clock();
@@ -63,7 +66,6 @@ function initMotion(){
     render();
 }
 initMotion();
-//setInterval(particleSystem.addParticles.bind(particleSystem), 1000, 20, {v: $V([initialV.x, initialV.y, initialV.z])});
 
 /** Euler integration */
 function integrate(v1, v2, timestep){
@@ -75,37 +77,17 @@ var particleFraction = 0;
 function simulate(){ 
     var timestep = H;
     
+    //generate new particles. keep track of fractions
     var particleCount = H * PPS;
-    if (particleCount < 1) {
-        particleFraction += particleCount;
-        if (particleFraction > 1){
-            particleCount = 1;
-            particleFraction = 0;
-        }
-        else {
-            particleCount = 0;
-        }
+    particleFraction += particleCount - Math.floor(particleCount);
+    particleCount = Math.floor(particleCount);
+    if (particleFraction > 1){
+        particleCount += 1;
+        particleFraction = particleFraction - 1;
     }
     
     particleSys.generate(particleCount, {v: $V([initialV.x, initialV.y, initialV.z])});
-    
-    /* 
-
-    for each particle generator k do 
-        generator[k].GenerateParticles(particlelist, t, h);
-    end
-    
-    particlelist.TestAndDeactivate(t); 
-    particlelist.ComputeAccelerations(t); 
-    if t == output-time then
-        particlelist.Display(); 
-    end
-    particlelist.Integrate(t, h); 
-    n = n + 1;
-    t = nh;
-
-    */
-  
+      
     //for all the particles apply physics
     for (var i=0; i<particleSys.max; i++){
         if (particleSys.isVisible(i)){
@@ -124,8 +106,7 @@ function simulate(){
     }
 
     var waitTime = H_MILLI - clock.getDelta(); 
-    //4 milliseconds is the minimum wait for most browsers
-    if (waitTime < 4){
+    if (waitTime < 4){ //4 milliseconds is the minimum wait for most browsers
         console.log("simulation getting behind and slowing down!");
     }
     setTimeout(simulate, waitTime);

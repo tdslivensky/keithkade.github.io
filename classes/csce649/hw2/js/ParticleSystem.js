@@ -43,6 +43,13 @@ function ParticleSystem(scene, x, dist){
     }
 }
 
+/** remove the particle system */
+ParticleSystem.prototype.delete = function(scene){
+    scene.remove(this.sourceVis);
+    for (var i = 0; i < this.max; i++) {
+        // add it to the geometry
+        scene.remove(this.particles[i].visual);
+    }};
 
 /** Creates a canvas with the given text then renders that as a sprite. TODO performance? */
 function initSprite(v){
