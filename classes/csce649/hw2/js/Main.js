@@ -81,6 +81,7 @@ function initPolygon(){
     var geometry = new THREE.PlaneGeometry(20, 20);
     var material = new THREE.MeshBasicMaterial( {color: 0xa0a0ff, side: THREE.DoubleSide} );
     var polygon = new THREE.Mesh( geometry, material );
+        
     polygon.position.set(planeAttr.p[0], planeAttr.p[1], planeAttr.p[2]);
     
     polygon.geometry.applyMatrix(
@@ -88,8 +89,10 @@ function initPolygon(){
             new THREE.Euler( planeAttr.r[0], planeAttr.r[1], planeAttr.r[2])
         )
     );
-    
+        
+    var wireframe = new THREE.WireframeHelper( polygon, 0x00ff00 );
     scene.add(polygon);
+    scene.add(wireframe);
     return polygon;
 }
 
@@ -197,23 +200,24 @@ function pointInPolygon(x){
     for (var i=0; i < polygon.geometry.faces.length; i++){
         
         var face = polygon.geometry.faces[i];
-        var p0 = $V([polygon.geometry.vertices[face.a].x, polygon.geometry.vertices[face.a].y,  polygon.geometry.vertices[face.a].z]);
-        var p1 = $V([polygon.geometry.vertices[face.b].x, polygon.geometry.vertices[face.b].y,  polygon.geometry.vertices[face.b].z]);
-        var p2 = $V([polygon.geometry.vertices[face.c].x, polygon.geometry.vertices[face.c].y,  polygon.geometry.vertices[face.c].z]);
- 
-        /*
-        
-        vn = (p2 − p1) × (p1 − p0),
-A = kvnk,
-n = vn/A
-u = [(p2 − p1) × (x − p1)] · n/A,
-v = [(p0 − p2) × (x − p2)] · n/A,
-w = 1 − u − v.
+        var p0 = $V([polygon.geometry.vertices[face.a].x + plane.p.elements[0], polygon.geometry.vertices[face.a].y + plane.p.elements[1],  polygon.geometry.vertices[face.a].z + plane.p.elements[2]]);
+        var p1 = $V([polygon.geometry.vertices[face.b].x + plane.p.elements[0], polygon.geometry.vertices[face.b].y + plane.p.elements[1],  polygon.geometry.vertices[face.b].z + plane.p.elements[2]]);
+        var p2 = $V([polygon.geometry.vertices[face.c].x + plane.p.elements[0], polygon.geometry.vertices[face.c].y + plane.p.elements[1],  polygon.geometry.vertices[face.c].z + plane.p.elements[2]]);
 
+        //drawPoint(p0);
+        //drawPoint(p1);
+        //drawPoint(p2);
+                
+        /* The original implementation from the appendix. Wasn't working
+        var vn = p2.subtract(p1).cross(p1.subtract(p0));
+        var A = Util.magnitude(vn);
+        var nHat = vn.multiply(1/A);
+        var u = p2.subtract(p1).cross(x.subtract(p1)).dot(nHat) / A;
+        var v = p0.subtract(p2).cross(x.subtract(p2)).dot(nHat) / A;
         */
         
         //implementation in appendix wasn't working, so I based this off of http://www.blackpawn.com/texts/pointinpoly/
-        //TODO clean this up. this breaks when I rotate the plane. bounces too low
+        //TODO clean this up
         var A = p0;
         var B = p1;
         var C = p2;
@@ -237,38 +241,7 @@ w = 1 − u − v.
         if ( u >= 0 && v >= 0 && (u+v) <= 1){
             return true;
         }
-        /*
         
-      /*  
-            // Prepare our barycentric variables
-    var u = B.subtract(A);
-    var v = C.subtract(A);
-    var w = x.subtract(A);
- 
-    var vCrossW = v.cross(w);
-    var vCrossU = v.cross(u);
- 
-    // Test sign of r
-    if (vCrossW.dot(vCrossU) < 0)
-        return false;
- 
-    var uCrossW = u.cross(w);
-    var uCrossV = u.cross(v);
- 
-    // Test sign of t
-    if (uCrossW.dot(uCrossV) < 0)
-        return false;
- 
-    // At this point, we know that r and t and both > 0.
-    // Therefore, as long as their sum is <= 1, each must be less <= 1
-    var denom = Util.magnitude(uCrossV);
-    var r = Util.magnitude(vCrossW) / denom;
-    var t = Util.magnitude(uCrossW) /denom;
- 
-    if (r + t <= 1)
-        return true;
-                */
-
     }
     return false;
 }
@@ -284,8 +257,9 @@ function render() {
 /** create the renderer and add it to the scene */
 function initRenderer(){
     var renderer = new THREE.WebGLRenderer({ alpha: true });
-    renderer.setClearColor(0xe8e8d6 , 1); //make the background grey
-
+    //renderer.setClearColor(0xe8e8d6 , 1); 
+    renderer.setClearColor(0x000000 , 1); 
+    
     renderer.setSize(SCENE_WIDTH, SCENE_HEIGHT);
     doc.getElementById('webgl-container').appendChild(renderer.domElement);
     return renderer;
@@ -381,6 +355,23 @@ function initLabel(text, color, coords){
     sprite.position.set(coords[0], coords[1], coords[2]);
     return sprite;  
     
+}
+
+function drawPoint(x){
+    var canvas = doc.createElement('canvas');
+    var size = 100;
+    canvas.width = size;
+    canvas.height = size;
+
+    var material = new THREE.SpriteMaterial( {
+            //color: Math.random() * 0x808008 + 0x808080,
+            color: {r: 255, g: 0, b: 0}
+    });
+
+    var sprite = new THREE.Sprite(material);
+    sprite.scale.set( 1, 1, 1 ); 
+    sprite.position.set(x.elements[0], x.elements[1], x.elements[2]);
+    scene.add(sprite);
 }
 
 /************* Functions for handling user input *************/
