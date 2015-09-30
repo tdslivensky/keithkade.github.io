@@ -98,7 +98,6 @@ ParticleSystem.prototype.generate = function(count, opts){
             this.index = 0;
         }
         
-        //FIXME NOT GAUSSION
         if (this.distribution == 'gaussian'){
             pX = distribution.ppf(Math.random());
             pY = distribution.ppf(Math.random());

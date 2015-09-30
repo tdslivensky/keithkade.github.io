@@ -25,12 +25,20 @@ var ASPECT = SCENE_WIDTH / SCENE_HEIGHT;
 var NEAR = 0.1;
 var FAR = 10000;
 
+var planeAttr = {
+    p: [20, 0 , 0],
+    r: [Math.radians(120), Math.radians(45), Math.radians(10)]
+
+    //r: [Math.radians(0), Math.radians(90), Math.radians(0)]
+};
+
 var scene = new THREE.Scene();
 var renderer = initRenderer();
 var camera = initCamera();
 var light = initLight();
 var axes = initAxes();
 var polygon = initPolygon();
+var plane = initPlane();
 var particleSys;
 var clock;
 var isSimulating;   //is the simulation currently running?
@@ -68,18 +76,34 @@ function initMotion(){
 }
 initMotion();
 
+/** the rendering of the surface that particles will bounce off of. */
 function initPolygon(){
-    var geometry = new THREE.PlaneGeometry( 20, 20);
+    var geometry = new THREE.PlaneGeometry(20, 20);
     var material = new THREE.MeshBasicMaterial( {color: 0xa0a0ff, side: THREE.DoubleSide} );
     var polygon = new THREE.Mesh( geometry, material );
-    polygon.position.set(50, 0, -20);
+    polygon.position.set(planeAttr.p[0], planeAttr.p[1], planeAttr.p[2]);
+    
     polygon.geometry.applyMatrix(
         new THREE.Matrix4().makeRotationFromEuler(
-            new THREE.Euler( Math.radians(120), Math.radians(45), Math.radians(10), 'XYZ' )
+            new THREE.Euler( planeAttr.r[0], planeAttr.r[1], planeAttr.r[2])
         )
     );
+    
     scene.add(polygon);
     return polygon;
+}
+
+/** the internal representation of the surface that particles will bounce off of. */
+function initPlane(){
+    var plane = new THREE.Plane( new THREE.Vector3(0, 0, 1), 0);
+    plane.applyMatrix4(
+        new THREE.Matrix4().makeRotationFromEuler(
+            new THREE.Euler( planeAttr.r[0], planeAttr.r[1], planeAttr.r[2])
+        )
+    );
+    plane.p = $V([planeAttr.p[0], planeAttr.p[1], planeAttr.p[2]]);
+    plane.n = $V([plane.normal.x, plane.normal.y, plane.normal.z]);
+    return plane;
 }
 
 /** Euler integration */
@@ -112,7 +136,10 @@ function simulate(){
             var vNew = integrate(vOld, acceleration, timestep);
             var xNew = integrate(xOld, vOld, timestep);
             
-            //collision detection
+            //collision detection and response. if there is no collision then no change
+            var collision = collisionDetectionAndResponse(xOld, xNew, vOld, vNew);
+            xNew = collision.xNew;
+            vNew = collision.vNew;
             
             particleSys.moveParticle(i, xNew);
             particleSys.updateAge(i, timestep);
@@ -128,6 +155,38 @@ function simulate(){
         console.log("simulation getting behind and slowing down!");
     }
     setTimeout(simulate, waitTime);
+}
+
+function collisionDetectionAndResponse(x1, x2, v1, v2){
+    //return true;
+    
+    
+    //x′[n+1] = x[n+1] − (1 + ρ)d[n+1]nˆ.
+    
+    //v′[n+1] = −ρvn + (1 − μ)vt,
+    
+    var dOld = x1.subtract(plane.p).dot(plane.n);
+    var dNew = x2.subtract(plane.p).dot(plane.n);
+    //check if they have the same sign
+    if (dOld*dNew <= 0 && pointInPlane()){
+        
+        var response = {};
+        response.xNew = x2.subtract(plane.n.multiply(dNew * (1 + CR)));
+        
+        var vNormal = plane.n.multiply(v1.dot(plane.n));
+        var vTan = v1.subtract(vNormal);
+
+        response.vNew = vNormal.multiply(-1 * CR).add(vTan.multiply(1 - CF));
+        
+        return response;
+    }
+    else {
+        return {xNew: x2, vNew: v2};
+    }
+}
+
+function pointInPlane(){
+
 }
 
 /** rendering loop */
@@ -152,7 +211,7 @@ function initRenderer(){
 function initCamera(){    
     var camera = new THREE.PerspectiveCamera( FIELD_OF_VIEW, ASPECT, NEAR, FAR);
 
-    camera.position.set(40, 40, 40);
+    camera.position.set(0, 40, 100);
 
     camera.lookAt(new THREE.Vector3(0,0,0)); //we want to focus on the center 
     
