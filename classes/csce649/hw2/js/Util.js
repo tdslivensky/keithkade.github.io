@@ -18,3 +18,13 @@ Util.magnitude = function(v){
     return Math.sqrt(sum);
 };
 
+// Source: http://cwestblog.com/2012/11/12/javascript-degree-and-radian-conversion/
+// Converts from degrees to radians.
+Math.radians = function(degrees) {
+  return degrees * Math.PI / 180;
+};
+ 
+// Converts from radians to degrees.
+Math.degrees = function(radians) {
+  return radians * 180 / Math.PI;
+};

@@ -30,6 +30,7 @@ var renderer = initRenderer();
 var camera = initCamera();
 var light = initLight();
 var axes = initAxes();
+var polygon = initPolygon();
 var particleSys;
 var clock;
 var isSimulating;   //is the simulation currently running?
@@ -67,6 +68,20 @@ function initMotion(){
 }
 initMotion();
 
+function initPolygon(){
+    var geometry = new THREE.PlaneGeometry( 20, 20);
+    var material = new THREE.MeshBasicMaterial( {color: 0xa0a0ff, side: THREE.DoubleSide} );
+    var polygon = new THREE.Mesh( geometry, material );
+    polygon.position.set(50, 0, -20);
+    polygon.geometry.applyMatrix(
+        new THREE.Matrix4().makeRotationFromEuler(
+            new THREE.Euler( Math.radians(120), Math.radians(45), Math.radians(10), 'XYZ' )
+        )
+    );
+    scene.add(polygon);
+    return polygon;
+}
+
 /** Euler integration */
 function integrate(v1, v2, timestep){
     return v1.add(v2.multiply(timestep));
@@ -96,10 +111,13 @@ function simulate(){
             var acceleration = G.subtract(vOld.multiply(D)); //I give particles a mass of one
             var vNew = integrate(vOld, acceleration, timestep);
             var xNew = integrate(xOld, vOld, timestep);
+            
+            //collision detection
+            
             particleSys.moveParticle(i, xNew);
             particleSys.updateAge(i, timestep);
             particleSys.updateColor(i);
-            
+                        
             particleSys.setV(i, vNew);
             particleSys.setX(i, xNew);
         }
