@@ -17,7 +17,9 @@
 
 var doc = document; //shorthand
 
-var SCENE_WIDTH = window.innerWidth - 430; //430 is width of options panel
+var panelWidth = 430;
+if (window.innerWidth > 700) panelWidth = 0;
+var SCENE_WIDTH = window.innerWidth - panelWidth; //430 is width of options panel
 var SCENE_HEIGHT = window.innerHeight - 5; //Three js makes the canvas a few pixels too big so the minus five fixes that 
 
 var FIELD_OF_VIEW = 45;

@@ -81,4 +81,8 @@ p {
     #control-panel {
         display: none;
     }
+    #webgl-container {
+        width: 500px;
+        height: 500px;
+    }
 }
