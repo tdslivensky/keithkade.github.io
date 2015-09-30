@@ -27,9 +27,9 @@ var FAR = 10000;
 
 var planeAttr = {
     p: [20, 0 , 0],
-    r: [Math.radians(120), Math.radians(45), Math.radians(10)]
+    //r: [Math.radians(120), Math.radians(45), Math.radians(10)]
 
-    //r: [Math.radians(0), Math.radians(90), Math.radians(0)]
+    r: [Math.radians(90), Math.radians(70), Math.radians(0)]
 };
 
 var scene = new THREE.Scene();
@@ -168,25 +168,109 @@ function collisionDetectionAndResponse(x1, x2, v1, v2){
     var dOld = x1.subtract(plane.p).dot(plane.n);
     var dNew = x2.subtract(plane.p).dot(plane.n);
     //check if they have the same sign
-    if (dOld*dNew <= 0 && pointInPlane()){
+    if (dOld*dNew <= 0){
         
-        var response = {};
-        response.xNew = x2.subtract(plane.n.multiply(dNew * (1 + CR)));
+        var fraction = dOld / (dOld-dNew);
+        var collisionX = integrate(x1, v1, fraction * H);
         
         var vNormal = plane.n.multiply(v1.dot(plane.n));
-        var vTan = v1.subtract(vNormal);
-
-        response.vNew = vNormal.multiply(-1 * CR).add(vTan.multiply(1 - CF));
+        if (pointInPolygon(collisionX)){
         
-        return response;
+            var response = {};
+            response.xNew = x2.subtract(plane.n.multiply(dNew * (1 + CR)));
+
+            var vTan = v1.subtract(vNormal);
+
+            response.vNew = vNormal.multiply(-1 * CR).add(vTan.multiply(1 - CF));
+
+            return response;
+        }
     }
-    else {
-        return {xNew: x2, vNew: v2};
-    }
+    
+    return {xNew: x2, vNew: v2};
 }
 
-function pointInPlane(){
+function pointInPolygon(x){
 
+    //these calculations should not be done every time
+    //FIXME not working on bottom triangle
+    for (var i=0; i < polygon.geometry.faces.length; i++){
+        
+        var face = polygon.geometry.faces[i];
+        var p0 = $V([polygon.geometry.vertices[face.a].x, polygon.geometry.vertices[face.a].y,  polygon.geometry.vertices[face.a].z]);
+        var p1 = $V([polygon.geometry.vertices[face.b].x, polygon.geometry.vertices[face.b].y,  polygon.geometry.vertices[face.b].z]);
+        var p2 = $V([polygon.geometry.vertices[face.c].x, polygon.geometry.vertices[face.c].y,  polygon.geometry.vertices[face.c].z]);
+ 
+        /*
+        
+        vn = (p2 − p1) × (p1 − p0),
+A = kvnk,
+n = vn/A
+u = [(p2 − p1) × (x − p1)] · n/A,
+v = [(p0 − p2) × (x − p2)] · n/A,
+w = 1 − u − v.
+
+        */
+        
+        //implementation in appendix wasn't working, so I based this off of http://www.blackpawn.com/texts/pointinpoly/
+        //TODO clean this up. this breaks when I rotate the plane. bounces too low
+        var A = p0;
+        var B = p1;
+        var C = p2;
+        
+        var v0 = C.subtract(A);
+        var v1 = B.subtract(A);
+        var v2 = x.subtract(A);
+        
+        // Compute dot products
+        var dot00 = v0.dot(v0);
+        var dot01 = v0.dot(v1);
+        var dot02 = v0.dot(v2);
+        var dot11 = v1.dot(v1);
+        var dot12 = v1.dot(v2);
+
+        // Compute barycentric coordinates
+        var invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+        var u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+        var v = (dot00 * dot12 - dot01 * dot02) * invDenom;        
+        
+        if ( u >= 0 && v >= 0 && (u+v) <= 1){
+            return true;
+        }
+        /*
+        
+      /*  
+            // Prepare our barycentric variables
+    var u = B.subtract(A);
+    var v = C.subtract(A);
+    var w = x.subtract(A);
+ 
+    var vCrossW = v.cross(w);
+    var vCrossU = v.cross(u);
+ 
+    // Test sign of r
+    if (vCrossW.dot(vCrossU) < 0)
+        return false;
+ 
+    var uCrossW = u.cross(w);
+    var uCrossV = u.cross(v);
+ 
+    // Test sign of t
+    if (uCrossW.dot(uCrossV) < 0)
+        return false;
+ 
+    // At this point, we know that r and t and both > 0.
+    // Therefore, as long as their sum is <= 1, each must be less <= 1
+    var denom = Util.magnitude(uCrossV);
+    var r = Util.magnitude(vCrossW) / denom;
+    var t = Util.magnitude(uCrossW) /denom;
+ 
+    if (r + t <= 1)
+        return true;
+                */
+
+    }
+    return false;
 }
 
 /** rendering loop */
