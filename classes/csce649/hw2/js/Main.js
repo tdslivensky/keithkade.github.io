@@ -104,7 +104,6 @@ function initPolygon(){
     );
         
     var wireframe = new THREE.WireframeHelper( polygon, 0x00ff00 );
-    //scene.add(wireframe);
     
     scene.add(polygon);
     return polygon;

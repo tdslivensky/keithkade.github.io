@@ -1,14 +1,13 @@
 /* global THREE, doc, Util, $V, gaussian, Float32Array, initialX */
 
 /** 
- *  My Particle System class. I intentially use getters and settters so that I can be implementation agnostic. 
+ *  My Particle System class. I use getters and settters so that I can be implementation agnostic. 
  *  I originally used sprites and then switched to vertices
  */
 
 
 var CONE_SIZE = 50;
 
-/** constructor using sprites instead of vertices in THREE.Points */ 
 function ParticleSystem(scene, dist){
     this.particleLifespan = 5;
     this.index = 0;
