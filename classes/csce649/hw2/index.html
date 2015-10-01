@@ -22,18 +22,18 @@
             <li>Start Position</li>
             <li>
                 X
-                <input id="p.x-slider" class="slider" type="range" value="3" step="1" min="2" max="8" oninput="inputChange(this, 'p.x')">
-                <input id="p.x" type="number" value="3" step="any" oninput="inputChange(this, 'p.x-slider')"> 
+                <input id="p.x-slider" class="slider" type="range" value="0" step="1" min="-20" max="20" oninput="inputChange(this, 'p.x')">
+                <input id="p.x" type="number" value="0" step="any" oninput="inputChange(this, 'p.x-slider')"> 
             </li>
             <li>
                 Y
-                <input id="p.y-slider" class="slider" type="range" value="7" step="1" min="2" max="8" oninput="inputChange(this, 'p.y')">
-                <input id="p.y" type="number" value="7" step="any" oninput="inputChange(this, 'p.y-slider')"> 
+                <input id="p.y-slider" class="slider" type="range" value="0" step="1" min="-20" max="20" oninput="inputChange(this, 'p.y')">
+                <input id="p.y" type="number" value="0" step="any" oninput="inputChange(this, 'p.y-slider')"> 
             </li>
             <li>
                 Z
-                <input id="p.z-slider" class="slider" type="range" value="5" step="1" min="2" max="8" oninput="inputChange(this, 'p.z')">
-                <input id="p.z" type="number" value="5" step="any" oninput="inputChange(this, 'p.z-slider')">
+                <input id="p.z-slider" class="slider" type="range" value="0" step="1" min="-20" max="20" oninput="inputChange(this, 'p.z')">
+                <input id="p.z" type="number" value="0" step="any" oninput="inputChange(this, 'p.z-slider')">
             </li>
         </ul>
         <ul>
@@ -88,6 +88,27 @@
     </div>
     <div id="webgl-container"></div>
 </body>
+
+<script type="x-shader/x-vertex" id="vertexshader">
+    // Starter: https://aerotwist.com/tutorials/an-introduction-to-shaders-part-2/
+
+    attribute vec4 color;
+    varying vec4 vColor;  //this can be seen in the frag shader
+    
+    void main() {
+        vColor = color;
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = 4.0;
+        gl_Position = projectionMatrix * mvPosition;
+    }
+</script>
+
+<script type="x-shader/x-fragment" id="fragmentshader">
+    varying vec4 vColor;
+    void main() {
+        gl_FragColor = vColor;
+    }
+</script>
     
 <script src="js/three.min.js"></script>
 <script src="js/OrbitControls.js"></script>    

@@ -1,46 +1,51 @@
-/* global THREE, doc, Util, $V, gaussian */
+/* global THREE, doc, Util, $V, gaussian, Float32Array, initialX */
 
 /** 
- *  My Particle System class. I intentially use getters and settters so that I can be implementation agnostic. I am undecided between sprites and vertices
+ *  My Particle System class. I intentially use getters and settters so that I can be implementation agnostic. 
+ *  I originally used sprites and then switched to vertices
  */
 
 
-var CONE_SIZE = 100;
+var CONE_SIZE = 50;
 
 /** constructor using sprites instead of vertices in THREE.Points */ 
-function ParticleSystem(scene, x, dist){
+function ParticleSystem(scene, dist){
     this.particleLifespan = 5;
-    this.initVis(scene, x);
     this.index = 0;
-    this.max = 1000;
-    this.x = x;
-    this.particles = [];
+    this.max = 4000;
     this.distribution = dist;
+    this.particlesAttr = new Array(this.max);
+    
+    this.vertices = new Float32Array(this.max * 3);
+    this.colors = new Float32Array(this.max * 4);
 
-    var pX, pY, pZ, distribution;
-    if (dist == 'gaussian'){
-        distribution = gaussian(this.x.elements[0], CONE_SIZE);
-    }
     for (var i = 0; i < this.max; i++) {
-
-        if (dist == 'gaussian'){
-            pX = distribution.ppf(Math.random());
-            pY = distribution.ppf(Math.random());
-            pZ = distribution.ppf(Math.random());
-        }
-        else {
-            pX = Util.getRandom(this.x.elements[0]-CONE_SIZE, this.x.elements[0]+CONE_SIZE);
-            pY = Util.getRandom(this.x.elements[1]-CONE_SIZE, this.x.elements[1]+CONE_SIZE);
-            pZ = Util.getRandom(this.x.elements[2]-CONE_SIZE, this.x.elements[2]+CONE_SIZE);
-        }
-        
-        var randX = $V([pX, pY, pZ]);
-        var sprite = initSprite(randX);
-
-        // add it to the geometry
-        this.particles.push({visual: sprite, x: randX});
-        scene.add(sprite);
+        this.vertices[i * 3 + 0] = 0;
+        this.vertices[i * 3 + 1] = 0;
+        this.vertices[i * 3 + 2] = 0;
+        this.colors[i * 4 + 0] = 1;
+        this.colors[i * 4 + 1] = 0;
+        this.colors[i * 4 + 2] = 0;
+        this.colors[i * 4 + 3] = 0;
+        this.particlesAttr[i] = {};
     }
+      
+    var uniforms = {};
+    var pMaterial = new THREE.ShaderMaterial({
+        uniforms : uniforms,
+        vertexShader: doc.getElementById('vertexshader').text,
+        fragmentShader: doc.getElementById('fragmentshader').text,
+        transparent: true
+    });
+    
+    this.geometry = new THREE.BufferGeometry();
+    this.geometry.addAttribute('position', new THREE.BufferAttribute(this.vertices, 3));
+    this.geometry.addAttribute('color', new THREE.BufferAttribute(this.colors, 4));
+    this.geometry.attributes.position.needsUpdate = true;
+    this.geometry.attributes.color.needsUpdate = true;
+
+    var particleSystem = new THREE.Points(this.geometry, pMaterial);
+    scene.add(particleSystem);  
 }
 
 /** remove the particle system */
@@ -71,25 +76,13 @@ function initSprite(v){
     return sprite;  
 }
 
-/** create the generator and add it to the scene represented as sphere for now */
-ParticleSystem.prototype.initVis = function(scene, x){
-    var segments = 16;
-    var rings = 16;
-
-    var sphereMaterial = new THREE.MeshLambertMaterial( { color: 0xCCCCCC });
-
-    var sphere = new THREE.Mesh( new THREE.SphereGeometry( 2, segments, rings), sphereMaterial);
-    sphere.position.set(x.elements[0], x.elements[1], x.elements[2]);
-    scene.add(sphere);
-    this.sourceVis = sphere;
-};
-
 /** turn on the next 'count' particles in our array based on the current index */ 
 ParticleSystem.prototype.generate = function(count, opts){
     
-    var pX, pY, pZ, distribution;
+    var pX, pY, pZ, distributionY, distributionZ;
     if (this.distribution == 'gaussian'){
-        distribution = gaussian(this.x.elements[0], CONE_SIZE);
+        distributionY = gaussian(initialX.y, CONE_SIZE);
+        distributionZ = gaussian(initialX.z, CONE_SIZE);
     }
     
     for (var i=0; i < count; i++){
@@ -99,14 +92,14 @@ ParticleSystem.prototype.generate = function(count, opts){
         }
         
         if (this.distribution == 'gaussian'){
-            pX = distribution.ppf(Math.random());
-            pY = distribution.ppf(Math.random());
-            pZ = distribution.ppf(Math.random());
+            pX = initialX.x;
+            pY = distributionY.ppf(Math.random());
+            pZ = distributionZ.ppf(Math.random());
         }
         else {
-            pX = Util.getRandom(this.x.elements[0]-CONE_SIZE, this.x.elements[0]+CONE_SIZE);
-            pY = Util.getRandom(this.x.elements[1]-CONE_SIZE, this.x.elements[1]+CONE_SIZE);
-            pZ = Util.getRandom(this.x.elements[2]-CONE_SIZE, this.x.elements[2]+CONE_SIZE);
+            pX = initialX.x;
+            pY = Util.getRandom(initialX.y-CONE_SIZE, initialX.x+CONE_SIZE);
+            pZ = Util.getRandom(initialX.z-CONE_SIZE, initialX.x+CONE_SIZE);
         }
         
         opts.x = $V([pX, pY, pZ]);
@@ -115,63 +108,68 @@ ParticleSystem.prototype.generate = function(count, opts){
     }
 };
 
-/** hide the particle at given index */
-ParticleSystem.prototype.turnOff = function(index, opts){
-    this.particles[index].visual.visible = false;
-};
-
 /** show the particle at the given index */
 ParticleSystem.prototype.turnOn = function(index, opts){
     this.turnOff(index);
-    this.particles[index].visual.visible = true;
+    this.particlesAttr[index].visible = true;
     
-    this.particles[index].visual.position.set(opts.x.elements[0], opts.x.elements[1], opts.x.elements[2]);
+    this.moveParticle(index, opts.x);
     
-    this.particles[index].v = opts.v;
-    this.particles[index].x = opts.x;
-    this.particles[index].age = 0;    
+    this.particlesAttr[index].v = opts.v;
+    this.particlesAttr[index].x = opts.x;
+    this.particlesAttr[index].age = 0;    
+};
+
+/** hide the particle at given index */
+ParticleSystem.prototype.turnOff = function(index, opts){
+    this.colors[index * 4 + 3] = 0; //set alpha to zero
+    this.particlesAttr[index].visible = false;
 };
 
 /** move the particle at the given index to the new position */
-ParticleSystem.prototype.moveParticle = function(index, x){
-    this.particles[index].x = x;
-    this.particles[index].visual.position.set(x.elements[0], x.elements[1], x.elements[2]);
+ParticleSystem.prototype.moveParticle = function(index, x){    
+    this.vertices[index * 3 + 0] = x.elements[0];
+    this.vertices[index * 3 + 1] = x.elements[1];
+    this.vertices[index * 3 + 2] = x.elements[2];
+
+    this.particlesAttr[index].x = x;
 };
 
 /** update the particles color/opacity based on age */
 ParticleSystem.prototype.updateAge = function(index, time){
-    this.particles[index].age += time;
+    this.particlesAttr[index].age += time;
 };
 
 /** update the particles color/opacity based on age */
 ParticleSystem.prototype.updateColor = function(index){
-    
-    var lifespanFraction = this.particles[index].age / this.particleLifespan;
-    if (this.particles[index].age > this.particleLifespan){
+    var lifespanFraction = this.particlesAttr[index].age / this.particleLifespan;
+    if (this.particlesAttr[index].age > this.particleLifespan){
         this.turnOff(index);
     }
     else {
-        this.particles[index].visual.material.opacity = 1 - lifespanFraction;
-        this.particles[index].visual.material.color.setRGB((1 - lifespanFraction), 0, 0); 
+        this.colors[index * 4 + 0] = Math.max(0.5, 1 - lifespanFraction);    // make it grey over time
+        this.colors[index * 4 + 1] = Math.min(0.5, lifespanFraction);    
+        this.colors[index * 4 + 2] = Math.min(0.5, lifespanFraction);         
+        this.colors[index * 4 + 3] = 1 - lifespanFraction;    // alpha
     }
 };
 
 ParticleSystem.prototype.getV = function(index){
-    return this.particles[index].v;
+    return this.particlesAttr[index].v;
 };
 
 ParticleSystem.prototype.getX = function(index){
-    return this.particles[index].x;
+    return this.particlesAttr[index].x;
 };
 
 ParticleSystem.prototype.setV = function(index, v){
-    this.particles[index].v = v;
+    this.particlesAttr[index].v = v;
 };
 
 ParticleSystem.prototype.setX = function(index, x){
-    this.particles[index].x = x;
+    this.particlesAttr[index].x = x;
 };
 
 ParticleSystem.prototype.isVisible = function(index){
-    return this.particles[index].visual.visible;
+    return this.particlesAttr[index].visible;
 };

@@ -18,7 +18,9 @@
 var doc = document; //shorthand
 
 var panelWidth = 430;
-if (window.innerWidth < 700) panelWidth = 0;
+if (window.innerWidth < 700){ //so it can look ok on mobile
+    panelWidth = 0;
+}
 var SCENE_WIDTH = window.innerWidth - panelWidth; //430 is width of options panel
 var SCENE_HEIGHT = window.innerHeight - 5; //Three js makes the canvas a few pixels too big so the minus five fixes that 
 
@@ -26,11 +28,10 @@ var FIELD_OF_VIEW = 45;
 var ASPECT = SCENE_WIDTH / SCENE_HEIGHT;
 var NEAR = 0.1;
 var FAR = 10000;
+var FACES = []; //for collision detection with barycentric coords
 
 var planeAttr = {
     p: [20, 0 , 0],
-    //r: [Math.radians(120), Math.radians(45), Math.radians(10)]
-
     r: [Math.radians(90), Math.radians(70), Math.radians(0)]
 };
 
@@ -44,7 +45,7 @@ var plane = initPlane();
 var particleSys;
 var clock;
 var isSimulating;   //is the simulation currently running?
-
+var repulsors = [];
 
 //Physics variables
 var G = new $V([0, -9.81, 0]);  // The accel due to gravity in m/s^2 
@@ -58,7 +59,7 @@ var initialV = {};  // Velocity
 var D;              // Air resitence
 var CR;             // coefficient of restitution. 1 is maximum bouncy
 var CF;             // coefficient of friction. 0 is no friction
-var PPS = 10;      // particles generated per second
+var PPS;            // particles generated per second
 
 
 /** create the sphere and set it according to user inputs, then start simulation and rendering */
@@ -68,7 +69,12 @@ function initMotion(){
         particleSys.delete(scene);
     }
     
-    particleSys = new ParticleSystem(scene, $V([initialX.x, initialX.y, initialX.z]), 'gaussian');
+    particleSys = new ParticleSystem(scene, 'gaussian');
+    addRepulsor($V([-9, -12, -13]));
+    addRepulsor($V([-9, -12, -18]));
+    addRepulsor($V([-4, -12, -13]));
+    addRepulsor($V([-4, -12, -18]));
+    
     clock = new THREE.Clock();
     clock.start();
     clock.getDelta();
@@ -93,8 +99,9 @@ function initPolygon(){
     );
         
     var wireframe = new THREE.WireframeHelper( polygon, 0x00ff00 );
-    scene.add(polygon);
     scene.add(wireframe);
+    
+    scene.add(polygon);
     return polygon;
 }
 
@@ -108,6 +115,16 @@ function initPlane(){
     );
     plane.p = $V([planeAttr.p[0], planeAttr.p[1], planeAttr.p[2]]);
     plane.n = $V([plane.normal.x, plane.normal.y, plane.normal.z]);
+    
+    //store the points on the corners of the faces for later collision detection
+    for (var i=0; i < polygon.geometry.faces.length; i++){
+        FACES[i] = [];
+        var face = polygon.geometry.faces[i];
+        FACES[i][0] = $V([polygon.geometry.vertices[face.a].x + plane.p.elements[0], polygon.geometry.vertices[face.a].y + plane.p.elements[1],  polygon.geometry.vertices[face.a].z + plane.p.elements[2]]);
+        FACES[i][1] = $V([polygon.geometry.vertices[face.b].x + plane.p.elements[0], polygon.geometry.vertices[face.b].y + plane.p.elements[1],  polygon.geometry.vertices[face.b].z + plane.p.elements[2]]);
+        FACES[i][2] = $V([polygon.geometry.vertices[face.c].x + plane.p.elements[0], polygon.geometry.vertices[face.c].y + plane.p.elements[1],  polygon.geometry.vertices[face.c].z + plane.p.elements[2]]);
+    }
+    
     return plane;
 }
 
@@ -138,6 +155,7 @@ function simulate(){
             var vOld = particleSys.getV(i);
             var xOld = particleSys.getX(i);
             var acceleration = G.subtract(vOld.multiply(D)); //I give particles a mass of one
+            acceleration = acceleration.add(getRepulsorForces(xOld));
             var vNew = integrate(vOld, acceleration, timestep);
             var xNew = integrate(xOld, vOld, timestep);
             
@@ -145,6 +163,7 @@ function simulate(){
             var collision = collisionDetectionAndResponse(xOld, xNew, vOld, vNew);
             xNew = collision.xNew;
             vNew = collision.vNew;
+            
             
             particleSys.moveParticle(i, xNew);
             particleSys.updateAge(i, timestep);
@@ -154,7 +173,9 @@ function simulate(){
             particleSys.setX(i, xNew);
         }
     }
-
+    particleSys.geometry.attributes.position.needsUpdate = true;
+    particleSys.geometry.attributes.color.needsUpdate = true;
+    
     var waitTime = H_MILLI - clock.getDelta(); 
     if (waitTime < 4){ //4 milliseconds is the minimum wait for most browsers
         console.log("simulation getting behind and slowing down!");
@@ -163,12 +184,6 @@ function simulate(){
 }
 
 function collisionDetectionAndResponse(x1, x2, v1, v2){
-    //return true;
-    
-    
-    //x′[n+1] = x[n+1] − (1 + ρ)d[n+1]nˆ.
-    
-    //v′[n+1] = −ρvn + (1 − μ)vt,
     
     var dOld = x1.subtract(plane.p).dot(plane.n);
     var dNew = x2.subtract(plane.p).dot(plane.n);
@@ -197,18 +212,7 @@ function collisionDetectionAndResponse(x1, x2, v1, v2){
 
 function pointInPolygon(x){
 
-    //these calculations should not be done every time
-    //FIXME not working on bottom triangle
     for (var i=0; i < polygon.geometry.faces.length; i++){
-        
-        var face = polygon.geometry.faces[i];
-        var p0 = $V([polygon.geometry.vertices[face.a].x + plane.p.elements[0], polygon.geometry.vertices[face.a].y + plane.p.elements[1],  polygon.geometry.vertices[face.a].z + plane.p.elements[2]]);
-        var p1 = $V([polygon.geometry.vertices[face.b].x + plane.p.elements[0], polygon.geometry.vertices[face.b].y + plane.p.elements[1],  polygon.geometry.vertices[face.b].z + plane.p.elements[2]]);
-        var p2 = $V([polygon.geometry.vertices[face.c].x + plane.p.elements[0], polygon.geometry.vertices[face.c].y + plane.p.elements[1],  polygon.geometry.vertices[face.c].z + plane.p.elements[2]]);
-
-        //drawPoint(p0);
-        //drawPoint(p1);
-        //drawPoint(p2);
                 
         /* The original implementation from the appendix. Wasn't working
         var vn = p2.subtract(p1).cross(p1.subtract(p0));
@@ -219,14 +223,13 @@ function pointInPolygon(x){
         */
         
         //implementation in appendix wasn't working, so I based this off of http://www.blackpawn.com/texts/pointinpoly/
-        //TODO clean this up
-        var A = p0;
-        var B = p1;
-        var C = p2;
+        var p0 = FACES[i][0];
+        var p1 = FACES[i][1];
+        var p2 = FACES[i][2];
         
-        var v0 = C.subtract(A);
-        var v1 = B.subtract(A);
-        var v2 = x.subtract(A);
+        var v0 = p2.subtract(p0);
+        var v1 = p1.subtract(p0);
+        var v2 = x.subtract(p0);
         
         // Compute dot products
         var dot00 = v0.dot(v0);
@@ -236,9 +239,9 @@ function pointInPolygon(x){
         var dot12 = v1.dot(v2);
 
         // Compute barycentric coordinates
-        var invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
-        var u = (dot11 * dot02 - dot01 * dot12) * invDenom;
-        var v = (dot00 * dot12 - dot01 * dot02) * invDenom;        
+        var denom = 1 / (dot00 * dot11 - dot01 * dot01);
+        var u = (dot11 * dot02 - dot01 * dot12) * denom;
+        var v = (dot00 * dot12 - dot01 * dot02) * denom;        
         
         if ( u >= 0 && v >= 0 && (u+v) <= 1){
             return true;
@@ -253,6 +256,42 @@ function render() {
     renderer.render(scene, camera); //draw it
 	requestAnimationFrame(render);  //redraw whenever the browser refreshes
 }
+
+
+/************* repulsor *************/
+
+function addRepulsor(x){
+    drawPoint(x);
+    repulsors.push(x);
+}
+
+function getRepulsorForces(x){
+    var fTotal = $V([0, 0, 0]);
+    for (var i = 0; i< repulsors.length; i++){
+        var r = repulsors[i];
+        var dist = Util.dist(x, r);
+        
+        if (dist < 5){ 
+            //arbitrary. fiddle
+            var f = 200 / (dist*dist);  
+            var v = $V([x.elements[0] - r.elements[0], x.elements[1] - r.elements[1], x.elements[2] - r.elements[2]]).toUnitVector();
+            fTotal = fTotal.add(v.multiply(f));
+        }
+    }
+    return fTotal;
+}
+
+/*
+xsi = xi − cs, dsi = ∥xsi∥,
+a+op=−G 1 xˆ. si s (rs − dsi)ps si
+
+
+
+fj =Gmimjxˆij i r2
+ij
+
+
+*/
 
 /************* THREE.js boilerplate *************/
 
@@ -366,7 +405,6 @@ function drawPoint(x){
     canvas.height = size;
 
     var material = new THREE.SpriteMaterial( {
-            //color: Math.random() * 0x808008 + 0x808080,
             color: {r: 255, g: 0, b: 0}
     });
 
@@ -396,7 +434,6 @@ function inputChange(elem, id){
 
 /** these might be able to be be optimized. lots of code */ 
 function getUserInputs(){
-
     
     initialX.x = parseFloat(doc.getElementById("p.x").value);
     initialX.y = parseFloat(doc.getElementById("p.y").value);

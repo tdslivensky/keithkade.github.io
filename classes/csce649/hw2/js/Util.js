@@ -18,6 +18,15 @@ Util.magnitude = function(v){
     return Math.sqrt(sum);
 };
 
+/** Euclidean distance between points */
+Util.dist = function(x1, x2){
+    var sum = 0;
+    for (var i = 0; i < x1.elements.length; i++){
+        sum += Math.pow(x1.elements[i] - x2.elements[i], 2);
+    }
+    return Math.sqrt(sum);
+};
+
 // Source: http://cwestblog.com/2012/11/12/javascript-degree-and-radian-conversion/
 // Converts from degrees to radians.
 Math.radians = function(degrees) {
