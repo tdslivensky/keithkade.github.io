@@ -9,7 +9,7 @@
 var CONE_SIZE = 50;
 
 function ParticleSystem(scene, dist){
-    this.particleLifespan = 5;
+    this.particleLifespan = 10;
     this.index = 0;
     this.max = 10000;
     this.distribution = dist;
@@ -113,7 +113,7 @@ ParticleSystem.prototype.turnOn = function(index, opts){
     
     this.particlesAttr[index].v = opts.v;
     this.particlesAttr[index].x = opts.x;
-    this.particlesAttr[index].age = 0;    
+    this.particlesAttr[index].age = Util.getRandom(0,2);    
 };
 
 /** hide the particle at given index */
