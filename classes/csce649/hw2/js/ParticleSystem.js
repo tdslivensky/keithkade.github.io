@@ -12,7 +12,7 @@ var CONE_SIZE = 50;
 function ParticleSystem(scene, dist){
     this.particleLifespan = 5;
     this.index = 0;
-    this.max = 4000;
+    this.max = 10000;
     this.distribution = dist;
     this.particlesAttr = new Array(this.max);
     

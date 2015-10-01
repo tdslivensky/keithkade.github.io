@@ -202,8 +202,8 @@ function collisionDetectionAndResponse(x1, x2, v1, v2){
         if (pointInPolygon(collisionX)){
             collisionCount++;
             var hsl = polygon.material.color.getHSL();
-            hsl.s = 0.995 * hsl.s;
-            hsl.l = 0.995 * hsl.l;
+            hsl.s = 0.999 * hsl.s;
+            hsl.l = 0.999 * hsl.l;
             if (hsl.l < 0.005){
                 polygonThere = false;
                 scene.remove(polygon);
