@@ -46,6 +46,8 @@ var particleSys;
 var clock;
 var isSimulating;   //is the simulation currently running?
 var repulsors = [];
+var collisionCount = 0;
+var polygonThere = true; //whether the polygon has been broken
 
 //Physics variables
 var G = new $V([0, -9.81, 0]);  // The accel due to gravity in m/s^2 
@@ -61,7 +63,6 @@ var CR;             // coefficient of restitution. 1 is maximum bouncy
 var CF;             // coefficient of friction. 0 is no friction
 var PPS;            // particles generated per second
 
-
 /** create the sphere and set it according to user inputs, then start simulation and rendering */
 function initMotion(){
     getUserInputs();
@@ -74,6 +75,10 @@ function initMotion(){
     addRepulsor($V([-9, -12, -18]));
     addRepulsor($V([-4, -12, -13]));
     addRepulsor($V([-4, -12, -18]));
+    addRepulsor($V([-9, -12, -23]));
+    addRepulsor($V([-4, -12, -23]));
+    addRepulsor($V([-9, -12, -28]));
+    addRepulsor($V([-4, -12, -28]));
     
     clock = new THREE.Clock();
     clock.start();
@@ -99,7 +104,7 @@ function initPolygon(){
     );
         
     var wireframe = new THREE.WireframeHelper( polygon, 0x00ff00 );
-    scene.add(wireframe);
+    //scene.add(wireframe);
     
     scene.add(polygon);
     return polygon;
@@ -188,14 +193,23 @@ function collisionDetectionAndResponse(x1, x2, v1, v2){
     var dOld = x1.subtract(plane.p).dot(plane.n);
     var dNew = x2.subtract(plane.p).dot(plane.n);
     //check if they have the same sign
-    if (dOld*dNew <= 0){
+    if (dOld*dNew <= 0 && polygonThere){
         
         var fraction = dOld / (dOld-dNew);
         var collisionX = integrate(x1, v1, fraction * H);
         
         var vNormal = plane.n.multiply(v1.dot(plane.n));
         if (pointInPolygon(collisionX)){
-        
+            collisionCount++;
+            var hsl = polygon.material.color.getHSL();
+            hsl.s = 0.995 * hsl.s;
+            hsl.l = 0.995 * hsl.l;
+            if (hsl.l < 0.005){
+                polygonThere = false;
+                scene.remove(polygon);
+            }
+            polygon.material.color.setHSL(hsl.h, hsl.s, hsl.l);
+            
             var response = {};
             response.xNew = x2.subtract(plane.n.multiply(dNew * (1 + CR)));
 
@@ -271,7 +285,7 @@ function getRepulsorForces(x){
         var r = repulsors[i];
         var dist = Util.dist(x, r);
         
-        if (dist < 5){ 
+        if (dist < 10){ 
             //arbitrary. fiddle
             var f = 200 / (dist*dist);  
             var v = $V([x.elements[0] - r.elements[0], x.elements[1] - r.elements[1], x.elements[2] - r.elements[2]]).toUnitVector();
@@ -280,18 +294,6 @@ function getRepulsorForces(x){
     }
     return fTotal;
 }
-
-/*
-xsi = xi − cs, dsi = ∥xsi∥,
-a+op=−G 1 xˆ. si s (rs − dsi)ps si
-
-
-
-fj =Gmimjxˆij i r2
-ij
-
-
-*/
 
 /************* THREE.js boilerplate *************/
 
@@ -341,9 +343,9 @@ function initAxes(){
     axes.add(initLine(new THREE.Vector3(0, 0, -length), new THREE.Vector3(0, 0, length), 0x0000ff)); // Z
     
     //labels
-    axes.add(initLabel('X','#ff0000', [20, 0, 0]));
-    axes.add(initLabel('Y','#00ff00', [0, 20, 0]));
-    axes.add(initLabel('Z','#0000ff', [0, 0, 20]));
+    axes.add(initLabel('X','#ff0000', [25, 0, 0]));
+    axes.add(initLabel('Y','#00ff00', [0, 25, 0]));
+    axes.add(initLabel('Z','#0000ff', [0, 0, 25]));
     
     scene.add(axes);
     return axes;
