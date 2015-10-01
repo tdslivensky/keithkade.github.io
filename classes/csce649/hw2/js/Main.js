@@ -288,7 +288,10 @@ function getRepulsorForces(x){
             //arbitrary. fiddle
             var f = 200 / (dist*dist);  
             var v = $V([x.elements[0] - r.elements[0], x.elements[1] - r.elements[1], x.elements[2] - r.elements[2]]).toUnitVector();
-            fTotal = fTotal.add(v.multiply(f));
+            var sign;
+            if (i % 2 === 0) sign = 1;
+            else sign = -1;
+            fTotal = fTotal.add(v.multiply( sign * f));
         }
     }
     return fTotal;
