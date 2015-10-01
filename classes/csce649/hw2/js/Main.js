@@ -525,7 +525,7 @@ function randomizeUserInputs(){
     doc.getElementById("g.y-slider").value = randY;
     doc.getElementById("g.z-slider").value = randZ;  
     
-    var randPPS = Util.getRandom(1, 100);
+    var randPPS = Util.getRandom(1, 1000);
     doc.getElementById("PPS").value = randPPS;  
     doc.getElementById("PPS-slider").value = randPPS;  
 
