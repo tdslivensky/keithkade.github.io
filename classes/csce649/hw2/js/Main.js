@@ -225,6 +225,7 @@ function collisionDetectionAndResponse(x1, x2, v1, v2){
 
 function pointInPolygon(x){
 
+    var p0, p1, p2, v0, v1, v2, dot00, dot01, dot02, dot11, dot12, denom, u, v;
     for (var i=0; i < polygon.geometry.faces.length; i++){
                 
         /* The original implementation from the appendix. Wasn't working
@@ -236,25 +237,25 @@ function pointInPolygon(x){
         */
         
         //implementation in appendix wasn't working, so I based this off of http://www.blackpawn.com/texts/pointinpoly/
-        var p0 = FACES[i][0];
-        var p1 = FACES[i][1];
-        var p2 = FACES[i][2];
+        p0 = FACES[i][0];
+        p1 = FACES[i][1];
+        p2 = FACES[i][2];
         
-        var v0 = p2.subtract(p0);
-        var v1 = p1.subtract(p0);
-        var v2 = x.subtract(p0);
+        v0 = p2.subtract(p0);
+        v1 = p1.subtract(p0);
+        v2 = x.subtract(p0);
         
         // Compute dot products
-        var dot00 = v0.dot(v0);
-        var dot01 = v0.dot(v1);
-        var dot02 = v0.dot(v2);
-        var dot11 = v1.dot(v1);
-        var dot12 = v1.dot(v2);
+        dot00 = v0.dot(v0);
+        dot01 = v0.dot(v1);
+        dot02 = v0.dot(v2);
+        dot11 = v1.dot(v1);
+        dot12 = v1.dot(v2);
 
         // Compute barycentric coordinates
-        var denom = 1 / (dot00 * dot11 - dot01 * dot01);
-        var u = (dot11 * dot02 - dot01 * dot12) * denom;
-        var v = (dot00 * dot12 - dot01 * dot02) * denom;        
+        denom = 1 / (dot00 * dot11 - dot01 * dot01);
+        u = (dot11 * dot02 - dot01 * dot12) * denom;
+        v = (dot00 * dot12 - dot01 * dot02) * denom;        
         
         if ( u >= 0 && v >= 0 && (u+v) <= 1){
             return true;
