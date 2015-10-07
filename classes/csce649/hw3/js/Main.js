@@ -1,4 +1,4 @@
-/*global document, THREE, setInterval, setTimeout, requestAnimationFrame, waitTime, console, ParticleSystem, window, Util*/ 
+/*global document, THREE, setInterval, setTimeout, requestAnimationFrame, waitTime, console, window, Util, Beezooka*/ 
 
 /** 
  *   I am using Three.js, a webgl library: http://threejs.org/
@@ -28,7 +28,6 @@ var FIELD_OF_VIEW = 45;
 var ASPECT = SCENE_WIDTH / SCENE_HEIGHT;
 var NEAR = 0.1;
 var FAR = 10000;
-var FACES = []; //for collision detection with barycentric coords
 
 var planeAttr = {
     p: [20, 0 , 0],
@@ -40,9 +39,7 @@ var renderer = initRenderer();
 var camera = initCamera();
 var light = initLight();
 var axes = initAxes();
-var polygon = initPolygon();
-var plane = initPlane();
-var particleSys;
+var zooka;
 var clock;
 var isSimulating;   //is the simulation currently running?
 var repulsors = [];
@@ -61,11 +58,15 @@ var initialV = new THREE.Vector3(0,0,0);  // Velocity
 var D;              // Air resitence
 var CR;             // coefficient of restitution. 1 is maximum bouncy
 var CF;             // coefficient of friction. 0 is no friction
-var PPS;            // particles generated per second
+var K_A = 0.9;        //flocking tuning constants
+var K_V = 0.9;
+var K_C = 0.9;
 
-//to keep from spend time garbage collecting
+
+//to keep from spending time garbage collecting
 var v1_mut = new THREE.Vector3(0,0,0); //I keep a couple mutable vectors for all calculations
 var v2_mut = new THREE.Vector3(0,0,0);
+var v3_mut = new THREE.Vector3(0,0,0);
 var dOld = 0;
 var dNew = 0;
 var fraction = 0;
@@ -77,28 +78,33 @@ var acceleration = new THREE.Vector3(0,0,0);
 var vNew = new THREE.Vector3(0,0,0);
 var xNew = new THREE.Vector3(0,0,0);
 var vNormal = new THREE.Vector3(0,0,0);
+var p0 = new THREE.Vector3(0,0,0);
+var p1 = new THREE.Vector3(0,0,0);
+var p2 = new THREE.Vector3(0,0,0);
+var dist = 0;
 
 /** create the sphere and set it according to user inputs, then start simulation and rendering */
 function initMotion(){
     getUserInputs();
-    if (particleSys){
-        particleSys.delete(scene);
+    if (zooka){
+        zooka.delete(scene);
     }
     
-    particleSys = new ParticleSystem(scene, 'gaussian');
-    addRepulsor(new THREE.Vector3(-9, -12, -13));
-    addRepulsor(new THREE.Vector3(-9, -12, -18));
-    addRepulsor(new THREE.Vector3(-4, -12, -13));
-    addRepulsor(new THREE.Vector3(-4, -12, -18));
-    addRepulsor(new THREE.Vector3(-9, -12, -23));
-    addRepulsor(new THREE.Vector3(-4, -12, -23));
-    addRepulsor(new THREE.Vector3(-9, -12, -28));
-    addRepulsor(new THREE.Vector3(-4, -12, -28));
+    zooka = new Beezooka(scene, 'gaussian', 40);
+    addRepulsor(new THREE.Vector3(20, 0, 0));
+    //addRepulsor(new THREE.Vector3(-9, -12, -18));
+    //addRepulsor(new THREE.Vector3(-4, -12, -13));
+    //addRepulsor(new THREE.Vector3(-4, -12, -18));
+    //addRepulsor(new THREE.Vector3(-9, -12, -23));
+    //addRepulsor(new THREE.Vector3(-4, -12, -23));
+    //addRepulsor(new THREE.Vector3(-9, -12, -28));
+    //addRepulsor(new THREE.Vector3(-4, -12, -28));
     
     clock = new THREE.Clock();
     clock.start();
     clock.getDelta();
     isSimulating = true;
+    zooka.fire({v: initialV});   
     simulate();
     render();
 }
@@ -124,34 +130,6 @@ function initPolygon(){
     return polygon;
 }
 
-/** the internal representation of the surface that particles will bounce off of. */
-function initPlane(){
-    var plane = new THREE.Plane( new THREE.Vector3(0, 0, 1), 0);
-    plane.applyMatrix4(
-        new THREE.Matrix4().makeRotationFromEuler(
-            new THREE.Euler( planeAttr.r[0], planeAttr.r[1], planeAttr.r[2])
-        )
-    );
-    plane.p = new THREE.Vector3(planeAttr.p[0], planeAttr.p[1], planeAttr.p[2]);
-    plane.n = new THREE.Vector3(plane.normal.x, plane.normal.y, plane.normal.z);
-    
-    //store the points on the corners of the faces for later collision detection
-    for (var i=0; i < polygon.geometry.faces.length; i++){
-        FACES[i] = [];
-        var face = polygon.geometry.faces[i];
-        FACES[i][0] = new THREE.Vector3(polygon.geometry.vertices[face.a].x + plane.p.x, 
-                                        polygon.geometry.vertices[face.a].y + plane.p.y,  
-                                        polygon.geometry.vertices[face.a].z + plane.p.z);
-        FACES[i][1] = new THREE.Vector3(polygon.geometry.vertices[face.b].x + plane.p.x, 
-                                        polygon.geometry.vertices[face.b].y + plane.p.y,  
-                                        polygon.geometry.vertices[face.b].z + plane.p.z);
-        FACES[i][2] = new THREE.Vector3(polygon.geometry.vertices[face.c].x + plane.p.x, 
-                                        polygon.geometry.vertices[face.c].y + plane.p.y,  
-                                        polygon.geometry.vertices[face.c].z + plane.p.z);
-    }
-    
-    return plane;
-}
 
 /** Euler integration */
 function integrate(v1, v2, timestep){
@@ -163,138 +141,70 @@ function integrate(v1, v2, timestep){
 /** the main simulation loop. recursive */ 
 function simulate(){ 
     var timestep = H;
-    
-    //generate new particles. keep track of fractions
-    var particleCount = H * PPS;
-    particleFraction += particleCount - Math.floor(particleCount);
-    particleCount = Math.floor(particleCount);
-    if (particleFraction > 1){
-        particleCount += 1;
-        particleFraction = particleFraction - 1;
-    }
-    
-    particleSys.generate(particleCount, {v: initialV});
-      
-    //for all the particles apply physics
-    for (var i=0; i<particleSys.max; i++){
-        if (particleSys.isVisible(i)){
-            vOld.copy(particleSys.getV(i));
-            xOld.copy(particleSys.getX(i));
 
-            v1_mut.copy(G);
-            v1_mut.sub(v2_mut.copy(vOld).multiplyScalar(D));
-            
-            acceleration.copy(v1_mut); 
-            acceleration.add(getRepulsorForces(xOld));
-            
-            vNew.copy(integrate(vOld, acceleration, timestep));
-            xNew.copy(integrate(xOld, vOld, timestep));
-            
-            //collision detection and response. if there is no collision then no change
-            var collision = collisionDetectionAndResponse(xOld, xNew, vOld, vNew);
-            xNew.copy(collision.xNew);
-            vNew.copy(collision.vNew);
-             
-            particleSys.moveParticle(i, xNew);
-            particleSys.updateAge(i, timestep);
-            particleSys.updateColor(i);
-                        
-            particleSys.setV(i, vNew);
-            particleSys.setX(i, xNew);
+    //for all the particles apply physics
+    for (var i=0; i<zooka.max; i++){
+        if (!zooka.isVisible(i)){
+            continue;
         }
+        vOld.copy(zooka.getV(i));
+        xOld.copy(zooka.getX(i));
+
+        v1_mut.copy(G);
+        v1_mut.sub(v2_mut.copy(vOld).multiplyScalar(D));
+
+        acceleration.copy(v1_mut); 
+        acceleration.add(getRepulsorForces(xOld));
+
+        for (var j=0; j<zooka.max; j++){
+            if (!zooka.isVisible(i) || i==j){
+                continue;
+            }
+            
+            //collision avoidance
+            v1_mut.copy(zooka.getX(i));   //x_i
+            v2_mut.copy(zooka.getX(j));   //x_j
+            dist = v1_mut.distanceTo(v2_mut);
+            v2_mut.sub(v1_mut);         
+            v3_mut.copy(v2_mut);        //x_ij
+            
+            //collision avoidance
+            if (dist < 20){           
+                v2_mut.normalize().multiplyScalar(-1 * K_A / dist);
+                acceleration.add(v2_mut);
+            }
+            
+            //Velocity matching
+            if (dist < 10) {
+                v1_mut.copy(zooka.getV(j));  //v_k
+                acceleration.add(v1_mut.sub(zooka.getV(i)).multiplyScalar(K_V));
+            }
+            
+            //centering. v3_mut is x_ij
+            if (dist > 25) {
+                acceleration.add(v3_mut.multiplyScalar(K_C));     
+            }
+        }
+
+        vNew.copy(integrate(vOld, acceleration, timestep));
+        xNew.copy(integrate(xOld, vOld, timestep));        
+        
+        //collision detection and response. if there is no collision then no change
+        //var collision = collisionDetectionAndResponse(xOld, xNew, vOld, vNew);
+        //xNew.copy(collision.xNew);
+        //vNew.copy(collision.vNew);
+
+        zooka.moveParticle(i, xNew);
+        zooka.setV(i, vNew);
     }
-    particleSys.geometry.attributes.position.needsUpdate = true;
-    particleSys.geometry.attributes.color.needsUpdate = true;
     
+    zooka.points.geometry.verticesNeedUpdate = true;
+
     var waitTime = H_MILLI - clock.getDelta(); 
     if (waitTime < 4){ //4 milliseconds is the minimum wait for most browsers
         console.log("simulation getting behind and slowing down!");
     }
     setTimeout(simulate, waitTime);
-}
-
-
-
-function collisionDetectionAndResponse(x1, x2, v1, v2){
-    v1_mut.copy(x1);
-    v2_mut.copy(x2);
-    
-    dOld = v1_mut.sub(plane.p).dot(plane.n);
-    dNew = v2_mut.sub(plane.p).dot(plane.n);
-    //check if they have the same sign
-    if (dOld*dNew <= 0 && polygonThere){
-        
-        fraction = dOld / (dOld-dNew);
-        collisionX.copy(integrate(x1, v1, fraction * H));
-        
-        v1_mut.copy(v1);
-        vNormal.copy(plane.n).multiplyScalar(v1_mut.dot(plane.n));
-        
-        if (pointInPolygon(collisionX)){
-            collisionCount++;
-            var hsl = polygon.material.color.getHSL();
-            hsl.s = 0.999 * hsl.s;
-            hsl.l = 0.999 * hsl.l;
-            if (hsl.l < 0.005){
-                polygonThere = false;
-                scene.remove(polygon);
-            }
-            polygon.material.color.setHSL(hsl.h, hsl.s, hsl.l);
-            
-            var response = {};
-            v1_mut.copy(x2);
-            v2_mut.copy(plane.n);
-            response.xNew = v1_mut.sub(v2_mut.multiplyScalar(dNew * (1 + CR))).clone();
-
-            v1_mut.copy(v1);
-            var vTan = v1_mut.sub(vNormal);
-
-            response.vNew = vNormal.multiplyScalar(-1 * CR).add(vTan.multiplyScalar(1 - CF)).clone();
-
-            return response;
-        }
-    }
-    
-    return {xNew: x2, vNew: v2};
-}
-
-var p0 = new THREE.Vector3(0,0,0);
-var p1 = new THREE.Vector3(0,0,0);
-var p2 = new THREE.Vector3(0,0,0);
-
-function pointInPolygon(x){
-    
-    var v0, v1, v2, dot00, dot01, dot02, dot11, dot12, denom, u, v;
-    for (var i=0; i < polygon.geometry.faces.length; i++){
-        
-        //implementation in appendix wasn't working, so I based this off of http://www.blackpawn.com/texts/pointinpoly/
-        p0.copy(FACES[i][0]);
-        p1.copy(FACES[i][1]);
-        p2.copy(FACES[i][2]);
-        
-        v0 = p2.sub(p0);
-        v1 = p1.sub(p0);
-        v1_mut.copy(x);
-        v2 = v1_mut.sub(p0);
-        
-        // Compute dot products
-        dot00 = v0.dot(v0);
-        dot01 = v0.dot(v1);
-        dot02 = v0.dot(v2);
-        dot11 = v1.dot(v1);
-        dot12 = v1.dot(v2);
-
-        // Compute barycentric coordinates
-        denom = 1 / (dot00 * dot11 - dot01 * dot01);
-        u = (dot11 * dot02 - dot01 * dot12) * denom;
-        v = (dot00 * dot12 - dot01 * dot02) * denom;        
-        
-        if ( u >= 0 && v >= 0 && (u+v) <= 1){
-            return true;
-        }
-        
-    }
-    return false;
 }
 
 /** rendering loop */
@@ -315,17 +225,14 @@ function getRepulsorForces(x){
     var fTotal = new THREE.Vector3(0, 0, 0);
     for (var i = 0; i< repulsors.length; i++){
         var r = repulsors[i];
-        var dist = x.distanceTo(r);
+        dist = x.distanceTo(r);
         
-        if (dist < 10){ 
+        //if (dist < 500){ 
             //arbitrary. fiddle
-            var f = 200 / (dist*dist);  
+            var f = 1000 / (dist*dist);  
             var v = new THREE.Vector3(x.x - r.x, x.y - r.y, x.z - r.z).normalize();
-            var sign;
-            if (i % 2 === 0) sign = 1;
-            else sign = -1;
-            fTotal = fTotal.add(v.multiplyScalar( sign * f));
-        }
+            fTotal = fTotal.add(v.multiplyScalar(f)); // negative makes it attract
+        //}
     }
     return fTotal;
 }
@@ -335,10 +242,9 @@ function getRepulsorForces(x){
 /** create the renderer and add it to the scene */
 function initRenderer(){
     var renderer = new THREE.WebGLRenderer({ alpha: true });
-    //renderer.setClearColor(0xe8e8d6 , 1); 
-    renderer.setClearColor(0x000000 , 1); 
-    
+    renderer.setClearColor(0xeeeeee , 1); 
     renderer.setSize(SCENE_WIDTH, SCENE_HEIGHT);
+    renderer.sortObjects = false; //helps. doesn't fix transparency issues fully though
     doc.getElementById('webgl-container').appendChild(renderer.domElement);
     return renderer;
 }
@@ -484,8 +390,6 @@ function getUserInputs(){
     G.y = parseFloat(doc.getElementById("g.y").value);
     G.z = parseFloat(doc.getElementById("g.z").value);
     
-    PPS = parseFloat(doc.getElementById("PPS").value); 
-
     H = parseFloat(doc.getElementById("H").value);    
     H_MILLI = H * 1000;    
     
@@ -511,14 +415,11 @@ function resetUserInputs(){
     doc.getElementById("v.z-slider").value = -10;     
     
     doc.getElementById("g.x").value = 0;
-    doc.getElementById("g.y").value = -9.81;
+    doc.getElementById("g.y").value = -1;
     doc.getElementById("g.z").value = 0;
     doc.getElementById("g.x-slider").value = 0;
-    doc.getElementById("g.y-slider").value = -9.81;
+    doc.getElementById("g.y-slider").value = -1;
     doc.getElementById("g.z-slider").value = 0;    
-
-    doc.getElementById("PPS").value = 10;
-    doc.getElementById("PPS-slider").value = 10; 
 
     doc.getElementById("H").value = 0.016;    
     H_MILLI = H * 1000;    
@@ -560,10 +461,6 @@ function randomizeUserInputs(){
     doc.getElementById("g.x-slider").value = randX;
     doc.getElementById("g.y-slider").value = randY;
     doc.getElementById("g.z-slider").value = randZ;  
-    
-    var randPPS = Util.getRandom(1, 1000);
-    doc.getElementById("PPS").value = randPPS;  
-    doc.getElementById("PPS-slider").value = randPPS;  
 
     doc.getElementById("H").value = Util.getRandom(0.016, 0.1);    
     H_MILLI = H * 1000;    

@@ -8,63 +8,57 @@
 
 var CONE_SIZE = 50;
 
-function ParticleSystem(scene, dist){
+function Beezooka(scene, dist, max){
     this.particleLifespan = 10;
     this.index = 0;
-    this.max = 1000000;
+    this.max = max;
     this.distribution = dist;
     this.particlesAttr = new Array(this.max);
     
-    this.vertices = new Float32Array(this.max * 3);
-    this.colors = new Float32Array(this.max * 4);
+    var geometry = new THREE.Geometry();
 
     for (var i = 0; i < this.max; i++) {
-        this.vertices[i * 3 + 0] = 0;
-        this.vertices[i * 3 + 1] = 0;
-        this.vertices[i * 3 + 2] = 0;
-        this.colors[i * 4 + 0] = 1;
-        this.colors[i * 4 + 1] = 0;
-        this.colors[i * 4 + 2] = 0;
-        this.colors[i * 4 + 3] = 0;
+        var pX = Math.random() * 500 - 250,
+            pY = Math.random() * 500 - 250,
+            pZ = Math.random() * 500 - 250,
+            particle = new THREE.Vector3(pX, pY, pZ);
+
+        // add it to the geometry
+        geometry.vertices.push(particle);
         this.particlesAttr[i] = {
-            x : new THREE.Vector3(0,0,0),
             v : new THREE.Vector3(0,0,0)
         };
     }
-      
-    var uniforms = {};
-    var pMaterial = new THREE.ShaderMaterial({
-        uniforms : uniforms,
-        vertexShader: doc.getElementById('vertexshader').text,
-        fragmentShader: doc.getElementById('fragmentshader').text,
-        transparent: true
-    });
-    
-    this.geometry = new THREE.BufferGeometry();
-    this.geometry.addAttribute('position', new THREE.BufferAttribute(this.vertices, 3));
-    this.geometry.addAttribute('color', new THREE.BufferAttribute(this.colors, 4));
-    this.geometry.attributes.position.needsUpdate = true;
-    this.geometry.attributes.color.needsUpdate = true;
 
-    this.particleSystem = new THREE.Points(this.geometry, pMaterial);
-    scene.add(this.particleSystem);  
+    geometry.verticesNeedUpdate = true;
+    
+    var pMaterial = new THREE.PointsMaterial({
+        color: 0xFFFFFF,
+        size: 10,
+        map: THREE.ImageUtils.loadTexture( "bee.png" ),
+        transparent: true,
+    });
+    pMaterial.alphaTest = 0.5; //this fixes the opacity issue becuase reasons
+    
+    this.points = new THREE.Points(geometry, pMaterial);
+    this.points.sortParticles = true;
+    scene.add(this.points);  
 }
 
 /** remove the particle system */
-ParticleSystem.prototype.delete = function(scene){
-    scene.remove(this.particleSystem);
+Beezooka.prototype.delete = function(scene){
+    scene.remove(this.points);
 };
 
-/** Creates a canvas with the given text then renders that as a sprite. TODO performance? */
+/** Creates a canvas with the given text then renders that as a sprite */
 function initSprite(v){
 
     var canvas = doc.createElement('canvas');
-    var size = 100;
+    var size = 200;
     canvas.width = size;
     canvas.height = size;
     
     var material = new THREE.SpriteMaterial( {
-            //color: Math.random() * 0x808008 + 0x808080,
             color: {r: 255, g: 0, b: 0}
     });
 
@@ -75,28 +69,29 @@ function initSprite(v){
     return sprite;  
 }
 
-/** turn on the next 'count' particles in our array based on the current index */ 
-ParticleSystem.prototype.generate = function(count, opts){
+/** ready aim fire boom */ 
+Beezooka.prototype.fire = function(opts){
     
-    var pX, pY, pZ, distributionY, distributionZ;
+    var pX, pY, pZ, distributionX, distributionY, distributionZ;
     if (this.distribution == 'gaussian'){
+        distributionX = gaussian(initialX.x, CONE_SIZE);        
         distributionY = gaussian(initialX.y, CONE_SIZE);
         distributionZ = gaussian(initialX.z, CONE_SIZE);
     }
     
-    for (var i=0; i < count; i++){
+    for (var i=0; i < this.max; i++){
         this.index++;
         if (this.index >= this.max) {
             this.index = 0;
         }
         
         if (this.distribution == 'gaussian'){
-            pX = initialX.x;
+            pX = distributionX.ppf(Math.random());
             pY = distributionY.ppf(Math.random());
             pZ = distributionZ.ppf(Math.random());
         }
         else {
-            pX = initialX.x;
+            pX = Util.getRandom(initialX.y-CONE_SIZE, initialX.x+CONE_SIZE);
             pY = Util.getRandom(initialX.y-CONE_SIZE, initialX.x+CONE_SIZE);
             pZ = Util.getRandom(initialX.z-CONE_SIZE, initialX.x+CONE_SIZE);
         }
@@ -108,67 +103,38 @@ ParticleSystem.prototype.generate = function(count, opts){
 };
 
 /** show the particle at the given index */
-ParticleSystem.prototype.turnOn = function(index, opts){
+Beezooka.prototype.turnOn = function(index, opts){
     this.turnOff(index);
     this.particlesAttr[index].visible = true;
     
     this.moveParticle(index, opts.x);
     
     this.particlesAttr[index].v.copy(opts.v);
-    this.particlesAttr[index].x.copy(opts.x);
     this.particlesAttr[index].age = Util.getRandom(0,2);    
 };
 
 /** hide the particle at given index */
-ParticleSystem.prototype.turnOff = function(index, opts){
-    this.colors[index * 4 + 3] = 0; //set alpha to zero
+Beezooka.prototype.turnOff = function(index, opts){
     this.particlesAttr[index].visible = false;
 };
 
 /** move the particle at the given index to the new position */
-ParticleSystem.prototype.moveParticle = function(index, x){    
-    this.vertices[index * 3 + 0] = x.x;
-    this.vertices[index * 3 + 1] = x.y;
-    this.vertices[index * 3 + 2] = x.z;
-
-    this.particlesAttr[index].x.copy(x);
+Beezooka.prototype.moveParticle = function(index, x){    
+    this.points.geometry.vertices[index].copy(x);
 };
 
-/** update the particles color/opacity based on age */
-ParticleSystem.prototype.updateAge = function(index, time){
-    this.particlesAttr[index].age += time;
-};
-
-/** update the particles color/opacity based on age */
-ParticleSystem.prototype.updateColor = function(index){
-    var lifespanFraction = this.particlesAttr[index].age / this.particleLifespan;
-    if (this.particlesAttr[index].age > this.particleLifespan){
-        this.turnOff(index);
-    }
-    else {
-        this.colors[index * 4 + 0] = Math.max(0.5, 1 - lifespanFraction);    // make it grey over time
-        this.colors[index * 4 + 1] = Math.min(0.5, lifespanFraction);    
-        this.colors[index * 4 + 2] = Math.min(0.5, lifespanFraction);         
-        this.colors[index * 4 + 3] = 1 - lifespanFraction;    // alpha
-    }
-};
-
-ParticleSystem.prototype.getV = function(index){
+Beezooka.prototype.getV = function(index){
     return this.particlesAttr[index].v;
 };
 
-ParticleSystem.prototype.getX = function(index){
-    return this.particlesAttr[index].x;
+Beezooka.prototype.getX = function(index){
+    return this.points.geometry.vertices[index];
 };
 
-ParticleSystem.prototype.setV = function(index, v){
+Beezooka.prototype.setV = function(index, v){
     this.particlesAttr[index].v.copy(v);
 };
 
-ParticleSystem.prototype.setX = function(index, x){
-    this.particlesAttr[index].x.copy(x);
-};
-
-ParticleSystem.prototype.isVisible = function(index){
+Beezooka.prototype.isVisible = function(index){
     return this.particlesAttr[index].visible;
 };
