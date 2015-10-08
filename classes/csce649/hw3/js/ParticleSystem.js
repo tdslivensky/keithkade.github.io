@@ -5,8 +5,8 @@
  *  I originally used sprites and then switched to vertices
  */
 
-
-var CONE_SIZE = 50;
+var CONE_SIZE = 500;
+var SPREAD = 500;
 
 function Beezooka(scene, dist, max){
     this.particleLifespan = 10;
@@ -18,10 +18,10 @@ function Beezooka(scene, dist, max){
     var geometry = new THREE.Geometry();
 
     for (var i = 0; i < this.max; i++) {
-        var pX = Math.random() * 500 - 250,
-            pY = Math.random() * 500 - 250,
-            pZ = Math.random() * 500 - 250,
-            particle = new THREE.Vector3(pX, pY, pZ);
+        var pX = 0;
+        var pY = 0;
+        var pZ = 0;
+        var particle = new THREE.Vector3(pX, pY, pZ);
 
         // add it to the geometry
         geometry.vertices.push(particle);
@@ -50,33 +50,18 @@ Beezooka.prototype.delete = function(scene){
     scene.remove(this.points);
 };
 
-/** Creates a canvas with the given text then renders that as a sprite */
-function initSprite(v){
-
-    var canvas = doc.createElement('canvas');
-    var size = 200;
-    canvas.width = size;
-    canvas.height = size;
-    
-    var material = new THREE.SpriteMaterial( {
-            color: {r: 255, g: 0, b: 0}
-    });
-
-    var sprite = new THREE.Sprite(material);
-    sprite.scale.set( 1, 1, 1 ); 
-    sprite.position.set(v.x, v.y, v.z);
-    sprite.visible = false;
-    return sprite;  
-}
-
 /** ready aim fire boom */ 
 Beezooka.prototype.fire = function(opts){
     
-    var pX, pY, pZ, distributionX, distributionY, distributionZ;
+    var pX, pY, pZ, distributionX, distributionY, distributionZ, distributionX_2, distributionY_2, distributionZ_2;
     if (this.distribution == 'gaussian'){
         distributionX = gaussian(initialX.x, CONE_SIZE);        
         distributionY = gaussian(initialX.y, CONE_SIZE);
         distributionZ = gaussian(initialX.z, CONE_SIZE);
+
+        distributionX_2 = gaussian(opts.v.x, SPREAD);        
+        distributionY_2 = gaussian(opts.v.y, SPREAD);
+        distributionZ_2 = gaussian(opts.v.z, SPREAD);        
     }
     
     for (var i=0; i < this.max; i++){
@@ -85,15 +70,22 @@ Beezooka.prototype.fire = function(opts){
             this.index = 0;
         }
         
+        //also randomize velocities a bit to make things more interesting
         if (this.distribution == 'gaussian'){
             pX = distributionX.ppf(Math.random());
             pY = distributionY.ppf(Math.random());
             pZ = distributionZ.ppf(Math.random());
+            opts.v.x = distributionX_2.ppf(Math.random());
+            opts.v.y = distributionY_2.ppf(Math.random());
+            opts.v.z = distributionZ_2.ppf(Math.random());            
         }
         else {
-            pX = Util.getRandom(initialX.y-CONE_SIZE, initialX.x+CONE_SIZE);
-            pY = Util.getRandom(initialX.y-CONE_SIZE, initialX.x+CONE_SIZE);
-            pZ = Util.getRandom(initialX.z-CONE_SIZE, initialX.x+CONE_SIZE);
+            pX = Util.getRandom(initialX.x - CONE_SIZE, initialX.x + CONE_SIZE);
+            pY = Util.getRandom(initialX.y - CONE_SIZE, initialX.y + CONE_SIZE);
+            pZ = Util.getRandom(initialX.z - CONE_SIZE, initialX.z + CONE_SIZE);
+            opts.v.x = Util.getRandom(opts.v.y - SPREAD, opts.v.x + SPREAD);
+            opts.v.y = Util.getRandom(opts.v.y - SPREAD, opts.v.x + SPREAD);
+            opts.v.z = Util.getRandom(opts.v.z - SPREAD, opts.v.x + SPREAD);            
         }
         
         opts.x = new THREE.Vector3(pX, pY, pZ);

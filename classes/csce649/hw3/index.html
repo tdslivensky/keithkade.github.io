@@ -9,7 +9,6 @@
     <title>Kade Keith | CSCE 649 HW 1</title>
     <link rel="icon" href="/img/kFavicon.png">
     <link rel="stylesheet" href="style.css">
-    
 </head>    
 <body>
     <div id="control-panel">
@@ -74,21 +73,19 @@
         </ul>
         <ul>
             <li><input id="H" type="number" value="0.02" min=".001" step=".001" onchange="inputChange()"> - Time Step </li>
-            <li><input id="D" type="number" value="0.1" step=".01" onchange="inputChange()"> - Air Resistence</li>
-            <li><input id="CR" type="number" value="0.5" step=".1" onchange="inputChange()"> - Coefficient of Restitution </li>
-            <li><input id="CF" type="number" value="0.2" step=".1" onchange="inputChange()"> - Coefficient of Friction </li>
         </ul>
-        <label><input class="checkbox" type="checkbox" onclick='toggleAxes(this)' checked> Show XYZ Axes</label>
+        <label><input class="checkbox" type="checkbox" onclick='Boiler.toggleAxes(this)' checked> Show XYZ Axes</label>
         <button class="restart-btn" onclick="initMotion()">Fire Beezooka</button>
     </div>
     <div id="webgl-container"></div>
 </body>
-    
+
 <script src="js/three.min.js"></script>
 <script src="js/OrbitControls.js"></script>    
 <script src="js/gaussian.js"></script>    
 <script src="js/Util.js"></script>    
 <script src="js/ParticleSystem.js"></script>
 <script src="js/Main.js"></script>
+<script src="js/UI.js"></script> 
     
 </html>

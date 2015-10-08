@@ -15,7 +15,7 @@ html, body {
 
 #control-panel {
     background-color: #575757;
-    width: 400px;
+    width: 260px;
     height: 100%;
     display: inline-block;
     color: white;
@@ -44,7 +44,7 @@ input[type="number"] {
 }
 
 .slider {
-    width: 260px;
+    width: 140px;
 }
 
 button {
@@ -63,8 +63,9 @@ button:hover {
 
 .restart-btn {
     padding: 8px;
-    margin: 20px 0 0 110px;
+    margin: 20px 0 0 0;
     font-size: 18px;
+    display: block;
 }
 
 .checkbox {
