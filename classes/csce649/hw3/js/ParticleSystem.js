@@ -1,34 +1,31 @@
 /* global THREE, doc, Util, gaussian, Float32Array, initialX */
 
 /** 
- *  My Particle System class. I use getters and settters so that I can be implementation agnostic. 
- *  I originally used sprites and then switched to vertices
+ *  Beezooka, a variant of particle system. 
  */
 
-var CONE_SIZE = 500;
-var SPREAD = 500;
+var CONE_SIZE = 200;
+var SPREAD = 100;
 
 function Beezooka(scene, dist, max){
     this.particleLifespan = 10;
     this.index = 0;
     this.max = max;
     this.distribution = dist;
+    this.STATE = new Array(this.max * 2);
     this.particlesAttr = new Array(this.max);
     
     var geometry = new THREE.Geometry();
 
     for (var i = 0; i < this.max; i++) {
-        var pX = 0;
-        var pY = 0;
-        var pZ = 0;
-        var particle = new THREE.Vector3(pX, pY, pZ);
-
-        // add it to the geometry
+        var particle = new THREE.Vector3(0,0,0);
         geometry.vertices.push(particle);
-        this.particlesAttr[i] = {
-            v : new THREE.Vector3(0,0,0)
-        };
+
+        this.STATE[i] = new THREE.Vector3(0,0,0);
+        this.STATE[i + this.max] = new THREE.Vector3(0,0,0);
+        this.particlesAttr[i] = {};
     }
+    
 
     geometry.verticesNeedUpdate = true;
     
@@ -53,7 +50,7 @@ Beezooka.prototype.delete = function(scene){
 /** ready aim fire boom */ 
 Beezooka.prototype.fire = function(opts){
     
-    var pX, pY, pZ, distributionX, distributionY, distributionZ, distributionX_2, distributionY_2, distributionZ_2;
+    var pX, pY, pZ, vX, vY, vZ, distributionX, distributionY, distributionZ, distributionX_2, distributionY_2, distributionZ_2;
     if (this.distribution == 'gaussian'){
         distributionX = gaussian(initialX.x, CONE_SIZE);        
         distributionY = gaussian(initialX.y, CONE_SIZE);
@@ -65,68 +62,39 @@ Beezooka.prototype.fire = function(opts){
     }
     
     for (var i=0; i < this.max; i++){
-        this.index++;
-        if (this.index >= this.max) {
-            this.index = 0;
-        }
         
         //also randomize velocities a bit to make things more interesting
         if (this.distribution == 'gaussian'){
             pX = distributionX.ppf(Math.random());
             pY = distributionY.ppf(Math.random());
             pZ = distributionZ.ppf(Math.random());
-            opts.v.x = distributionX_2.ppf(Math.random());
-            opts.v.y = distributionY_2.ppf(Math.random());
-            opts.v.z = distributionZ_2.ppf(Math.random());            
+            vX = distributionX_2.ppf(Math.random());
+            vY = distributionY_2.ppf(Math.random());
+            vZ = distributionZ_2.ppf(Math.random());            
         }
         else {
             pX = Util.getRandom(initialX.x - CONE_SIZE, initialX.x + CONE_SIZE);
             pY = Util.getRandom(initialX.y - CONE_SIZE, initialX.y + CONE_SIZE);
             pZ = Util.getRandom(initialX.z - CONE_SIZE, initialX.z + CONE_SIZE);
-            opts.v.x = Util.getRandom(opts.v.y - SPREAD, opts.v.x + SPREAD);
-            opts.v.y = Util.getRandom(opts.v.y - SPREAD, opts.v.x + SPREAD);
-            opts.v.z = Util.getRandom(opts.v.z - SPREAD, opts.v.x + SPREAD);            
+            vX = Util.getRandom(opts.v.y - SPREAD, opts.v.x + SPREAD);
+            vY = Util.getRandom(opts.v.y - SPREAD, opts.v.x + SPREAD);
+            vZ = Util.getRandom(opts.v.z - SPREAD, opts.v.x + SPREAD);            
         }
         
-        opts.x = new THREE.Vector3(pX, pY, pZ);
-        
-        this.turnOn(this.index, opts);
+        //update the state
+        this.STATE[i].x = pX;
+        this.STATE[i].y = pY;
+        this.STATE[i].z = pZ;
+        this.STATE[i + this.max].x = vX;
+        this.STATE[i + this.max].y = vY;
+        this.STATE[i + this.max].z = vZ;
     }
+    this.moveParticles();
 };
 
-/** show the particle at the given index */
-Beezooka.prototype.turnOn = function(index, opts){
-    this.turnOff(index);
-    this.particlesAttr[index].visible = true;
-    
-    this.moveParticle(index, opts.x);
-    
-    this.particlesAttr[index].v.copy(opts.v);
-    this.particlesAttr[index].age = Util.getRandom(0,2);    
-};
-
-/** hide the particle at given index */
-Beezooka.prototype.turnOff = function(index, opts){
-    this.particlesAttr[index].visible = false;
-};
-
-/** move the particle at the given index to the new position */
-Beezooka.prototype.moveParticle = function(index, x){    
-    this.points.geometry.vertices[index].copy(x);
-};
-
-Beezooka.prototype.getV = function(index){
-    return this.particlesAttr[index].v;
-};
-
-Beezooka.prototype.getX = function(index){
-    return this.points.geometry.vertices[index];
-};
-
-Beezooka.prototype.setV = function(index, v){
-    this.particlesAttr[index].v.copy(v);
-};
-
-Beezooka.prototype.isVisible = function(index){
-    return this.particlesAttr[index].visible;
+/** update all th particles to the right position from the state */
+Beezooka.prototype.moveParticles = function(){  
+    for (var i = 0; i < this.max; i++){
+        this.points.geometry.vertices[i].copy(this.STATE[i]);
+    }
 };

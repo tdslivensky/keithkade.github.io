@@ -26,9 +26,9 @@ var initialX = new THREE.Vector3(0,0,0);  // Position
 var initialV = new THREE.Vector3(0,0,0);  // Velocity
 
 //flocking tuning constants
-var K_A = 15;       //collision avoidance
-var K_V = 1;        //velocity matching
-var K_C = 1;        //centering
+var K_A = 0.5;       //collision avoidance
+var K_V = 0.5;        //velocity matching
+var K_C = 0.5;        //centering
 
 //ugly, but saves time garbage collecting
 var v1_mut = new THREE.Vector3(0,0,0); //I keep a couple mutable vectors for all calculations
@@ -51,6 +51,7 @@ var p2 = new THREE.Vector3(0,0,0);
 var dist = 0;
 
 var simTimeout;
+var state_mut;
 
 window.onload = function(){
     scene = new THREE.Scene();
@@ -70,7 +71,13 @@ function initMotion(){
         zooka.delete(scene);
     }
     
-    zooka = new Beezooka(scene, 'gaussian', 50);
+    var ammo = 50;
+    zooka = new Beezooka(scene, 'gaussian', ammo);
+    state_mut = new Array(ammo * 2);
+    for (var i = 0; i < ammo * 2; i++){
+        state_mut[i] = new THREE.Vector3(0,0,0);
+    }
+
     zooka.fire({v: initialV});   
     
     clock = new THREE.Clock();
@@ -82,41 +89,30 @@ function initMotion(){
     render();
 }
 
-/** Euler integration */
-function integrate(v1, v2, timestep){
-    v1_mut.copy(v1);
-    v2_mut.copy(v2);
-    return v1_mut.add(v2_mut.multiplyScalar(timestep));
-}
-
-/** the main simulation loop. recursive */ 
-function simulate(){ 
-    var timestep = H;
-
+//gets the derivative of a state. plus external forces
+function F(state){
     //for all the particles apply physics
     for (var i=0; i<zooka.max; i++){
-        if (!zooka.isVisible(i)){
-            continue;
-        }
-        vOld.copy(zooka.getV(i));
-        xOld.copy(zooka.getX(i));
+        state_mut[i].copy(state[i + zooka.max]);
+        
+        xOld.copy(zooka.STATE[i]);
+        vOld.copy(zooka.STATE[i + zooka.max]);
 
         v1_mut.copy(G);
 
-        acceleration.copy(v1_mut); 
+        acceleration.copy(G); 
         acceleration.add(getRepulsorForces(xOld));
 
         for (var j=0; j<zooka.max; j++){
-            if (!zooka.isVisible(i) || i==j){
+            if (i==j){
                 continue;
             }
             
-            //collision avoidance
-            v1_mut.copy(zooka.getX(i));   //x_i
-            v2_mut.copy(zooka.getX(j));   //x_j
+            v1_mut.copy(zooka.STATE[i]);    //x_i
+            v2_mut.copy(zooka.STATE[j]);    //x_j
             dist = v1_mut.distanceTo(v2_mut);
             v2_mut.sub(v1_mut);         
-            v3_mut.copy(v2_mut);        //x_ij
+            v3_mut.copy(v2_mut);            //x_ij
             
             //collision avoidance
             if (dist < 40){           
@@ -126,8 +122,8 @@ function simulate(){
             
             //Velocity matching
             if (dist < 10) {
-                v1_mut.copy(zooka.getV(j));  //v_k
-                acceleration.add(v1_mut.sub(zooka.getV(i)).multiplyScalar(K_V));
+                v1_mut.copy(zooka.STATE[j + zooka.max]);  //v_k
+                acceleration.add(v1_mut.sub(zooka.STATE[i + zooka.max]).multiplyScalar(K_V));
             }
             
             //centering. v3_mut is x_ij
@@ -135,19 +131,36 @@ function simulate(){
                 acceleration.add(v3_mut.multiplyScalar(K_C));     
             }
         }
-
-        vNew.copy(integrate(vOld, acceleration, timestep));
-        xNew.copy(integrate(xOld, vOld, timestep));        
         
-        //collision detection and response. if there is no collision then no change
-        //var collision = collisionDetectionAndResponse(xOld, xNew, vOld, vNew);
-        //xNew.copy(collision.xNew);
-        //vNew.copy(collision.vNew);
-
-        zooka.moveParticle(i, xNew);
-        zooka.setV(i, vNew);
+        state_mut[i + zooka.max].copy(acceleration);
     }
+    return state_mut;
+}
+
+function addState(state1, state2){
+    for (var i = 0; i < state1.length; i++){
+        state1[i].add(state2[i]);
+    }
+}
+
+function stateMultScalar(state, scalar){
+    for (var i = 0; i < state.length; i++){
+        state[i].multiplyScalar(scalar);
+    }
+}
+
+/** the main simulation loop. recursive */ 
+function simulate(){ 
+    var timestep = H;
+
+    //euler integration
+    var deriv = F(zooka.STATE);
+    stateMultScalar(deriv, H);
+    addState(zooka.STATE, deriv);
     
+    //zooka.STATE.add(F(zooka.STATE).multiply(h));
+    
+    zooka.moveParticles();
     zooka.points.geometry.verticesNeedUpdate = true;
 
     var waitTime = H_MILLI - clock.getDelta(); 

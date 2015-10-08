@@ -142,17 +142,12 @@ Boiler.initLabel = function(text, color, coords){
 };
 
 Boiler.drawPoint = function(x){
-    var canvas = doc.createElement('canvas');
-    var size = 100;
-    canvas.width = size;
-    canvas.height = size;
-
     var material = new THREE.SpriteMaterial( {
-            color: {r: 255, g: 0, b: 0}
+        color: 0x333333
     });
 
     var sprite = new THREE.Sprite(material);
-    sprite.scale.set( 1, 1, 1 ); 
+    sprite.scale.set( 5, 5, 1 ); 
     sprite.position.set(x.x, x.y, x.z);
     scene.add(sprite);
 };
