@@ -103,33 +103,38 @@ function F(state){
         acceleration.copy(G); 
         acceleration.add(getRepulsorForces(xOld));
 
-        for (var j=0; j<zooka.max; j++){
-            if (i==j){
-                continue;
+        if (j % 20 !== 0){ //every 20th bee is a seeker bee who doesn't follow flocking rules
+            for (var j=0; j<zooka.max; j++){
+                if (i==j){
+                    continue;
+                }
+
+                v1_mut.copy(zooka.STATE[i]);    //x_i
+                v2_mut.copy(zooka.STATE[j]);    //x_j
+                dist = v1_mut.distanceTo(v2_mut);
+                v2_mut.sub(v1_mut);         
+                v3_mut.copy(v2_mut);            //x_ij
+
+                //collision avoidance
+                if (dist < 40){           
+                    v2_mut.normalize().multiplyScalar(-1 * K_A / dist);
+                    acceleration.add(v2_mut);
+                }
+
+                //Velocity matching
+                if (dist < 10) {
+                    v1_mut.copy(zooka.STATE[j + zooka.max]);  //v_k
+                    acceleration.add(v1_mut.sub(zooka.STATE[i + zooka.max]).multiplyScalar(K_V));
+                }
+
+                //centering. v3_mut is x_ij
+                if (dist > 40) {
+                    acceleration.add(v3_mut.multiplyScalar(K_C));     
+                }
             }
-            
-            v1_mut.copy(zooka.STATE[i]);    //x_i
-            v2_mut.copy(zooka.STATE[j]);    //x_j
-            dist = v1_mut.distanceTo(v2_mut);
-            v2_mut.sub(v1_mut);         
-            v3_mut.copy(v2_mut);            //x_ij
-            
-            //collision avoidance
-            if (dist < 40){           
-                v2_mut.normalize().multiplyScalar(-1 * K_A / dist);
-                acceleration.add(v2_mut);
-            }
-            
-            //Velocity matching
-            if (dist < 10) {
-                v1_mut.copy(zooka.STATE[j + zooka.max]);  //v_k
-                acceleration.add(v1_mut.sub(zooka.STATE[i + zooka.max]).multiplyScalar(K_V));
-            }
-            
-            //centering. v3_mut is x_ij
-            if (dist > 40) {
-                acceleration.add(v3_mut.multiplyScalar(K_C));     
-            }
+        }
+        else {
+            //attract bee to target
         }
         
         state_mut[i + zooka.max].copy(acceleration);
@@ -157,9 +162,7 @@ function simulate(){
     var deriv = F(zooka.STATE);
     stateMultScalar(deriv, H);
     addState(zooka.STATE, deriv);
-    
-    //zooka.STATE.add(F(zooka.STATE).multiply(h));
-    
+        
     zooka.moveParticles();
     zooka.points.geometry.verticesNeedUpdate = true;
 

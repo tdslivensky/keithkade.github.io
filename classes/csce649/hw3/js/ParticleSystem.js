@@ -13,7 +13,6 @@ function Beezooka(scene, dist, max){
     this.max = max;
     this.distribution = dist;
     this.STATE = new Array(this.max * 2);
-    this.particlesAttr = new Array(this.max);
     
     var geometry = new THREE.Geometry();
 
@@ -23,9 +22,7 @@ function Beezooka(scene, dist, max){
 
         this.STATE[i] = new THREE.Vector3(0,0,0);
         this.STATE[i + this.max] = new THREE.Vector3(0,0,0);
-        this.particlesAttr[i] = {};
     }
-    
 
     geometry.verticesNeedUpdate = true;
     
