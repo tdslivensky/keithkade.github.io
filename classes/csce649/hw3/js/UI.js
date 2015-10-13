@@ -1,4 +1,4 @@
-/* global doc, initialX:true, initialV:true, G:true, H:true, H_MILLI:true, Util*/
+/* global doc, initialX:true, initialV:true, G:true, H:true, H_MILLI:true, Util, moveZooka*/
 
 /************* Functions for handling user input *************/
 
@@ -11,6 +11,7 @@ function inputChange(elem, id){
         doc.getElementById(id).value = elem.value;
     }
     getUserInputs();
+    moveZooka();
 }
 
 /** these might be able to be be optimized. lots of code */ 
@@ -21,8 +22,8 @@ function getUserInputs(){
     initialX.z = parseFloat(doc.getElementById("p.z").value);
 
     initialV.x = parseFloat(doc.getElementById("v.x").value);
-    initialV.y = parseFloat(doc.getElementById("v.y").value);
-    initialV.z = parseFloat(doc.getElementById("v.z").value); 
+    initialV.y = 0;
+    initialV.z = 0;
     
     G.x = parseFloat(doc.getElementById("g.x").value);
     G.y = parseFloat(doc.getElementById("g.y").value);
@@ -40,12 +41,8 @@ function resetUserInputs(){
     doc.getElementById("p.y-slider").value = 7;
     doc.getElementById("p.z-slider").value = 5;
 
-    doc.getElementById("v.x").value = 30;
-    doc.getElementById("v.y").value = 4;
-    doc.getElementById("v.z").value = -10; 
-    doc.getElementById("v.x-slider").value = 30;
-    doc.getElementById("v.y-slider").value = 4;
-    doc.getElementById("v.z-slider").value = -10;     
+    doc.getElementById("v.x").value = 20;
+    doc.getElementById("v.x-slider").value = 20;   
     
     doc.getElementById("g.x").value = 0;
     doc.getElementById("g.y").value = -1;
@@ -73,14 +70,8 @@ function randomizeUserInputs(){
     doc.getElementById("p.z-slider").value = randZ;
 
     randX = Util.getRandom(-100, 100);
-    randY = Util.getRandom(-100, 100);
-    randZ = Util.getRandom(-100, 100);
     doc.getElementById("v.x").value = randX;
-    doc.getElementById("v.y").value = randY;
-    doc.getElementById("v.z").value = randZ; 
     doc.getElementById("v.x-slider").value = randX;
-    doc.getElementById("v.y-slider").value = randY;
-    doc.getElementById("v.z-slider").value = randZ;     
  
     randX = Util.getRandom(-10, 10);
     randY = Util.getRandom(-10, 10);

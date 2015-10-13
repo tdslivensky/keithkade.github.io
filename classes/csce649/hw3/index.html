@@ -15,42 +15,29 @@
         <h3>Simulation Settings</h3>
         <button onclick="resetUserInputs()">Reset</button>
         <button onclick="randomizeUserInputs()">Randomize</button>
-
         <ul>
-
-            <li>Start Position</li>
+            <li>Zooka Power</li>
+            <li>
+                <input id="v.x-slider" class="slider" type="range" value="20" step="1" min="-100" max="100" oninput="inputChange(this, 'v.x')">
+                <input id="v.x" type="number" value="20" step="any" oninput="inputChange(this, 'v.x-slider')">
+            </li>
+        </ul>
+        <ul>
+            <li>Zooka Position</li>
             <li>
                 X
-                <input id="p.x-slider" class="slider" type="range" value="0" step="1" min="-20" max="20" oninput="inputChange(this, 'p.x')">
+                <input id="p.x-slider" class="slider" type="range" value="0" step="1" min="-200" max="200" oninput="inputChange(this, 'p.x')">
                 <input id="p.x" type="number" value="0" step="any" oninput="inputChange(this, 'p.x-slider')"> 
             </li>
             <li>
                 Y
-                <input id="p.y-slider" class="slider" type="range" value="0" step="1" min="-20" max="20" oninput="inputChange(this, 'p.y')">
+                <input id="p.y-slider" class="slider" type="range" value="0" step="1" min="-200" max="200" oninput="inputChange(this, 'p.y')">
                 <input id="p.y" type="number" value="0" step="any" oninput="inputChange(this, 'p.y-slider')"> 
             </li>
             <li>
                 Z
-                <input id="p.z-slider" class="slider" type="range" value="0" step="1" min="-20" max="20" oninput="inputChange(this, 'p.z')">
+                <input id="p.z-slider" class="slider" type="range" value="0" step="1" min="-200" max="200" oninput="inputChange(this, 'p.z')">
                 <input id="p.z" type="number" value="0" step="any" oninput="inputChange(this, 'p.z-slider')">
-            </li>
-        </ul>
-        <ul>
-            <li>Start Velocity</li>
-            <li>
-                X
-                <input id="v.x-slider" class="slider" type="range" value="20" step="1" min="-100" max="100" oninput="inputChange(this, 'v.x')">
-                <input id="v.x" type="number" value="20" step="any" oninput="inputChange(this, 'v.x-slider')">
-            </li>
-            <li>
-                Y
-                <input id="v.y-slider" class="slider" type="range" value="0" step="1" min="-100" max="100" oninput="inputChange(this, 'v.y')">
-                <input id="v.y" type="number" value="0" step="any" oninput="inputChange(this, 'v.y-slider')">
-            </li>
-            <li>
-                Z
-                <input id="v.z-slider" class="slider" type="range" value="0" step="1" min="-100" max="100" oninput="inputChange(this, 'v.z')">
-                <input id="v.z" type="number" value="0" step="any" oninput="inputChange(this, 'v.z-slider')">
             </li>
         </ul>
         <ul>
@@ -84,7 +71,7 @@
 <script src="js/OrbitControls.js"></script>    
 <script src="js/gaussian.js"></script>    
 <script src="js/Util.js"></script>    
-<script src="js/ParticleSystem.js"></script>
+<script src="js/Zooka.js"></script>
 <script src="js/Main.js"></script>
 <script src="js/UI.js"></script> 
     

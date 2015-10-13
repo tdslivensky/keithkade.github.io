@@ -5,7 +5,7 @@
  */
 
 var CONE_SIZE = 200;
-var SPREAD = 100;
+var SPREAD = 25;
 
 function Beezooka(scene, dist, max){
     this.particleLifespan = 10;

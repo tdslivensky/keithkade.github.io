@@ -11,10 +11,18 @@ var renderer;
 var camera;
 var light;
 var axes;
+var zookaCylinder;
 
 var zooka;
 var clock;
-var repulsors = [];
+var repulsors = []; //smoke clouds
+var enemies = []; //bee-eaters
+var target;
+
+var ENEMY_SIZE = 30;
+var AVOID_FORCE = 20;
+var LOOK_AHEAD = 50;
+var TARGET_FORCE = 30000; //bigger = slower
 
 //Physics variables
 var G = new THREE.Vector3(0, -9.81, 0);  // The accel due to gravity in m/s^2 
@@ -28,26 +36,19 @@ var initialV = new THREE.Vector3(0,0,0);  // Velocity
 //flocking tuning constants
 var K_A = 0.5;       //collision avoidance
 var K_V = 0.5;        //velocity matching
-var K_C = 0.5;        //centering
+var K_C = 0.01;        //centering
 
 //ugly, but saves time garbage collecting
 var v1_mut = new THREE.Vector3(0,0,0); //I keep a couple mutable vectors for all calculations
 var v2_mut = new THREE.Vector3(0,0,0);
 var v3_mut = new THREE.Vector3(0,0,0);
-var dOld = 0;
-var dNew = 0;
-var fraction = 0;
-var particleFraction = 0;
-var collisionX = new THREE.Vector3(0,0,0);
+var v4_mut = new THREE.Vector3(0,0,0);
+var v5_mut = new THREE.Vector3(0,0,0);
 var vOld = new THREE.Vector3(0,0,0);
 var xOld = new THREE.Vector3(0,0,0);
 var acceleration = new THREE.Vector3(0,0,0);
 var vNew = new THREE.Vector3(0,0,0);
 var xNew = new THREE.Vector3(0,0,0);
-var vNormal = new THREE.Vector3(0,0,0);
-var p0 = new THREE.Vector3(0,0,0);
-var p1 = new THREE.Vector3(0,0,0);
-var p2 = new THREE.Vector3(0,0,0);
 var dist = 0;
 
 var simTimeout;
@@ -59,8 +60,19 @@ window.onload = function(){
     camera = Boiler.initCamera();
     light = Boiler.initLight();
     axes = Boiler.initAxes();
-    addRepulsor(new THREE.Vector3(20, 0, 0));
+    zookaCylinder = Boiler.initZookaCylinder();
+    
+    //change what the camera is looking at and add our controls
+    camera.position.set(100, 100, 800);
+    var controls = new THREE.OrbitControls(camera, renderer.domElement);
+    
+    addRepulsor(new THREE.Vector3(50, 12, 0));
+    addRepulsor(new THREE.Vector3(60, 0, 12));
 
+    addEnemy(new THREE.Vector3(100, 100, 0));
+    
+    setTarget(new THREE.Vector3(300, 100, 0));
+    
     initMotion();
 };
 
@@ -71,7 +83,7 @@ function initMotion(){
         zooka.delete(scene);
     }
     
-    var ammo = 50;
+    var ammo = 45;
     zooka = new Beezooka(scene, 'gaussian', ammo);
     state_mut = new Array(ammo * 2);
     for (var i = 0; i < ammo * 2; i++){
@@ -95,15 +107,16 @@ function F(state){
     for (var i=0; i<zooka.max; i++){
         state_mut[i].copy(state[i + zooka.max]);
         
-        xOld.copy(zooka.STATE[i]);
-        vOld.copy(zooka.STATE[i + zooka.max]);
+        xOld.copy(state[i]);
+        vOld.copy(state[i + zooka.max]);
 
         v1_mut.copy(G);
 
         acceleration.copy(G); 
         acceleration.add(getRepulsorForces(xOld));
+        acceleration.add(getSteeringForces(xOld, vOld));
 
-        if (j % 20 !== 0){ //every 20th bee is a seeker bee who doesn't follow flocking rules
+        if (i % 20 !== 0){ //every 20th bee is a seeker bee who doesn't follow flocking rules
             for (var j=0; j<zooka.max; j++){
                 if (i==j){
                     continue;
@@ -125,16 +138,23 @@ function F(state){
                 if (dist < 10) {
                     v1_mut.copy(zooka.STATE[j + zooka.max]);  //v_k
                     acceleration.add(v1_mut.sub(zooka.STATE[i + zooka.max]).multiplyScalar(K_V));
+                    //we care even more about the leaders bees
+                    if (j % 20 === 0){
+                        acceleration.add(v1_mut.multiplyScalar(2));
+                    }
                 }
 
                 //centering. v3_mut is x_ij
                 if (dist > 40) {
-                    acceleration.add(v3_mut.multiplyScalar(K_C));     
+                    acceleration.add(v3_mut.multiplyScalar(K_C));
+                    if (j % 20 === 0){
+                        acceleration.add(v3_mut.multiplyScalar(2));
+                    }
                 }
             }
         }
         else {
-            //attract bee to target
+            acceleration.add(getTargetForces(xOld, vOld));
         }
         
         state_mut[i + zooka.max].copy(acceleration);
@@ -183,8 +203,18 @@ function render() {
 /************* repulsor physics *************/
 
 function addRepulsor(x){
-    Boiler.drawPoint(x);
+    Boiler.drawRepel(x);
     repulsors.push(x);
+}
+
+function addEnemy(x){
+    Boiler.drawEater(x);
+    enemies.push(x);
+}
+
+function setTarget(x){
+    Boiler.drawFlower(x);
+    target = x;
 }
 
 function getRepulsorForces(x){
@@ -194,10 +224,72 @@ function getRepulsorForces(x){
         dist = x.distanceTo(r);
         
         if (dist < 50){ 
-            var f = 1000 / (dist*dist);  
-            var v = new THREE.Vector3(x.x - r.x, x.y - r.y, x.z - r.z).normalize();
-            fTotal = fTotal.add(v.multiplyScalar(f)); // negative makes it attract
+            var f = 1500 / (dist*dist);  //force inversely proportional to distance
+            var v = new THREE.Vector3(x.x - r.x, x.y - r.y, x.z - r.z).normalize(); //repulse
+            fTotal = fTotal.add(v.multiplyScalar(f)); 
         }
     }
     return fTotal;
+}
+
+function getSteeringForces(x, v){
+    var fTotal = new THREE.Vector3(0, 0, 0);
+    v2_mut.copy(x);
+    v3_mut.copy(x);
+    v4_mut.copy(v);
+    
+    v2_mut.add(v4_mut.normalize().multiplyScalar(LOOK_AHEAD)); //look ahead vector
+    v3_mut.add(v4_mut.normalize().multiplyScalar(LOOK_AHEAD * 0.5)); //look ahead vector half length
+    
+    //approximation based on circle around enemy
+    for (var i = 0; i< enemies.length; i++){ 
+        if (v2_mut.distanceTo(enemies[i]) < ENEMY_SIZE || v3_mut.distanceTo(enemies[i]) < ENEMY_SIZE){
+            v2_mut.sub(enemies[i]); //avoidance force
+            v2_mut.normalize().multiplyScalar(AVOID_FORCE);
+            fTotal.add(v2_mut);
+        }
+    }
+    
+    //TODO full sterring as described in notes. 
+    
+    
+    return fTotal;
+}
+
+//seeker bees are attracted to the target
+function getTargetForces(x, v){
+    var fTotal = new THREE.Vector3(0, 0, 0); 
+    dist = x.distanceTo(target);
+    var f = (dist*dist) / TARGET_FORCE; //force should be proportional to distance 
+    var vectorBetween = new THREE.Vector3(target.x - x.x, target.y - x.y, target.z - x.z);
+    var a = vectorBetween.clone().normalize(); //attract
+
+    //accel towards target
+    fTotal.add(a.multiplyScalar(f));
+
+    /*
+        I tried a couple strategies for getting a homing missile effect as opposed to an orbit
+        I do this by slowing the bees down as I think they get closer to the target
+        Kinda works
+    */
+    if (dist > 10){
+        var ang = Math.degrees(v.angleTo(vectorBetween));
+        v2_mut.copy(v);
+
+        //slow down based on if accell is away from velocity
+        fTotal.add(v2_mut.multiplyScalar(-2 * ang/180));
+
+        //slow down as distance decreases
+        fTotal.add(v2_mut.multiplyScalar(-20 / dist));
+
+        var forceFactor = f;
+        fTotal.add(a.multiplyScalar(forceFactor));
+    }
+    return fTotal;
+}
+
+function moveZooka(){
+    zookaCylinder.position.x = initialX.x - 100; //shift permanently by half the zooka length
+    zookaCylinder.position.y = initialX.y;
+    zookaCylinder.position.z = initialX.z;
 }

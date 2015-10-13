@@ -1,4 +1,4 @@
-/*global THREE, window, doc, scene, renderer, axes */
+/*global THREE, window, doc, scene, renderer, axes, SPREAD */
 
 /**
  * Returns a random number between min (inclusive) and max (exclusive). 
@@ -52,15 +52,7 @@ Boiler.initRenderer = function(){
 /** create the camera and add it to the scene */
 Boiler.initCamera = function(){    
     var camera = new THREE.PerspectiveCamera( FIELD_OF_VIEW, ASPECT, NEAR, FAR);
-
-    camera.position.set(0, 40, 100);
-
-    camera.lookAt(new THREE.Vector3(0,0,0)); //we want to focus on the center 
-    
-    scene.add(camera);
-    
-    var controls = new THREE.OrbitControls(camera, renderer.domElement);
-
+    scene.add(camera);        
     return camera;
 };
     
@@ -71,6 +63,31 @@ Boiler.initLight = function(){
 
     scene.add(pointLight);
     return pointLight;
+};
+
+Boiler.initZookaCylinder = function(){
+    var wholeThing = new THREE.Object3D();
+
+    //var geometry = new THREE.CylinderGeometry( 5, 5, 20, 32 );
+    var barrelGeometry = new THREE.CylinderGeometry( SPREAD, SPREAD, 200, 32, 1, true);
+    var barrelMaterial = new THREE.MeshBasicMaterial( {color: 0x003300, side: THREE.DoubleSide} );
+    var barrelCylinder = new THREE.Mesh( barrelGeometry, barrelMaterial );
+    
+    var handleGeometry = new THREE.CylinderGeometry( 8, 8, 30, 32, 1, false);
+    var handleMaterial = new THREE.MeshBasicMaterial( {color: 0x3D1F00} );
+    var handleCylinder = new THREE.Mesh( handleGeometry, handleMaterial );
+    
+    barrelCylinder.rotateZ(Math.radians(90));
+    handleCylinder.translateY(-40);
+    handleCylinder.translateX(20);
+
+    
+    wholeThing.add(barrelCylinder);
+    wholeThing.add(handleCylinder);
+    
+    wholeThing.position.x = -100;
+    scene.add( wholeThing );
+    return wholeThing;
 };
 
 /** draw x, y and z axes */
@@ -148,6 +165,46 @@ Boiler.drawPoint = function(x){
 
     var sprite = new THREE.Sprite(material);
     sprite.scale.set( 5, 5, 1 ); 
+    sprite.position.set(x.x, x.y, x.z);
+    scene.add(sprite);
+};
+
+Boiler.drawRepel = function(x){
+    var material = new THREE.SpriteMaterial( {
+        color: 0xFFFFFF,
+        map: THREE.ImageUtils.loadTexture( "repel.png" ),
+        transparent: true,    
+        opacity: 0.5
+    });
+        
+    var sprite = new THREE.Sprite(material);
+    sprite.scale.set( 10, 10, 1 ); 
+    sprite.position.set(x.x, x.y, x.z);
+    scene.add(sprite);
+};
+
+Boiler.drawFlower = function(x){
+    var material = new THREE.SpriteMaterial( {
+        color: 0xFFFFFF,
+        map: THREE.ImageUtils.loadTexture( "cage.png" ),
+        transparent: true,    
+    });
+        
+    var sprite = new THREE.Sprite(material);
+    sprite.scale.set( 30, 30, 1 ); 
+    sprite.position.set(x.x, x.y, x.z);
+    scene.add(sprite);
+};
+
+Boiler.drawEater = function(x){
+    var material = new THREE.SpriteMaterial( {
+        color: 0xFFFFFF,
+        map: THREE.ImageUtils.loadTexture( "eater.png" ),
+        transparent: true,    
+    });
+        
+    var sprite = new THREE.Sprite(material);
+    sprite.scale.set( 20, 20, 1 ); 
     sprite.position.set(x.x, x.y, x.z);
     scene.add(sprite);
 };
