@@ -20,8 +20,7 @@ var enemies = []; //bee-eaters
 var target;
 
 var ENEMY_SIZE = 30;
-var AVOID_FORCE = 20;
-var LOOK_AHEAD = 50;
+var LOOK_AHEAD_TIME = 3; //seconds
 var TARGET_FORCE = 30000; //bigger = slower
 
 //Physics variables
@@ -237,21 +236,64 @@ function getSteeringForces(x, v){
     v2_mut.copy(x);
     v3_mut.copy(x);
     v4_mut.copy(v);
-    
-    v2_mut.add(v4_mut.normalize().multiplyScalar(LOOK_AHEAD)); //look ahead vector
-    v3_mut.add(v4_mut.normalize().multiplyScalar(LOOK_AHEAD * 0.5)); //look ahead vector half length
-    
-    //approximation based on circle around enemy
+
+    //approximation based on sphere around enemy
     for (var i = 0; i< enemies.length; i++){ 
-        if (v2_mut.distanceTo(enemies[i]) < ENEMY_SIZE || v3_mut.distanceTo(enemies[i]) < ENEMY_SIZE){
-            v2_mut.sub(enemies[i]); //avoidance force
-            v2_mut.normalize().multiplyScalar(AVOID_FORCE);
-            fTotal.add(v2_mut);
-        }
+        
+        var c = enemies[i];
+        v2_mut.copy(x);
+        v3_mut.copy(enemies[i]);
+        v4_mut.copy(v);
+        
+        //vHat 
+        v4_mut.normalize();
+        
+        //x_is
+        v3_mut.sub(x);
+        
+        //sClose
+        var sClose = v3_mut.dot(v4_mut);
+        
+        //how far we look ahead
+        var dConcern = v.length() * LOOK_AHEAD_TIME; 
+            
+        if (sClose < dConcern && sClose > 0){ //maybe collision
+            //xClose
+            v2_mut.add(v4_mut.multiplyScalar(sClose));
+            
+            var d = v2_mut.sub(c).length();  //d = ∥xclose −cs∥
+            
+            if (d < ENEMY_SIZE){  //AVOID IT
+                
+                //vTan is v2_mut at this point
+                    
+                //vTanHat 
+                v2_mut.normalize();
+                
+                v3_mut.copy(v2_mut);
+                
+                v3_mut.multiplyScalar(ENEMY_SIZE).add(c); //xt = cs + Rvˆ⊥
+
+                var dt = v3_mut.sub(x).length();
+                
+                var vt = v.dot(v3_mut) / dt; //vt = vi ·(xt −xi)/dt
+                
+                var tt = dt/vt;
+                
+                v4_mut.copy(v);
+
+                var deltaV = v4_mut.normalize().cross(v3_mut).length() / tt;          //∆vs = ∥vˆi ×(xt −xi)∥/tt
+                
+                var accel = 2 * deltaV / tt;            //as = 2∆vs/t
+                
+                //neededAccel
+                v2_mut.multiplyScalar(accel); //a+op = asvˆ⊥
+                
+                fTotal.add(v2_mut);
+            }
+        }        
     }
-    
-    //TODO full sterring as described in notes. 
-    
+
     
     return fTotal;
 }
