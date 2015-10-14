@@ -32,10 +32,16 @@ var H_MILLI;        // In milliseconds
 var initialX = new THREE.Vector3(0,0,0);  // Position
 var initialV = new THREE.Vector3(0,0,0);  // Velocity
 
+//use grid positions for more efficient collision detections
+var VOX_SIZE = 20;
+var gridVoxelsHash = []; //where the bees are on the grid
+var repulsorsHash = []; //where the repulsors are located in grid
+var enemiesHash = []; //where the enemies are located in grid
+
 //flocking tuning constants
 var K_A = 0.5;       //collision avoidance
-var K_V = 0.5;        //velocity matching
-var K_C = 0.01;        //centering
+var K_V = 0.5;       //velocity matching
+var K_C = 0.001;     //centering
 
 //ugly, but saves time garbage collecting
 var v1_mut = new THREE.Vector3(0,0,0); //I keep a couple mutable vectors for all calculations
@@ -49,9 +55,13 @@ var acceleration = new THREE.Vector3(0,0,0);
 var vNew = new THREE.Vector3(0,0,0);
 var xNew = new THREE.Vector3(0,0,0);
 var dist = 0;
+var x_mut;
+var y_mut;
+var z_mut;
 
 var simTimeout;
 var state_mut;
+
 
 window.onload = function(){
     scene = new THREE.Scene();
@@ -68,10 +78,11 @@ window.onload = function(){
     addRepulsor(new THREE.Vector3(50, 12, 0));
     addRepulsor(new THREE.Vector3(60, 0, 12));
 
-    addEnemy(new THREE.Vector3(100, 100, 0));
+    addEnemy(new THREE.Vector3(100, 100, 10));
+    addEnemy(new THREE.Vector3(120, 150, -10));
     
     setTarget(new THREE.Vector3(300, 100, 0));
-    
+        
     initMotion();
 };
 
@@ -82,11 +93,12 @@ function initMotion(){
         zooka.delete(scene);
     }
     
-    var ammo = 45;
+    var ammo = 200;
+    
     zooka = new Beezooka(scene, 'gaussian', ammo);
     state_mut = new Array(ammo * 2);
-    for (var i = 0; i < ammo * 2; i++){
-        state_mut[i] = new THREE.Vector3(0,0,0);
+    for (var l = 0; l < ammo * 2; l++){
+        state_mut[l] = new THREE.Vector3(0,0,0);
     }
 
     zooka.fire({v: initialV});   
@@ -94,7 +106,7 @@ function initMotion(){
     clock = new THREE.Clock();
     clock.start();
     clock.getDelta();
-    
+        
     window.clearTimeout(simTimeout);
     simulate();
     render();
@@ -102,6 +114,16 @@ function initMotion(){
 
 //gets the derivative of a state. plus external forces
 function F(state){
+   
+    //update our grid of positions
+    var x,y,z;
+    for (var g=0; g<zooka.max; g++){
+        x = Math.floor(state[g].x / VOX_SIZE);
+        y = Math.floor(state[g].y / VOX_SIZE);
+        z = Math.floor(state[g].z / VOX_SIZE);
+        gridVoxelsHash[g] = [x,y,z]; //index of cell containing g
+    }
+    
     //for all the particles apply physics
     for (var i=0; i<zooka.max; i++){
         state_mut[i].copy(state[i + zooka.max]);
@@ -112,12 +134,15 @@ function F(state){
         v1_mut.copy(G);
 
         acceleration.copy(G); 
-        acceleration.add(getRepulsorForces(xOld));
-        acceleration.add(getSteeringForces(xOld, vOld));
+        
+        acceleration.add(getRepulsorForces(xOld, gridVoxelsHash[i]));
+        acceleration.add(getSteeringForces(xOld, vOld, gridVoxelsHash[i]));
 
         if (i % 20 !== 0){ //every 20th bee is a seeker bee who doesn't follow flocking rules
+            
             for (var j=0; j<zooka.max; j++){
-                if (i==j){
+
+                if (i==j){ 
                     continue;
                 }
 
@@ -151,8 +176,9 @@ function F(state){
                     }
                 }
             }
+            
         }
-        else {
+        else { //seeker bees
             acceleration.add(getTargetForces(xOld, vOld));
         }
         
@@ -198,17 +224,30 @@ function render() {
 	requestAnimationFrame(render);  //redraw whenever the browser refreshes
 }
 
-
 /************* repulsor physics *************/
 
-function addRepulsor(x){
-    Boiler.drawRepel(x);
-    repulsors.push(x);
+function addRepulsor(pos){
+    Boiler.drawRepel(pos);
+
+    x_mut = Math.floor(pos.x / VOX_SIZE);
+    y_mut = Math.floor(pos.y / VOX_SIZE);
+    z_mut = Math.floor(pos.z / VOX_SIZE);
+    
+    repulsorsHash.push([x_mut,y_mut,z_mut]); 
+    
+    repulsors.push(pos);
 }
 
-function addEnemy(x){
-    Boiler.drawEater(x);
-    enemies.push(x);
+function addEnemy(pos){
+    Boiler.drawEater(pos);
+    
+    x_mut = Math.floor(pos.x / VOX_SIZE);
+    y_mut = Math.floor(pos.y / VOX_SIZE);
+    z_mut = Math.floor(pos.z / VOX_SIZE);
+    
+    enemiesHash.push([x_mut,y_mut,z_mut]); 
+    
+    enemies.push(pos);
 }
 
 function setTarget(x){
@@ -216,13 +255,16 @@ function setTarget(x){
     target = x;
 }
 
-function getRepulsorForces(x){
+function getRepulsorForces(x, voxel){
     var fTotal = new THREE.Vector3(0, 0, 0);
     for (var i = 0; i< repulsors.length; i++){
-        var r = repulsors[i];
-        dist = x.distanceTo(r);
+        var r = repulsors[i];  
         
-        if (dist < 50){ 
+        //check that we are near enough on the grid 
+        if ( Math.abs(voxel[0] - repulsorsHash[i][0]) < 3 &&
+        Math.abs(voxel[1] - repulsorsHash[i][1]) < 3 &&
+        Math.abs(voxel[2] - repulsorsHash[i][2]) < 3 ){
+            
             var f = 1500 / (dist*dist);  //force inversely proportional to distance
             var v = new THREE.Vector3(x.x - r.x, x.y - r.y, x.z - r.z).normalize(); //repulse
             fTotal = fTotal.add(v.multiplyScalar(f)); 
@@ -231,7 +273,7 @@ function getRepulsorForces(x){
     return fTotal;
 }
 
-function getSteeringForces(x, v){
+function getSteeringForces(x, v, voxel){
     var fTotal = new THREE.Vector3(0, 0, 0);
     v2_mut.copy(x);
     v3_mut.copy(x);
@@ -239,59 +281,65 @@ function getSteeringForces(x, v){
 
     //approximation based on sphere around enemy
     for (var i = 0; i< enemies.length; i++){ 
-        
-        var c = enemies[i];
-        v2_mut.copy(x);
-        v3_mut.copy(enemies[i]);
-        v4_mut.copy(v);
-        
-        //vHat 
-        v4_mut.normalize();
-        
-        //x_is
-        v3_mut.sub(x);
-        
-        //sClose
-        var sClose = v3_mut.dot(v4_mut);
-        
-        //how far we look ahead
-        var dConcern = v.length() * LOOK_AHEAD_TIME; 
-            
-        if (sClose < dConcern && sClose > 0){ //maybe collision
-            //xClose
-            v2_mut.add(v4_mut.multiplyScalar(sClose));
-            
-            var d = v2_mut.sub(c).length();  //d = ∥xclose −cs∥
-            
-            if (d < ENEMY_SIZE){  //AVOID IT
                 
-                //vTan is v2_mut at this point
-                    
-                //vTanHat 
-                v2_mut.normalize();
-                
-                v3_mut.copy(v2_mut);
-                
-                v3_mut.multiplyScalar(ENEMY_SIZE).add(c); //xt = cs + Rvˆ⊥
+        //check that we are near enough on the grid 
+        if ( Math.abs(voxel[0] - enemiesHash[i][0]) < 3 &&
+        Math.abs(voxel[1] - enemiesHash[i][1]) < 3 &&
+        Math.abs(voxel[2] - enemiesHash[i][2]) < 3 ){
 
-                var dt = v3_mut.sub(x).length();
-                
-                var vt = v.dot(v3_mut) / dt; //vt = vi ·(xt −xi)/dt
-                
-                var tt = dt/vt;
-                
-                v4_mut.copy(v);
+            var c = enemies[i];
+            v2_mut.copy(x);
+            v3_mut.copy(enemies[i]);
+            v4_mut.copy(v);
 
-                var deltaV = v4_mut.normalize().cross(v3_mut).length() / tt;          //∆vs = ∥vˆi ×(xt −xi)∥/tt
-                
-                var accel = 2 * deltaV / tt;            //as = 2∆vs/t
-                
-                //neededAccel
-                v2_mut.multiplyScalar(accel); //a+op = asvˆ⊥
-                
-                fTotal.add(v2_mut);
+            //vHat 
+            v4_mut.normalize();
+
+            //x_is
+            v3_mut.sub(x);
+
+            //sClose
+            var sClose = v3_mut.dot(v4_mut);
+
+            //how far we look ahead
+            var dConcern = v.length() * LOOK_AHEAD_TIME; 
+
+            if (sClose < dConcern && sClose > 0){ //maybe collision
+                //xClose
+                v2_mut.add(v4_mut.multiplyScalar(sClose));
+
+                var d = v2_mut.sub(c).length();  //d = ∥xclose −cs∥
+
+                if (d < ENEMY_SIZE){  //AVOID IT
+
+                    //vTan is v2_mut at this point
+
+                    //vTanHat 
+                    v2_mut.normalize();
+
+                    v3_mut.copy(v2_mut);
+
+                    v3_mut.multiplyScalar(ENEMY_SIZE).add(c); //xt = cs + Rvˆ⊥
+
+                    var dt = v3_mut.sub(x).length();
+
+                    var vt = v.dot(v3_mut) / dt; //vt = vi ·(xt −xi)/dt
+
+                    var tt = dt/vt;
+
+                    v4_mut.copy(v);
+
+                    var deltaV = v4_mut.normalize().cross(v3_mut).length() / tt;          //∆vs = ∥vˆi ×(xt −xi)∥/tt
+
+                    var accel = 2 * deltaV / tt;            //as = 2∆vs/t
+
+                    //neededAccel
+                    v2_mut.multiplyScalar(accel); //a+op = asvˆ⊥
+
+                    fTotal.add(v2_mut);
+                }
             }
-        }        
+        }
     }
 
     
@@ -319,10 +367,10 @@ function getTargetForces(x, v){
         v2_mut.copy(v);
 
         //slow down based on if accell is away from velocity
-        fTotal.add(v2_mut.multiplyScalar(-2 * ang/180));
+        fTotal.add(v2_mut.multiplyScalar(-0.02 * ang));
 
         //slow down as distance decreases
-        fTotal.add(v2_mut.multiplyScalar(-20 / dist));
+        fTotal.add(v2_mut.multiplyScalar(-1 / dist));
 
         var forceFactor = f;
         fTotal.add(a.multiplyScalar(forceFactor));

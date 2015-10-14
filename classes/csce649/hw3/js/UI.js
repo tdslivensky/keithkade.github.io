@@ -55,6 +55,7 @@ function resetUserInputs(){
     H_MILLI = H * 1000;    
     
     getUserInputs();
+    moveZooka();
 }
 
 function randomizeUserInputs(){
@@ -87,4 +88,5 @@ function randomizeUserInputs(){
     H_MILLI = H * 1000;    
     
     getUserInputs();
+    moveZooka();    
 }
