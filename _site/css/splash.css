@@ -54,15 +54,23 @@ body {
   to {
     opacity: 1; } }
 
+/* line 64, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+#fll {
+  color: white;
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  font-size: 20px; }
+
 @media (max-width: 560px) {
-  /* line 65, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+  /* line 73, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
   #content {
     margin-left: 16px; }
-    /* line 68, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+    /* line 76, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
     #content h1 {
       margin-top: 40px;
       font-size: 40px; }
-    /* line 72, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+    /* line 80, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
     #content p {
       font-size: 20px; } }
 

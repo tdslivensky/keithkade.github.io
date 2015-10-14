@@ -61,6 +61,14 @@ body {
     }
 }
 
+#fll {
+    color: white;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    font-size: 20px;
+}
+
 @media (max-width: 560px) {
     #content {
         margin-left: 16px;

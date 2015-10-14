@@ -1,0 +1,25 @@
+$slate: #212121;
+$green: #00ff6c;
+$purple: #81479f;
+$light-blue: #60c6f8;
+$medium-blue: #7a94ce;
+$light-grey: #484848;
+$fontStack: Helvetica, Arial, sans-serif;
+
+body {
+	background: $slate;
+    color: white;
+	font-family: $fontStack; 
+    font-size: 16px;
+    text-align: center;
+}
+
+
+h1 {
+    font-weight: 300;
+    margin: 20px;
+}
+
+iframe, video {
+    margin: 20px;
+}
