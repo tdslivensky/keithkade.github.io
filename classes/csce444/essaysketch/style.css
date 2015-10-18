@@ -24,7 +24,7 @@ h1 {
   /* Portals */ }
   /* line 26, /Users/kadekeith/Desktop/keithkade.github.io/classes/csce444/essaysketch/style.scss */
   .perceived-choice .choicenav {
-    width: 400px;
+    width: 300px;
     text-align: center;
     position: fixed; }
   /* line 32, /Users/kadekeith/Desktop/keithkade.github.io/classes/csce444/essaysketch/style.scss */
@@ -35,11 +35,11 @@ h1 {
     text-align: center; }
   /* line 40, /Users/kadekeith/Desktop/keithkade.github.io/classes/csce444/essaysketch/style.scss */
   .perceived-choice .left-path {
-    bottom: 60px;
+    top: 20px;
     left: 200px; }
   /* line 45, /Users/kadekeith/Desktop/keithkade.github.io/classes/csce444/essaysketch/style.scss */
   .perceived-choice .right-path {
-    bottom: 60px;
+    top: 20px;
     right: 200px; }
   /* line 51, /Users/kadekeith/Desktop/keithkade.github.io/classes/csce444/essaysketch/style.scss */
   .perceived-choice .northwest-path {
@@ -61,7 +61,7 @@ h1 {
   .perceived-choice .middle-portal {
     top: 100px;
     left: 50%;
-    margin-left: -200px; }
+    margin-left: -150px; }
   /* line 79, /Users/kadekeith/Desktop/keithkade.github.io/classes/csce444/essaysketch/style.scss */
   .perceived-choice .right-portal {
     top: 100px;
