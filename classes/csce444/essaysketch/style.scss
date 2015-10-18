@@ -1,4 +1,110 @@
+$footer-height: 60px;
+$choicenav-width: 400px;
+
 * {
     margin: 0;
     padding: 0;
+}
+
+h1 {
+    text-align: center;
+    font-size: 12px;
+    position: relative;
+    top: 200px;
+}
+
+.link {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
+/* Percieved Choice */
+
+.perceived-choice {
+    .choicenav {
+        width: $choicenav-width;
+        text-align: center;
+        position: fixed;
+    }
+
+    p {
+        position: fixed;
+        bottom: 20px;
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Two Roads Diverge in the wood */ 
+    .left-path {
+        bottom: $footer-height;
+        left: 200px;
+    }
+
+    .right-path {
+        bottom: $footer-height;
+        right: 200px;    
+    }
+    
+    /* Crossroads */
+    .northwest-path {
+        top: 10px;
+        left: 100px;
+    }
+    
+    .northeast-path {
+        top: 100px;
+        right: 10px;
+    }
+    
+    .east-path {
+        bottom: 200px;
+        right: 10px;
+    }
+    
+    /* Portals */
+    
+    .left-portal {
+        top: 100px;
+        left: 100px;
+    }
+    
+    .middle-portal {
+        top: 100px;
+        left: 50%;
+        margin-left: - ($choicenav-width / 2);
+    }
+    
+    .right-portal {
+        top: 100px;
+        right: 100px;
+    }
+    
+}
+
+
+/* Landmark */
+
+.landmark {
+    
+    p {
+        position: fixed;
+        top: 20px;
+        width: 100%;
+        text-align: center;
+    }    
+    
+    .flex-container {
+        display: flex;
+        position: fixed;
+        bottom: 20px;
+        width: 100%;
+        
+        .link {
+            flex: 1;
+            text-align: center;
+        }
+    }
+    
 }
