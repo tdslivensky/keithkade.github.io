@@ -22,7 +22,7 @@ var G = new THREE.Vector3(0, -9.81, 0);  // The accel due to gravity in m/s^2
 //use grid positions for more efficient collision detections
 var VOX_SIZE = 20;
 var gridVoxelsHash = []; //where the vertices are on the grid
-//TODO other stuff
+// TODO other stuff
 
 //ugly, but saves time garbage collecting
 var state_mut;
@@ -48,10 +48,15 @@ window.onload = function(){
     axes = Boiler.initAxes();
     
     //change what the camera is looking at and add our controls
-    camera.position.set(100, 100, 800);
+    camera.position.set(15, 50, 15);
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
         
-    bass = new Bass(scene);
+    render();
+    bass = new Bass(scene, loadIntegrationVars);
+};
+
+/* load up all the mutables for integration */
+function loadIntegrationVars(){
     state_mut = new Array(bass.count * 2);
     deriv = new Array(bass.count * 2);    
     K1 = new Array(bass.count * 2);
@@ -66,23 +71,19 @@ window.onload = function(){
         K3[l] = new THREE.Vector3(0,0,0);
         K4[l] = new THREE.Vector3(0,0,0);
         deriv[l] = new THREE.Vector3(0,0,0);
-    }
-
-    initMotion();
-};
+    }  
+}
 
 /** create the sphere and set it according to user inputs, then start simulation and rendering */
 function initMotion(){
     getUserInputs();
-    bass.drop(); //wub wub wub  
-    
+
     clock = new THREE.Clock();
     clock.start();
     clock.getDelta();
         
     window.clearTimeout(simTimeout);
     simulate();
-    render();
 }
 
 //gets the derivative of a state. plus external forces
@@ -174,7 +175,7 @@ function simulate(){
     }
     
     bass.moveParticles();
-    bass.points.geometry.verticesNeedUpdate = true;
+    bass.mesh.geometry.verticesNeedUpdate = true;
 
     var waitTime = H_MILLI - clock.getDelta(); 
     if (waitTime < 4){ //4 milliseconds is the minimum wait for most browsers
