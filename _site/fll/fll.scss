@@ -14,12 +14,19 @@ body {
     text-align: center;
 }
 
-
 h1 {
     font-weight: 300;
     margin: 20px;
 }
 
 iframe, video {
-    margin: 20px;
+    margin: 10px;
 }
+
+p {
+    width: 100%;
+    text-align: left;
+    background-color: gray;
+    margin: 0;
+}
+

@@ -1,4 +1,4 @@
-/* line 9, /Users/kadekeith/Desktop/keithkade.github.io/fll/fll.scss */
+/* line 9, /Users/kadekeith/Desktop/keithkade.github/fll/fll.scss */
 body {
   background: #212121;
   color: white;
@@ -6,13 +6,20 @@ body {
   font-size: 16px;
   text-align: center; }
 
-/* line 18, /Users/kadekeith/Desktop/keithkade.github.io/fll/fll.scss */
+/* line 17, /Users/kadekeith/Desktop/keithkade.github/fll/fll.scss */
 h1 {
   font-weight: 300;
   margin: 20px; }
 
-/* line 23, /Users/kadekeith/Desktop/keithkade.github.io/fll/fll.scss */
+/* line 22, /Users/kadekeith/Desktop/keithkade.github/fll/fll.scss */
 iframe, video {
-  margin: 20px; }
+  margin: 10px; }
+
+/* line 26, /Users/kadekeith/Desktop/keithkade.github/fll/fll.scss */
+p {
+  width: 100%;
+  text-align: left;
+  background-color: gray;
+  margin: 0; }
 
 /*# sourceMappingURL=fll.css.map */
