@@ -19,7 +19,8 @@ iframe, video {
 p {
   width: 100%;
   text-align: left;
-  background-color: gray;
-  margin: 0; }
+  background-color: #484848;
+  margin: 0;
+  padding: 10px; }
 
 /*# sourceMappingURL=fll.css.map */
