@@ -13,7 +13,7 @@ function Bass(scene, callback){
     var loader = new THREE.JSONLoader();
     loader.load( "js/bass_model.js", function( geometry ) {
         this.mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial() );
-        this.mesh.scale.set( 100, 100, 100 );
+        this.mesh.scale.set(1, 1, 1);
         this.mesh.position.y = 0;
         this.mesh.position.x = 0;
         
@@ -21,6 +21,11 @@ function Bass(scene, callback){
         this.STATE = new Array(this.count * 2);
         
         for (var i = 0; i < this.count; i++) {
+            //scale the mesh
+            this.mesh.geometry.vertices[i].x *= 100;
+            this.mesh.geometry.vertices[i].y *= 100;
+            this.mesh.geometry.vertices[i].z *= 100;
+            
             this.STATE[i] = new THREE.Vector3(
                 this.mesh.geometry.vertices[i].x,
                 this.mesh.geometry.vertices[i].y,

@@ -8,11 +8,14 @@ var doc = document; //shorthand
 var simTimeout;     //for starting and stopping the sim
 
 //boilerplate
-var scene, renderer, camera, light;
+var scene, renderer, camera, light, polygon, plane;
 var axes;
 
 var bass;
 var clock;
+
+var CR = 0.5;   // coefficient of restitution. 1 is maximum bouncy
+var CF = 0.5;   // coefficient of friction. 0 is no friction
 
 //variables that the user sets
 var H;              // Step time in seconds
@@ -24,6 +27,13 @@ var VOX_SIZE = 20;
 var gridVoxelsHash = []; //where the vertices are on the grid
 // TODO other stuff
 
+var FACES = []; //for collision detection with barycentric coords
+
+var planeAttr = {
+    p: [0, -20 , 0],
+    r: [Math.radians(90), Math.radians(70), Math.radians(0)]
+};
+
 //ugly, but saves time garbage collecting
 var state_mut;
 
@@ -32,13 +42,19 @@ var v2_mut = new THREE.Vector3(0,0,0);
 var v3_mut = new THREE.Vector3(0,0,0);
 var v4_mut = new THREE.Vector3(0,0,0);
 
+var p0 = new THREE.Vector3(0,0,0);
+var p1 = new THREE.Vector3(0,0,0);
+var p2 = new THREE.Vector3(0,0,0);
+var vNormal = new THREE.Vector3(0,0,0);
+
 var vOld = new THREE.Vector3(0,0,0);
 var xOld = new THREE.Vector3(0,0,0);
 var acceleration = new THREE.Vector3(0,0,0);
 var vNew = new THREE.Vector3(0,0,0);
 var xNew = new THREE.Vector3(0,0,0);
+var collisionX = new THREE.Vector3(0,0,0);
 var deriv;
-var K1, K2, K3, K4;
+var K1, K2, K3, K4, oldState;
 
 window.onload = function(){
     scene = new THREE.Scene();
@@ -46,6 +62,8 @@ window.onload = function(){
     camera = Boiler.initCamera();
     light = Boiler.initLight();
     axes = Boiler.initAxes();
+    polygon = Boiler.initPolygon(planeAttr);
+    plane = Boiler.initPlane(planeAttr, polygon);
     
     //change what the camera is looking at and add our controls
     camera.position.set(15, 50, 15);
@@ -63,6 +81,7 @@ function loadIntegrationVars(){
     K2 = new Array(bass.count * 2);
     K3 = new Array(bass.count * 2);
     K4 = new Array(bass.count * 2);
+    oldState = new Array(bass.count * 2);
     
     for (var l = 0; l < bass.count * 2; l++){
         state_mut[l] = new THREE.Vector3(0,0,0);
@@ -71,6 +90,7 @@ function loadIntegrationVars(){
         K3[l] = new THREE.Vector3(0,0,0);
         K4[l] = new THREE.Vector3(0,0,0);
         deriv[l] = new THREE.Vector3(0,0,0);
+        oldState[l] = new THREE.Vector3(0,0,0);        
     }  
 }
 
@@ -106,31 +126,16 @@ function F(state){
         xOld.copy(state[i]);
         vOld.copy(state[i + bass.count]);
 
-        acceleration.copy(G);         
-        
-        //COLLISION DETECTION
-        
+        acceleration.copy(G);                 
         state_mut[i + bass.count].copy(acceleration);
     }
     return state_mut;
 }
 
-function addState(state1, state2){
-    for (var i = 0; i < state1.length; i++){
-        state1[i].add(state2[i]);
-    }
-}
-
-function stateMultScalar(state, scalar){
-    for (var i = 0; i < state.length; i++){
-        state[i].multiplyScalar(scalar);
-    }
-}
-
-function deepCopy(state1, state2){
-    for (var i = 0; i < state1.length; i++){
-        state1[i].copy(state2[i]);
-    }          
+function integrateState(state, deriv, H){
+    deepCopy(oldState, state);
+    stateMultScalar(deriv, H);
+    addState(state, deriv);    
 }
 
 /** the main simulation loop. recursive */ 
@@ -140,8 +145,7 @@ function simulate(){
     deepCopy(deriv, F(bass.STATE));
 
     if (false){ /******************************************* euler integration */ 
-        stateMultScalar(deriv, H);
-        addState(bass.STATE, deriv);
+        integrateState(bass.STATE, deriv, H);
     }
     else {      /******************************************* rk4 integration */ 
         deepCopy(K1, deriv);//K1 = F(Xn)
@@ -169,9 +173,17 @@ function simulate(){
         addState(K1, K2);
         addState(K1, K3);
         addState(K1, K4);
-        stateMultScalar(K1, H/6);
-
-        addState(bass.STATE, K1); //Xn+1 = Xn + (K1 + 2*K2 + 2*K3 + K4)/6
+        
+        //Xn+1 = Xn + (K1 + 2*K2 + 2*K3 + K4)/6
+        integrateState(bass.STATE, K1, H/6);
+    }
+    
+    //COLLISION DETECTION
+    for (var i = 0; i < bass.count; i++){
+        //collision detection and response. if there is no collision then no change
+        var collision = collisionDetectionAndResponse(oldState[i], bass.STATE[i], oldState[i + bass.count], bass.STATE[i + bass.count]);
+        bass.STATE[i].copy(collision.xNew);
+        bass.STATE[i + bass.count].copy(collision.vNew);
     }
     
     bass.moveParticles();
@@ -184,8 +196,102 @@ function simulate(){
     simTimeout = setTimeout(simulate, waitTime);
 }
 
+function integrateVector(v1, v2, timestep){
+    v1_mut.copy(v1);
+    v2_mut.copy(v2);
+    return v1.add(v2.multiplyScalar(timestep));
+}
+
+function collisionDetectionAndResponse(x1, x2, v1, v2){
+    
+    v1_mut.copy(x1);
+    v2_mut.copy(x2);
+    
+    var dOld = v1_mut.sub(plane.p).dot(plane.n);
+    var dNew = v2_mut.sub(plane.p).dot(plane.n);
+    //check if they have the same sign
+    if (dOld*dNew <= 0){
+        
+        var fraction = dOld / (dOld-dNew);
+        collisionX.copy(integrateVector(x1, v1, fraction * H));
+        
+        v1_mut.copy(v1);
+        vNormal.copy(plane.n).multiplyScalar(v1_mut.dot(plane.n));
+        
+        if (pointInPolygon(collisionX)){
+            
+            var response = {};
+            v1_mut.copy(x2);
+            v2_mut.copy(plane.n);
+            response.xNew = v1_mut.sub(v2_mut.multiplyScalar(dNew * (1 + CR))).clone();
+
+            v1_mut.copy(v1);
+            var vTan = v1_mut.sub(vNormal);
+
+            response.vNew = vNormal.multiplyScalar(-1 * CR).add(vTan.multiplyScalar(1 - CF)).clone();
+
+            return response;
+        }
+    }
+    
+    return {xNew: x2, vNew: v2};
+}
+
+function pointInPolygon(x){
+
+    var v0, v1, v2, dot00, dot01, dot02, dot11, dot12, denom, u, v;
+    for (var i=0; i < polygon.geometry.faces.length; i++){
+        
+        //implementation in appendix wasn't working, so I based this off of http://www.blackpawn.com/texts/pointinpoly/
+        p0.copy(FACES[i][0]);
+        p1.copy(FACES[i][1]);
+        p2.copy(FACES[i][2]);
+        
+        v0 = p2.sub(p0);
+        v1 = p1.sub(p0);
+        v1_mut.copy(x);
+        v2 = v1_mut.sub(p0);
+        
+        // Compute dot products
+        dot00 = v0.dot(v0);
+        dot01 = v0.dot(v1);
+        dot02 = v0.dot(v2);
+        dot11 = v1.dot(v1);
+        dot12 = v1.dot(v2);
+
+        // Compute barycentric coordinates
+        denom = 1 / (dot00 * dot11 - dot01 * dot01);
+        u = (dot11 * dot02 - dot01 * dot12) * denom;
+        v = (dot00 * dot12 - dot01 * dot02) * denom;        
+        
+        if ( u >= 0 && v >= 0 && (u+v) <= 1){
+            return true;
+        }
+        
+    }
+    return false;
+}
+
 /** rendering loop */
 function render() {	
     renderer.render(scene, camera); //draw it
 	requestAnimationFrame(render);  //redraw whenever the browser refreshes
+}
+
+function addState(state1, state2){
+    for (var i = 0; i < state1.length; i++){
+        state1[i].add(state2[i]);
+    }
+}
+
+function stateMultScalar(state, scalar){
+    for (var i = 0; i < state.length; i++){
+        state[i].multiplyScalar(scalar);
+    }
+}
+
+function deepCopy(state1, state2){
+    for (var i = 0; i < state1.length; i++){
+        state1[i].copy(state2[i]);
+    }          
 }

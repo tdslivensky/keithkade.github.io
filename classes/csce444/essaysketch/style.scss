@@ -1,5 +1,20 @@
 $footer-height: 60px;
 $choicenav-width: 300px;
+$width: 1000px;
+$height: 600px;
+
+@mixin vertical-align {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+@mixin horizontal-align {
+    margin-left: auto;
+    margin-right: auto;
+}
 
 * {
     margin: 0;
@@ -8,12 +23,14 @@ $choicenav-width: 300px;
 
 body {
     font-family: Helvetica, Arial, sans-serif;
+    background-color: gray;
 }
 
 h1 {
     text-align: center;
     font-size: 12px;
-    position: relative;
+    position: absolute;
+    width: 100%;
     top: 200px;
 }
 
@@ -23,6 +40,35 @@ h1 {
     cursor: pointer;
 }
 
+#viewWindow {
+    width: $width;
+    height: $height;
+
+    position: relative;
+    top: $height/2;
+    
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    
+    margin: 20px auto 0 auto;
+}
+
+#container {
+    z-index: 2;
+}
+
+
+#backgroundImg {
+    z-index: 1;
+    width: 1000px;
+    height: 600px;    
+}
+
+article {
+    margin: 0;
+    padding: 0;
+}
 
 /* Percieved Choice */
 
@@ -30,11 +76,11 @@ h1 {
     .choicenav {
         width: $choicenav-width;
         text-align: center;
-        position: fixed;
+        position: absolute;
     }
 
     p {
-        position: fixed;
+        position: absolute;
         bottom: 20px;
         width: 100%;
         text-align: center;
@@ -93,7 +139,7 @@ h1 {
 .landmark {
     
     p {
-        position: fixed;
+        position: absolute;
         top: 20px;
         width: 100%;
         text-align: center;
@@ -101,7 +147,7 @@ h1 {
     
     .flex-container {
         display: flex;
-        position: fixed;
+        position: absolute;
         bottom: 20px;
         width: 100%;
         

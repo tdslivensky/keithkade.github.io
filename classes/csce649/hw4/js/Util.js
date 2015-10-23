@@ -1,4 +1,4 @@
-/*global THREE, window, doc, scene, renderer, axes, SPREAD */
+/*global THREE, window, doc, scene, renderer, axes, SPREAD, FACES */
 
 /**
  * Returns a random number between min (inclusive) and max (exclusive). 
@@ -63,6 +63,62 @@ Boiler.initLight = function(){
 
     scene.add(pointLight);
     return pointLight;
+};
+
+/** the rendering of the surface that bass will bounce off of. */
+Boiler.initPolygon = function(planeAttr){
+    var geometry = new THREE.PlaneGeometry(20, 20);
+    var material = new THREE.MeshBasicMaterial( {color: 0xa0a0ff, side: THREE.DoubleSide} );
+    var polygon = new THREE.Mesh( geometry, material );
+        
+    polygon.position.set(planeAttr.p[0], planeAttr.p[1], planeAttr.p[2]);
+    
+    polygon.geometry.applyMatrix(
+        new THREE.Matrix4().makeRotationFromEuler(
+            new THREE.Euler( planeAttr.r[0], planeAttr.r[1], planeAttr.r[2])
+        )
+    );
+        
+    var wireframe = new THREE.WireframeHelper( polygon, 0x00ff00 );
+    scene.add(wireframe);
+
+    scene.add(polygon);
+    return polygon;
+};
+
+/** the internal representation of the surface that particles will bounce off of. */
+Boiler.initPlane = function(planeAttr, polygon){
+    var plane = new THREE.Plane( new THREE.Vector3(0, 0, 1), 0);
+    plane.applyMatrix4(
+        new THREE.Matrix4().makeRotationFromEuler(
+            new THREE.Euler( planeAttr.r[0], planeAttr.r[1], planeAttr.r[2])
+        )
+    );
+    plane.p = new THREE.Vector3(planeAttr.p[0], planeAttr.p[1], planeAttr.p[2]);
+    plane.n = new THREE.Vector3(plane.normal.x, plane.normal.y, plane.normal.z);
+    
+    //store the points on the corners of the faces for later collision detection
+    for (var i=0; i < polygon.geometry.faces.length; i++){
+        FACES[i] = [];
+        var face = polygon.geometry.faces[i];
+        FACES[i][0] = new THREE.Vector3(
+            polygon.geometry.vertices[face.a].x + plane.p.x, 
+            polygon.geometry.vertices[face.a].y + plane.p.y,  
+            polygon.geometry.vertices[face.a].z + plane.p.z
+        );
+        FACES[i][1] = new THREE.Vector3(
+            polygon.geometry.vertices[face.b].x + plane.p.x, 
+            polygon.geometry.vertices[face.b].y + plane.p.y,  
+            polygon.geometry.vertices[face.b].z + plane.p.z
+        );
+        FACES[i][2] = new THREE.Vector3(
+            polygon.geometry.vertices[face.c].x + plane.p.x, 
+            polygon.geometry.vertices[face.c].y + plane.p.y,  
+            polygon.geometry.vertices[face.c].z + plane.p.z
+        );
+    }
+    
+    return plane;
 };
 
 /** draw x, y and z axes */

@@ -4,6 +4,8 @@
 
 var doc = document;
 var container = document.getElementById('container');
+var image = document.getElementById('backgroundImg');
+
 var PAGES = ['TWOROADS', 'CROSSROADS', 'PORTALS', 'FOUNTAIN', 'CHASM', 'MEMEX', 'MONOLITH'];
 
 /* Psuedo-Links */
@@ -322,6 +324,7 @@ function renderPage(page) {
         //choices
         case 'TWOROADS':
             ReactDOM.render(React.createElement(TwoRoadsNode, { leftRoadTarget: 'FOUNTAIN', rightRoadTarget: 'FOUNTAIN' }), container);
+            image.src = "img/pasture.jpeg";
             break;
         case 'CROSSROADS':
             ReactDOM.render(React.createElement(CrossRoadsNode, { northwestTarget: 'FOUNTAIN', northeastTarget: 'CHASM', eastTarget: 'MEMEX' }), container);
