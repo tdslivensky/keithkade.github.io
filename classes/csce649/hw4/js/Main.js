@@ -144,7 +144,7 @@ function simulate(){
     //first order deriv
     deepCopy(deriv, F(bass.STATE));
 
-    if (false){ /******************************************* euler integration */ 
+    if (true){ /******************************************* euler integration */ 
         integrateState(bass.STATE, deriv, H);
     }
     else {      /******************************************* rk4 integration */ 
@@ -199,7 +199,7 @@ function simulate(){
 function integrateVector(v1, v2, timestep){
     v1_mut.copy(v1);
     v2_mut.copy(v2);
-    return v1.add(v2.multiplyScalar(timestep));
+    return v1_mut.add(v2_mut.multiplyScalar(timestep));
 }
 
 function collisionDetectionAndResponse(x1, x2, v1, v2){

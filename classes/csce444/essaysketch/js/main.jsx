@@ -37,7 +37,6 @@ var TwoRoadsNode = React.createClass({
     render: function() {
         return (
             <article className="perceived-choice">
-                <h1>(Two Roads Node)</h1>
                 <div className="left-path choicenav">
                     <div>Left Path</div>
                     <ChoiceLink text="Go" target={this.props.leftRoadTarget}/>
@@ -56,10 +55,13 @@ var TwoRoadsNode = React.createClass({
 });
 
 var CrossRoadsNode = React.createClass({
+
+//TODO {this.props.northwestTarget}
+//add image to landmark maybe
+
     render: function() {
         return (
             <article className="perceived-choice">
-                <h1>(Crossroads Node)</h1>
                 <div className="northwest-path choicenav">    
                     <div>Northwest Path</div>
                     <ChoiceLink text="Go" target={this.props.northwestTarget}/>
@@ -86,7 +88,6 @@ var PortalsNode = React.createClass({
     render: function() {
         return (
             <article className="perceived-choice">
-                <h1>(Portals Node)</h1>
                 <div className="left-portal choicenav">    
                     <div>Left Portal</div>
                     <ChoiceLink text="Go" target={this.props.leftTarget}/>
@@ -114,7 +115,6 @@ var FountainNode = React.createClass({
     render: function() {
         return (
             <article className="landmark">
-                <h1>(Fountain Node)</h1>
                 <p>
                     You see a large urinal in a clearing. The name "R. Mutt" has been written on it. <br/>
                     On the ground you see a plaque with the inscription, "Artist: Marcel Duchamp. Submitted by: unidan"
@@ -132,7 +132,6 @@ var ChasmNode = React.createClass({
     render: function() {
         return (
             <article className="landmark">
-                <h1>(Chasm Node)</h1>
                 <p>
                     A great chasm lies before you. On one side is a sign reading "Information" <br/>
                     On the other is a sign reading "Knowledge"
@@ -150,7 +149,6 @@ var MemexNode = React.createClass({
     render: function() {
         return (
             <article className="landmark">
-                <h1>(Memex Node)</h1>
                 <p>
                     You come up to a convoluted machine. It is a mass of wires and buttons with one primary screen <br/>
                     It appears as though the wires are meant to connect pieces of data together. <br/>
@@ -170,7 +168,6 @@ var MonolithNode = React.createClass({
     render: function() {
         return (
             <article className="landmark">
-                <h1>(Monolith Node)</h1>
                 <p>
                     A coal black obelisk towers above you. Its exterior is impenetrable and you cannot discern anything about its makeup <br/>
                     You feel as though it is compelling you to move in a certain direction. 
@@ -193,21 +190,22 @@ function loadPage(page){
     setTimeout(renderPage, 500, page);
 }
 
+/** choices */
 function renderPage(page){
-    switch(page){
-        //choices
+    switch(page){  
         case 'TWOROADS':
             ReactDOM.render(
                 <TwoRoadsNode leftRoadTarget="FOUNTAIN" rightRoadTarget="FOUNTAIN" />, 
                 container
             );
-            image.src = "img/pasture.jpeg";
+            image.src = "img/tworoads-crop.jpg";
             break;
         case 'CROSSROADS':
             ReactDOM.render(
                 <CrossRoadsNode northwestTarget="FOUNTAIN" northeastTarget="CHASM"  eastTarget="MEMEX" />, 
                 container
             );
+            image.src = "img/crossroads-crop.jpg";            
             break;
         case 'PORTALS':
             ReactDOM.render(
@@ -221,12 +219,14 @@ function renderPage(page){
                 <FountainNode backTarget="TWOROADS" forwardTarget="CROSSROADS" />, 
                 container
             );
+            image.src = "img/fountain-crop.jpg";
             break;    
         case 'CHASM':
             ReactDOM.render(
                 <ChasmNode leftTarget="PORTALS" rightTarget="MEMEX" />, 
                 container
             );
+            image.src = "img/chasm-crop.jpg";
             break;    
         case 'MEMEX':
             ReactDOM.render(

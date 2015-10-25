@@ -47,11 +47,6 @@ var TwoRoadsNode = React.createClass({
             'article',
             { className: 'perceived-choice' },
             React.createElement(
-                'h1',
-                null,
-                '(Two Roads Node)'
-            ),
-            React.createElement(
                 'div',
                 { className: 'left-path choicenav' },
                 React.createElement(
@@ -85,15 +80,13 @@ var TwoRoadsNode = React.createClass({
 var CrossRoadsNode = React.createClass({
     displayName: 'CrossRoadsNode',
 
+    //TODO {this.props.northwestTarget}
+    //add image to landmark maybe
+
     render: function render() {
         return React.createElement(
             'article',
             { className: 'perceived-choice' },
-            React.createElement(
-                'h1',
-                null,
-                '(Crossroads Node)'
-            ),
             React.createElement(
                 'div',
                 { className: 'northwest-path choicenav' },
@@ -143,11 +136,6 @@ var PortalsNode = React.createClass({
         return React.createElement(
             'article',
             { className: 'perceived-choice' },
-            React.createElement(
-                'h1',
-                null,
-                '(Portals Node)'
-            ),
             React.createElement(
                 'div',
                 { className: 'left-portal choicenav' },
@@ -199,11 +187,6 @@ var FountainNode = React.createClass({
             'article',
             { className: 'landmark' },
             React.createElement(
-                'h1',
-                null,
-                '(Fountain Node)'
-            ),
-            React.createElement(
                 'p',
                 null,
                 'You see a large urinal in a clearing. The name "R. Mutt" has been written on it. ',
@@ -228,11 +211,6 @@ var ChasmNode = React.createClass({
             'article',
             { className: 'landmark' },
             React.createElement(
-                'h1',
-                null,
-                '(Chasm Node)'
-            ),
-            React.createElement(
                 'p',
                 null,
                 'A great chasm lies before you. On one side is a sign reading "Information" ',
@@ -256,11 +234,6 @@ var MemexNode = React.createClass({
         return React.createElement(
             'article',
             { className: 'landmark' },
-            React.createElement(
-                'h1',
-                null,
-                '(Memex Node)'
-            ),
             React.createElement(
                 'p',
                 null,
@@ -288,11 +261,6 @@ var MonolithNode = React.createClass({
         return React.createElement(
             'article',
             { className: 'landmark' },
-            React.createElement(
-                'h1',
-                null,
-                '(Monolith Node)'
-            ),
             React.createElement(
                 'p',
                 null,
@@ -324,10 +292,11 @@ function renderPage(page) {
         //choices
         case 'TWOROADS':
             ReactDOM.render(React.createElement(TwoRoadsNode, { leftRoadTarget: 'FOUNTAIN', rightRoadTarget: 'FOUNTAIN' }), container);
-            image.src = "img/pasture.jpeg";
+            image.src = "img/tworoads-crop.jpg";
             break;
         case 'CROSSROADS':
             ReactDOM.render(React.createElement(CrossRoadsNode, { northwestTarget: 'FOUNTAIN', northeastTarget: 'CHASM', eastTarget: 'MEMEX' }), container);
+            image.src = "img/crossroads-crop.jpg";
             break;
         case 'PORTALS':
             ReactDOM.render(React.createElement(PortalsNode, { leftTarget: 'MONOLITH', middleTarget: Util.getRandomEntry(PAGES), rightTarget: 'CHASM' }), container);
@@ -335,9 +304,11 @@ function renderPage(page) {
         //landmarks
         case 'FOUNTAIN':
             ReactDOM.render(React.createElement(FountainNode, { backTarget: 'TWOROADS', forwardTarget: 'CROSSROADS' }), container);
+            image.src = "img/fountain-crop.jpg";
             break;
         case 'CHASM':
             ReactDOM.render(React.createElement(ChasmNode, { leftTarget: 'PORTALS', rightTarget: 'MEMEX' }), container);
+            image.src = "img/chasm-crop.jpg";
             break;
         case 'MEMEX':
             ReactDOM.render(React.createElement(MemexNode, { leftTarget: 'MONOLITH', forwardTarget: 'CROSSROADS', rightTarget: 'TWOROADS' }), container);
