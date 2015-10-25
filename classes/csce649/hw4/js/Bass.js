@@ -9,23 +9,52 @@ var START_V = new THREE.Vector3(0,0,0);
 
 var startGeom;
 
-function Bass(scene, callback){    
-    var loader = new THREE.JSONLoader();
-    loader.load( "js/bass_model.js", function( geometry ) {
+function Bass(scene, callback, fish){   
+    if (fish){
+        var loader = new THREE.JSONLoader();
+        loader.load( "js/bass_model.js", function( geometry ) {
+            this.mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial() );
+            this.mesh.scale.set(1, 1, 1);
+            this.mesh.position.y = 0;
+            this.mesh.position.x = 0;
+
+            this.count = this.mesh.geometry.vertices.length;
+            this.STATE = new Array(this.count * 2);
+
+            for (var i = 0; i < this.count; i++) {
+                //scale the mesh
+                this.mesh.geometry.vertices[i].x *= 100;
+                this.mesh.geometry.vertices[i].y *= 100;
+                this.mesh.geometry.vertices[i].z *= 100;
+
+                this.STATE[i] = new THREE.Vector3(
+                    this.mesh.geometry.vertices[i].x,
+                    this.mesh.geometry.vertices[i].y,
+                    this.mesh.geometry.vertices[i].z
+                );
+                this.STATE[i + this.count] = new THREE.Vector3(0,0,0);
+            }
+
+            scene.add(this.mesh);
+            callback();
+        }.bind(this) );
+    }
+    else {
+        var geometry = new THREE.BoxGeometry( 1, 1, 1 );
         this.mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial() );
         this.mesh.scale.set(1, 1, 1);
         this.mesh.position.y = 0;
         this.mesh.position.x = 0;
-        
+
         this.count = this.mesh.geometry.vertices.length;
         this.STATE = new Array(this.count * 2);
-        
+
         for (var i = 0; i < this.count; i++) {
             //scale the mesh
-            this.mesh.geometry.vertices[i].x *= 100;
-            this.mesh.geometry.vertices[i].y *= 100;
-            this.mesh.geometry.vertices[i].z *= 100;
-            
+            this.mesh.geometry.vertices[i].x *= 10;
+            this.mesh.geometry.vertices[i].y *= 10;
+            this.mesh.geometry.vertices[i].z *= 10;
+
             this.STATE[i] = new THREE.Vector3(
                 this.mesh.geometry.vertices[i].x,
                 this.mesh.geometry.vertices[i].y,
@@ -33,10 +62,9 @@ function Bass(scene, callback){
             );
             this.STATE[i + this.count] = new THREE.Vector3(0,0,0);
         }
-        
+
         scene.add(this.mesh);
-        callback();
-    }.bind(this) );
+    }
 }
 
 /** remove the particle system */

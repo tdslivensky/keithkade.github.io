@@ -30,8 +30,8 @@ var gridVoxelsHash = []; //where the vertices are on the grid
 var FACES = []; //for collision detection with barycentric coords
 
 var planeAttr = {
-    p: [0, -20 , 0],
-    r: [Math.radians(90), Math.radians(70), Math.radians(0)]
+    p: [-5, -20 , 0],
+    r: [Math.radians(90), Math.radians(60), Math.radians(0)]
 };
 
 //ugly, but saves time garbage collecting
@@ -70,7 +70,13 @@ window.onload = function(){
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
         
     render();
-    bass = new Bass(scene, loadIntegrationVars);
+    
+    //if fish is false then render as cube
+    var fish = false;
+    bass = new Bass(scene, loadIntegrationVars, fish);
+    if (!fish){
+        loadIntegrationVars();
+    }
 };
 
 /* load up all the mutables for integration */
