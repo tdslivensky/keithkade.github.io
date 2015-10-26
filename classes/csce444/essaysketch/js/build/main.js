@@ -1,4 +1,4 @@
-/*global React, ReactDOM, setInterval, document, console, setTimeout, Util */
+/*global React, ReactDOM, setInterval, document, console, setTimeout, Util, window */
 
 'use strict';
 
@@ -13,18 +13,31 @@ var PAGES = ['TWOROADS', 'CROSSROADS', 'PORTALS', 'FOUNTAIN', 'CHASM', 'MEMEX', 
 function renderLink() {
     return React.createElement(
         'div',
-        { className: 'link', onClick: this.handleClick },
+        { className: 'link', onClick: this.handleClick, onMouseOver: this.handleMouseOver, onMouseOut: this.handleMouseOut },
         this.props.text
     );
+}
+
+function previewLink() {
+    console.log('over');
+}
+
+function hideLink() {
+    console.log('out');
 }
 
 var ChoiceLink = React.createClass({
     displayName: 'ChoiceLink',
 
     handleClick: function handleClick(event) {
-        //Ken Burns into the clicked thing
-        loadPage(this.props.target);
+        var xDelt = window.innerWidth / 2 - event.clientX;
+        var yDelt = 310 - event.clientY;
+        image.style.transition = '1s ease';
+        image.style.transform = 'scale(1.3, 1.3) translate(' + xDelt / 4 + 'px,' + yDelt / 4 + 'px)';
+        setTimeout(loadPage, 1000, this.props.target, 600);
     },
+    handleMouseOver: previewLink,
+    handleMouseOut: hideLink,
     render: renderLink
 });
 
@@ -32,8 +45,10 @@ var LandmarkLink = React.createClass({
     displayName: 'LandmarkLink',
 
     handleClick: function handleClick(event) {
-        loadPage(this.props.target);
+        loadPage(this.props.target, 600);
     },
+    handleMouseOver: previewLink,
+    handleMouseOut: hideLink,
     render: renderLink
 });
 
@@ -68,7 +83,7 @@ var TwoRoadsNode = React.createClass({
             ),
             React.createElement(
                 'p',
-                null,
+                { className: 'main-text' },
                 'Two roads diverge in the wood. Beyond the direction ',
                 React.createElement('br', null),
                 'they lead, there is no discernable difference between the two.'
@@ -119,7 +134,7 @@ var CrossRoadsNode = React.createClass({
             ),
             React.createElement(
                 'p',
-                null,
+                { className: 'main-text' },
                 'You approach a crossroads marked by a signpost. There are three options, ',
                 React.createElement('br', null),
                 'a northwest path, a northeast path, and an east path.'
@@ -168,7 +183,7 @@ var PortalsNode = React.createClass({
             ),
             React.createElement(
                 'p',
-                null,
+                { className: 'main-text' },
                 'There are three portals in the forest. They are large enough to walk through, ',
                 React.createElement('br', null),
                 'but it is not clear what lies on the other side.'
@@ -188,7 +203,7 @@ var FountainNode = React.createClass({
             { className: 'landmark' },
             React.createElement(
                 'p',
-                null,
+                { className: 'main-text' },
                 'You see a large urinal in a clearing. The name "R. Mutt" has been written on it. ',
                 React.createElement('br', null),
                 'On the ground you see a plaque with the inscription, "Artist: Marcel Duchamp. Submitted by: unidan"'
@@ -212,7 +227,7 @@ var ChasmNode = React.createClass({
             { className: 'landmark' },
             React.createElement(
                 'p',
-                null,
+                { className: 'main-text' },
                 'A great chasm lies before you. On one side is a sign reading "Information" ',
                 React.createElement('br', null),
                 'On the other is a sign reading "Knowledge"'
@@ -236,7 +251,7 @@ var MemexNode = React.createClass({
             { className: 'landmark' },
             React.createElement(
                 'p',
-                null,
+                { className: 'main-text' },
                 'You come up to a convoluted machine. It is a mass of wires and buttons with one primary screen ',
                 React.createElement('br', null),
                 'It appears as though the wires are meant to connect pieces of data together. ',
@@ -263,7 +278,7 @@ var MonolithNode = React.createClass({
             { className: 'landmark' },
             React.createElement(
                 'p',
-                null,
+                { className: 'main-text' },
                 'A coal black obelisk towers above you. Its exterior is impenetrable and you cannot discern anything about its makeup ',
                 React.createElement('br', null),
                 'You feel as though it is compelling you to move in a certain direction.'
@@ -282,14 +297,16 @@ var MonolithNode = React.createClass({
 /* Page Transitions */
 
 //there should be a realistic delay
-function loadPage(page) {
+function loadPage(page, delay) {
     Util.deleteChildren(container);
-    setTimeout(renderPage, 500, page);
+    setTimeout(renderPage, delay, page);
 }
 
+/** choices */
 function renderPage(page) {
+    image.style.transition = "";
+    image.style.transform = "";
     switch (page) {
-        //choices
         case 'TWOROADS':
             ReactDOM.render(React.createElement(TwoRoadsNode, { leftRoadTarget: 'FOUNTAIN', rightRoadTarget: 'FOUNTAIN' }), container);
             image.src = "img/tworoads-crop.jpg";
@@ -312,16 +329,19 @@ function renderPage(page) {
             break;
         case 'MEMEX':
             ReactDOM.render(React.createElement(MemexNode, { leftTarget: 'MONOLITH', forwardTarget: 'CROSSROADS', rightTarget: 'TWOROADS' }), container);
+            image.src = "img/chasm-crop.jpg";
             break;
         case 'MONOLITH':
             ReactDOM.render(React.createElement(MonolithNode, { leftTarget: 'PORTALS', forwardTarget: 'CROSSROADS', rightTarget: 'MEMEX' }), container);
+            image.src = "img/chasm-crop.jpg";
             break;
         default:
             ReactDOM.render(React.createElement(PortalsNode, { leftTarget: Util.getRandomEntry(PAGES), middleTarget: Util.getRandomEntry(PAGES), rightTarget: Util.getRandomEntry(PAGES) }), container);
+            image.src = "img/chasm-crop.jpg";
             break;
     }
 }
 
 /* Start page */
 
-renderPage('TWOROADS');
+renderPage('CROSSROADS');

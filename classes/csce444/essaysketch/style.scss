@@ -1,7 +1,12 @@
 $footer-height: 60px;
-$choicenav-width: 300px;
+$choicenav-width: 150px;
 $width: 1000px;
 $height: 600px;
+
+$myGrey: #333333;
+$myGreyTranslucent: rgba(51, 51, 51, 0.7);
+$myLightGreyTranslucent: rgba(147, 147, 147, 0.7);
+
 
 @mixin vertical-align {
   position: relative;
@@ -23,7 +28,8 @@ $height: 600px;
 
 body {
     font-family: Helvetica, Arial, sans-serif;
-    background-color: gray;
+    background-color: $myGrey;
+    color: white;
 }
 
 h1 {
@@ -52,22 +58,39 @@ h1 {
     transform: translateY(-50%);
     
     margin: 20px auto 0 auto;
+    
+    overflow: hidden;
 }
 
 #container {
     z-index: 2;
 }
 
-
 #backgroundImg {
     z-index: 1;
     width: 1000px;
-    height: 600px;    
+    height: 600px; 
 }
 
-article {
-    margin: 0;
-    padding: 0;
+#curtain {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+}
+
+.main-text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    background-color: $myGreyTranslucent;
+    padding: 16px 0 16px 0;
+    font-size: 20px;
+    line-height: 1.5;
 }
 
 /* Percieved Choice */
@@ -77,40 +100,43 @@ article {
         width: $choicenav-width;
         text-align: center;
         position: absolute;
+        background-color: $myLightGreyTranslucent;
+        padding: 6px 0 6px 0;
+        
+        .link {
+            margin: 4px 0 0 0;
+        }
     }
 
-    p {
-        position: absolute;
-        bottom: 20px;
-        width: 100%;
-        text-align: center;
+    .main-text {
+        bottom: 0px;
     }
 
     /* Two Roads Diverge in the wood */ 
     .left-path {
-        top: 20px;
-        left: 200px;
+        top: 30px;
+        left: 220px;
     }
 
     .right-path {
-        top: 20px;
-        right: 200px;    
+        top: 30px;
+        right: 220px;    
     }
     
     /* Crossroads */
     .northwest-path {
-        top: 10px;
-        left: 100px;
+        top: 25px;
+        left: 75px;
     }
     
     .northeast-path {
-        top: 100px;
-        right: 10px;
+        top: 200px;
+        right: 20px;
     }
     
     .east-path {
-        bottom: 200px;
-        right: 10px;
+        bottom: 160px;
+        right: 20px;
     }
     
     /* Portals */
@@ -138,22 +164,23 @@ article {
 
 .landmark {
     
-    p {
-        position: absolute;
-        top: 20px;
-        width: 100%;
-        text-align: center;
+    .main-text {
+        top: 0px;
     }    
     
     .flex-container {
         display: flex;
+        justify-content: center;
         position: absolute;
         bottom: 20px;
         width: 100%;
         
         .link {
-            flex: 1;
             text-align: center;
+            background-color: $myLightGreyTranslucent;
+            width: 100px;
+            margin: 0 40px 0 40px;
+            padding: 5px;
         }
     }
     
