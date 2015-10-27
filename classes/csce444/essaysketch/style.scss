@@ -5,25 +5,43 @@ $height: 600px;
 
 $myGrey: #333333;
 $myGreyTranslucent: rgba(51, 51, 51, 0.7);
-$myLightGreyTranslucent: rgba(147, 147, 147, 0.7);
+$myLightGreyTranslucent: rgba(147, 147, 147, 0.8);
 
-
-@mixin vertical-align {
-  position: relative;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-}
-
-@mixin horizontal-align {
-    margin-left: auto;
-    margin-right: auto;
-}
+$previewGrey: #ebebeb;
+$previewGreyBorder: #b3b3b3;
 
 * {
     margin: 0;
     padding: 0;
+}
+
+/* Consistent Styles */ 
+
+.main-text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    background-color: $myGreyTranslucent;
+    padding: 16px 0 16px 0;
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+#link-preview {
+    width: 370px;
+    height: 14px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 5;
+    background-color: $previewGrey;
+    border-top-right-radius: 2px;
+    border-bottom-left-radius: 2px;    
+    border: 2px solid $previewGreyBorder;
+    color: black;
+    font-size: 11px;
+    display: none;
+    padding: 1px 0 0 2px;
 }
 
 body {
@@ -46,7 +64,9 @@ h1 {
     cursor: pointer;
 }
 
-#viewWindow {
+/* User percieves everything through a window */
+
+#view-window {
     width: $width;
     height: $height;
 
@@ -62,35 +82,26 @@ h1 {
     overflow: hidden;
 }
 
-#container {
+//the three divs within the view window are windowed
+.windowed {
+    width: 1000px;
+    height: 600px; 
+    position: absolute;
+    top: 0;
+    left: 0;      
+}
+
+#background-img {
+    z-index: 1;
+}
+
+#frame {
+    box-shadow: inset 0 0 40px black;
     z-index: 2;
 }
 
-#backgroundImg {
-    z-index: 1;
-    width: 1000px;
-    height: 600px; 
-}
-
-#curtain {
-    width: 100%;
-    height: 100%;
-    background-color: white;
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
+#container {
     z-index: 3;
-}
-
-.main-text {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    background-color: $myGreyTranslucent;
-    padding: 16px 0 16px 0;
-    font-size: 20px;
-    line-height: 1.5;
 }
 
 /* Percieved Choice */
@@ -112,6 +123,10 @@ h1 {
         bottom: 0px;
     }
 
+    .path-lbl {
+        font-size: 20px;
+    }
+    
     /* Two Roads Diverge in the wood */ 
     .left-path {
         top: 30px;
@@ -179,8 +194,10 @@ h1 {
             text-align: center;
             background-color: $myLightGreyTranslucent;
             width: 100px;
-            margin: 0 40px 0 40px;
-            padding: 5px;
+            margin: 0 60px 0 60px;
+            padding: 6px;
+            font-size: 14p;
+            border-radius: 2px;
         }
     }
     

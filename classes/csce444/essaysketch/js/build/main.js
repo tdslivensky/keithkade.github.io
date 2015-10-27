@@ -4,9 +4,10 @@
 
 var doc = document;
 var container = document.getElementById('container');
-var image = document.getElementById('backgroundImg');
+var image = document.getElementById('background-img');
+var preview = document.getElementById('link-preview');
 
-var PAGES = ['TWOROADS', 'CROSSROADS', 'PORTALS', 'FOUNTAIN', 'CHASM', 'MEMEX', 'MONOLITH'];
+var PAGES = ['tworoads', 'crossroads', 'portals', 'fountain', 'chasm', 'memex', 'monolith'];
 
 /* Psuedo-Links */
 
@@ -18,12 +19,13 @@ function renderLink() {
     );
 }
 
-function previewLink() {
-    console.log('over');
+function showLinkPreview() {
+    preview.style.display = "block";
+    preview.innerHTML = 'kadekeith.me/classes/csce444/essaysketch/' + this.props.target;
 }
 
-function hideLink() {
-    console.log('out');
+function hideLinkPreview() {
+    preview.style.display = "none";
 }
 
 var ChoiceLink = React.createClass({
@@ -35,9 +37,10 @@ var ChoiceLink = React.createClass({
         image.style.transition = '1s ease';
         image.style.transform = 'scale(1.3, 1.3) translate(' + xDelt / 4 + 'px,' + yDelt / 4 + 'px)';
         setTimeout(loadPage, 1000, this.props.target, 600);
+        hideLinkPreview();
     },
-    handleMouseOver: previewLink,
-    handleMouseOut: hideLink,
+    handleMouseOver: showLinkPreview,
+    handleMouseOut: hideLinkPreview,
     render: renderLink
 });
 
@@ -46,9 +49,10 @@ var LandmarkLink = React.createClass({
 
     handleClick: function handleClick(event) {
         loadPage(this.props.target, 600);
+        hideLinkPreview();
     },
-    handleMouseOver: previewLink,
-    handleMouseOut: hideLink,
+    handleMouseOver: showLinkPreview,
+    handleMouseOut: hideLinkPreview,
     render: renderLink
 });
 
@@ -66,7 +70,7 @@ var TwoRoadsNode = React.createClass({
                 { className: 'left-path choicenav' },
                 React.createElement(
                     'div',
-                    null,
+                    { className: 'path-lbl' },
                     'Left Path'
                 ),
                 React.createElement(ChoiceLink, { text: 'Go', target: this.props.leftRoadTarget })
@@ -76,7 +80,7 @@ var TwoRoadsNode = React.createClass({
                 { className: 'right-path choicenav' },
                 React.createElement(
                     'div',
-                    null,
+                    { className: 'path-lbl' },
                     'Right Path'
                 ),
                 React.createElement(ChoiceLink, { text: 'Go', target: this.props.rightRoadTarget })
@@ -107,7 +111,7 @@ var CrossRoadsNode = React.createClass({
                 { className: 'northwest-path choicenav' },
                 React.createElement(
                     'div',
-                    null,
+                    { className: 'path-lbl' },
                     'Northwest Path'
                 ),
                 React.createElement(ChoiceLink, { text: 'Go', target: this.props.northwestTarget })
@@ -117,7 +121,7 @@ var CrossRoadsNode = React.createClass({
                 { className: 'northeast-path choicenav' },
                 React.createElement(
                     'div',
-                    null,
+                    { className: 'path-lbl' },
                     'Northeast Path'
                 ),
                 React.createElement(ChoiceLink, { text: 'Go', target: this.props.northeastTarget })
@@ -127,7 +131,7 @@ var CrossRoadsNode = React.createClass({
                 { className: 'east-path choicenav' },
                 React.createElement(
                     'div',
-                    null,
+                    { className: 'path-lbl' },
                     'East Path'
                 ),
                 React.createElement(ChoiceLink, { text: 'Go', target: this.props.eastTarget })
@@ -156,7 +160,7 @@ var PortalsNode = React.createClass({
                 { className: 'left-portal choicenav' },
                 React.createElement(
                     'div',
-                    null,
+                    { className: 'path-lbl' },
                     'Left Portal'
                 ),
                 React.createElement(ChoiceLink, { text: 'Go', target: this.props.leftTarget })
@@ -166,7 +170,7 @@ var PortalsNode = React.createClass({
                 { className: 'middle-portal choicenav' },
                 React.createElement(
                     'div',
-                    null,
+                    { className: 'path-lbl' },
                     'Middle Portal'
                 ),
                 React.createElement(ChoiceLink, { text: 'Go', target: this.props.middleTarget })
@@ -176,7 +180,7 @@ var PortalsNode = React.createClass({
                 { className: 'right-portal choicenav' },
                 React.createElement(
                     'div',
-                    null,
+                    { className: 'path-lbl' },
                     'Right Portal'
                 ),
                 React.createElement(ChoiceLink, { text: 'Go', target: this.props.rightTarget })
@@ -279,7 +283,9 @@ var MonolithNode = React.createClass({
             React.createElement(
                 'p',
                 { className: 'main-text' },
-                'A coal black obelisk towers above you. Its exterior is impenetrable and you cannot discern anything about its makeup ',
+                'A coal black obelisk towers above you. ',
+                React.createElement('br', null),
+                'Its exterior is impenetrable and you cannot discern anything about its makeup. ',
                 React.createElement('br', null),
                 'You feel as though it is compelling you to move in a certain direction.'
             ),
@@ -307,41 +313,42 @@ function renderPage(page) {
     image.style.transition = "";
     image.style.transform = "";
     switch (page) {
-        case 'TWOROADS':
-            ReactDOM.render(React.createElement(TwoRoadsNode, { leftRoadTarget: 'FOUNTAIN', rightRoadTarget: 'FOUNTAIN' }), container);
+        case 'tworoads':
             image.src = "img/tworoads-crop.jpg";
+            ReactDOM.render(React.createElement(TwoRoadsNode, { leftRoadTarget: 'fountain', rightRoadTarget: 'fountain' }), container);
             break;
-        case 'CROSSROADS':
-            ReactDOM.render(React.createElement(CrossRoadsNode, { northwestTarget: 'FOUNTAIN', northeastTarget: 'CHASM', eastTarget: 'MEMEX' }), container);
+        case 'crossroads':
             image.src = "img/crossroads-crop.jpg";
+            ReactDOM.render(React.createElement(CrossRoadsNode, { northwestTarget: 'fountain', northeastTarget: 'chasm', eastTarget: 'memex' }), container);
             break;
-        case 'PORTALS':
-            ReactDOM.render(React.createElement(PortalsNode, { leftTarget: 'MONOLITH', middleTarget: Util.getRandomEntry(PAGES), rightTarget: 'CHASM' }), container);
+        case 'portals':
+            image.src = "img/chasm-crop.jpg";
+            ReactDOM.render(React.createElement(PortalsNode, { leftTarget: 'monolith', middleTarget: Util.getRandomEntry(PAGES), rightTarget: 'chasm' }), container);
             break;
         //landmarks
-        case 'FOUNTAIN':
-            ReactDOM.render(React.createElement(FountainNode, { backTarget: 'TWOROADS', forwardTarget: 'CROSSROADS' }), container);
+        case 'fountain':
             image.src = "img/fountain-crop.jpg";
+            ReactDOM.render(React.createElement(FountainNode, { backTarget: 'tworoads', forwardTarget: 'crossroads' }), container);
             break;
-        case 'CHASM':
-            ReactDOM.render(React.createElement(ChasmNode, { leftTarget: 'PORTALS', rightTarget: 'MEMEX' }), container);
+        case 'chasm':
             image.src = "img/chasm-crop.jpg";
+            ReactDOM.render(React.createElement(ChasmNode, { leftTarget: 'portals', rightTarget: 'memex' }), container);
             break;
-        case 'MEMEX':
-            ReactDOM.render(React.createElement(MemexNode, { leftTarget: 'MONOLITH', forwardTarget: 'CROSSROADS', rightTarget: 'TWOROADS' }), container);
+        case 'memex':
             image.src = "img/chasm-crop.jpg";
+            ReactDOM.render(React.createElement(MemexNode, { leftTarget: 'monolith', forwardTarget: 'crossroads', rightTarget: 'tworoads' }), container);
             break;
-        case 'MONOLITH':
-            ReactDOM.render(React.createElement(MonolithNode, { leftTarget: 'PORTALS', forwardTarget: 'CROSSROADS', rightTarget: 'MEMEX' }), container);
+        case 'monolith':
             image.src = "img/chasm-crop.jpg";
+            ReactDOM.render(React.createElement(MonolithNode, { leftTarget: 'portals', forwardTarget: 'crossroads', rightTarget: 'memex' }), container);
             break;
         default:
-            ReactDOM.render(React.createElement(PortalsNode, { leftTarget: Util.getRandomEntry(PAGES), middleTarget: Util.getRandomEntry(PAGES), rightTarget: Util.getRandomEntry(PAGES) }), container);
             image.src = "img/chasm-crop.jpg";
+            ReactDOM.render(React.createElement(PortalsNode, { leftTarget: Util.getRandomEntry(PAGES), middleTarget: Util.getRandomEntry(PAGES), rightTarget: Util.getRandomEntry(PAGES) }), container);
             break;
     }
 }
 
 /* Start page */
 
-renderPage('CROSSROADS');
+renderPage('tworoads');
