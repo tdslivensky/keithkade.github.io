@@ -74,72 +74,72 @@ h1 {
 
 /* line 94, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
 #background-img {
-  z-index: 1; }
+  z-index: 1;
+  opacity: 0.75; }
 
-/* line 98, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+/* line 99, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
 #frame {
-  box-shadow: inset 0 0 40px black;
+  box-shadow: inset 0 0 60px black;
   z-index: 2; }
 
-/* line 103, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+/* line 104, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
 #container {
   z-index: 3; }
 
 /* Percieved Choice */
-/* line 109, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+/* line 110, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
 .perceived-choice {
   /* Two Roads Diverge in the wood */
   /* Crossroads */
   /* Portals */ }
-  /* line 110, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 111, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .choicenav {
     width: 150px;
     text-align: center;
     position: absolute;
     background-color: rgba(147, 147, 147, 0.8);
     padding: 6px 0 6px 0; }
-    /* line 117, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+    /* line 118, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
     .perceived-choice .choicenav .link {
       margin: 4px 0 0 0; }
-  /* line 122, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 123, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .main-text {
     bottom: 0px; }
-  /* line 126, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 127, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .path-lbl {
     font-size: 20px; }
-  /* line 131, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 132, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .left-path {
     top: 30px;
     left: 220px; }
-  /* line 136, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 137, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .right-path {
     top: 30px;
     right: 220px; }
-  /* line 142, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 143, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .northwest-path {
     top: 25px;
     left: 75px; }
-  /* line 147, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 148, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .northeast-path {
     top: 200px;
     right: 20px; }
-  /* line 152, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 153, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .east-path {
-    bottom: 160px;
+    bottom: 180px;
     right: 20px; }
-  /* line 159, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 160, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .left-portal {
     top: 100px;
-    left: 100px; }
-  /* line 164, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+    left: 150px; }
+  /* line 165, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .middle-portal {
     top: 100px;
-    left: 50%;
-    margin-left: -75px; }
+    left: 430px; }
   /* line 170, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .right-portal {
     top: 100px;
-    right: 100px; }
+    right: 130px; }
 
 /* Landmark */
 /* line 182, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */

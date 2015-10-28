@@ -93,10 +93,11 @@ h1 {
 
 #background-img {
     z-index: 1;
+    opacity: 0.75;
 }
 
 #frame {
-    box-shadow: inset 0 0 40px black;
+    box-shadow: inset 0 0 60px black;
     z-index: 2;
 }
 
@@ -150,7 +151,7 @@ h1 {
     }
     
     .east-path {
-        bottom: 160px;
+        bottom: 180px;
         right: 20px;
     }
     
@@ -158,18 +159,17 @@ h1 {
     
     .left-portal {
         top: 100px;
-        left: 100px;
+        left: 150px;
     }
     
     .middle-portal {
         top: 100px;
-        left: 50%;
-        margin-left: - ($choicenav-width / 2);
+        left: 430px;
     }
     
     .right-portal {
         top: 100px;
-        right: 100px;
+        right: 130px;
     }
     
 }

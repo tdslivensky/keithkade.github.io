@@ -29,10 +29,10 @@ function hideLinkPreview(){
 var ChoiceLink = React.createClass({
     handleClick: function(event) {
         var xDelt = window.innerWidth/2 - event.clientX;
-        var yDelt = 310 - event.clientY;    
+        var yDelt = 310 - (event.clientY - 50);    
         image.style.transition = '1s ease';
         image.style.transform = 'scale(1.3, 1.3) translate(' + xDelt/4 + 'px,' + yDelt/4 + 'px)';
-        setTimeout(loadPage, 1000, this.props.target, 600);
+        loadPage(this.props.target, 1500);
         hideLinkPreview();
     },
     handleMouseOver: showLinkPreview,
@@ -230,7 +230,7 @@ function renderPage(page){
             );
             break;
         case 'portals':
-            image.src = "img/compressed/chasm-crop.jpg";
+            image.src = "img/compressed/portals-crop.jpg";
             ReactDOM.render(
                 <PortalsNode leftTarget='monolith' middleTarget={Util.getRandomEntry(PAGES)} rightTarget='chasm' />, 
                 container
@@ -252,21 +252,22 @@ function renderPage(page){
             );
             break;    
         case 'memex':
-            image.src = "img/compressed/chasm-crop.jpg";        
+            image.src = "img/compressed/memex-crop.jpg";        
             ReactDOM.render(
                 <MemexNode leftTarget="monolith" forwardTarget="crossroads" rightTarget="tworoads" />, 
                 container
             );
             break;
         case 'monolith':
-            image.src = "img/compressed/chasm-crop.jpg";        
+            image.src = "img/compressed/monolith-crop.jpg";        
             ReactDOM.render(
                 <MonolithNode leftTarget="portals" forwardTarget="crossroads" rightTarget="memex" />, 
                 container
             );
             break;               
         default:
-            image.src = "img/compressed/chasm-crop.jpg";        
+            console.log('something went wrong. defaulting to portals');
+            image.src = "img/compressed/portals-crop.jpg";        
             ReactDOM.render(
                 <PortalsNode leftTarget={Util.getRandomEntry(PAGES)} middleTarget={Util.getRandomEntry(PAGES)} rightTarget={Util.getRandomEntry(PAGES)} />, 
                 container
