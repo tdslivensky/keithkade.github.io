@@ -384,6 +384,9 @@ function renderPage(page) {
 /* Start navigation */
 
 function start() {
+    for (var i = 0; i < 100; i++) {
+        history.pushState({}, null, 'tworoads');
+    }
     renderPage('tworoads');
 }
 
