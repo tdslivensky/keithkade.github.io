@@ -105,6 +105,20 @@ h1 {
     z-index: 3;
 }
 
+#welcome {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 200px;
+    line-height: 1.3;
+    
+    button {
+        padding: 4px;
+        font-size: 18px;
+        cursor: pointer;
+    }
+}
+
 /* Percieved Choice */
 
 .perceived-choice {

@@ -86,74 +86,87 @@ h1 {
 #container {
   z-index: 3; }
 
+/* line 108, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+#welcome {
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 200px;
+  line-height: 1.3; }
+  /* line 115, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  #welcome button {
+    padding: 4px;
+    font-size: 18px;
+    cursor: pointer; }
+
 /* Percieved Choice */
-/* line 110, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+/* line 124, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
 .perceived-choice {
   /* Two Roads Diverge in the wood */
   /* Crossroads */
   /* Portals */ }
-  /* line 111, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 125, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .choicenav {
     width: 150px;
     text-align: center;
     position: absolute;
     background-color: rgba(147, 147, 147, 0.8);
     padding: 6px 0 6px 0; }
-    /* line 118, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+    /* line 132, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
     .perceived-choice .choicenav .link {
       margin: 4px 0 0 0; }
-  /* line 123, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 137, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .main-text {
     bottom: 0px; }
-  /* line 127, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 141, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .path-lbl {
     font-size: 20px; }
-  /* line 132, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 146, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .left-path {
     top: 30px;
     left: 220px; }
-  /* line 137, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 151, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .right-path {
     top: 30px;
     right: 220px; }
-  /* line 143, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 157, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .northwest-path {
     top: 25px;
     left: 75px; }
-  /* line 148, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 162, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .northeast-path {
     top: 200px;
     right: 20px; }
-  /* line 153, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 167, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .east-path {
     bottom: 180px;
     right: 20px; }
-  /* line 160, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 174, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .left-portal {
     top: 100px;
     left: 150px; }
-  /* line 165, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 179, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .middle-portal {
     top: 100px;
     left: 430px; }
-  /* line 170, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 184, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .perceived-choice .right-portal {
     top: 100px;
     right: 130px; }
 
 /* Landmark */
-/* line 182, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+/* line 196, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
 .landmark .main-text {
   top: 0px; }
 
-/* line 186, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+/* line 200, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
 .landmark .flex-container {
   display: flex;
   justify-content: center;
   position: absolute;
   bottom: 20px;
   width: 100%; }
-  /* line 193, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
+  /* line 207, /Users/kadekeith/Desktop/keithkade.github/classes/csce444/essaysketch/style.scss */
   .landmark .flex-container .link {
     text-align: center;
     background-color: rgba(147, 147, 147, 0.8);

@@ -1,4 +1,4 @@
-/*global React, ReactDOM, setInterval, document, console, setTimeout, Util, window */
+/*global React, ReactDOM, setInterval, document, console, setTimeout, Util, window, history, sessionStorage*/
 
 'use strict';
 
@@ -8,6 +8,31 @@ var image = document.getElementById('background-img');
 var preview = document.getElementById('link-preview');
 
 var PAGES = ['tworoads', 'crossroads', 'portals', 'fountain', 'chasm', 'memex', 'monolith'];
+var BASE_URL = 'kadekeith.me/classes/csce444/essaysketch/';
+
+var REFRESH_MESSAGES = ["Please refrain from navigating that way", "Seriously, you might get lost", "This is not how you are supposed to experience my site", "Really?", "Really?", "Really?", "Really?", "Really?", "Really?", "Dang you are persistent", "Really?"];
+
+//odds in % of things happening
+var LINK_PREVIEW_CHANCE = 75;
+var PREVIEW_CORRECT_CHANCE = 75;
+var NAV_CORRECT_CHANCE = 90;
+var URL_CORRECT_CHANCE = 75;
+
+/* Set flag so we know first time user visits page */
+if (!sessionStorage.getItem("visited")) {
+    sessionStorage.setItem("visited", true);
+    sessionStorage.setItem("refreshCount", 0);
+}
+
+/** returns page chance % of the time. otherwise returns random page */
+function maybePage(page, chance) {
+    var rand = Util.getRandom(0, 100);
+    if (rand < chance) {
+        return page;
+    } else {
+        return Util.getRandomEntry(PAGES);
+    }
+}
 
 /* Psuedo-Links */
 
@@ -20,8 +45,13 @@ function renderLink() {
 }
 
 function showLinkPreview() {
+    var rand = Util.getRandom(0, 100);
+    if (rand > LINK_PREVIEW_CHANCE) {
+        return;
+    }
+
     preview.style.display = "block";
-    preview.innerHTML = 'kadekeith.me/classes/csce444/essaysketch/' + this.props.target;
+    preview.innerHTML = BASE_URL + maybePage(this.props.target, PREVIEW_CORRECT_CHANCE);
 }
 
 function hideLinkPreview() {
@@ -73,7 +103,7 @@ var TwoRoadsNode = React.createClass({
                     { className: 'path-lbl' },
                     'Left Path'
                 ),
-                React.createElement(ChoiceLink, { text: 'Go', target: this.props.leftRoadTarget })
+                React.createElement(ChoiceLink, { text: 'Go', target: maybePage(this.props.leftRoadTarget, NAV_CORRECT_CHANCE) })
             ),
             React.createElement(
                 'div',
@@ -83,7 +113,7 @@ var TwoRoadsNode = React.createClass({
                     { className: 'path-lbl' },
                     'Right Path'
                 ),
-                React.createElement(ChoiceLink, { text: 'Go', target: this.props.rightRoadTarget })
+                React.createElement(ChoiceLink, { text: 'Go', target: maybePage(this.props.rightRoadTarget, NAV_CORRECT_CHANCE) })
             ),
             React.createElement(
                 'p',
@@ -114,7 +144,7 @@ var CrossRoadsNode = React.createClass({
                     { className: 'path-lbl' },
                     'Northwest Path'
                 ),
-                React.createElement(ChoiceLink, { text: 'Go', target: this.props.northwestTarget })
+                React.createElement(ChoiceLink, { text: 'Go', target: maybePage(this.props.northwestTarget, NAV_CORRECT_CHANCE) })
             ),
             React.createElement(
                 'div',
@@ -124,7 +154,7 @@ var CrossRoadsNode = React.createClass({
                     { className: 'path-lbl' },
                     'Northeast Path'
                 ),
-                React.createElement(ChoiceLink, { text: 'Go', target: this.props.northeastTarget })
+                React.createElement(ChoiceLink, { text: 'Go', target: maybePage(this.props.northeastTarget, NAV_CORRECT_CHANCE) })
             ),
             React.createElement(
                 'div',
@@ -134,7 +164,7 @@ var CrossRoadsNode = React.createClass({
                     { className: 'path-lbl' },
                     'East Path'
                 ),
-                React.createElement(ChoiceLink, { text: 'Go', target: this.props.eastTarget })
+                React.createElement(ChoiceLink, { text: 'Go', target: maybePage(this.props.eastTarget, NAV_CORRECT_CHANCE) })
             ),
             React.createElement(
                 'p',
@@ -163,7 +193,7 @@ var PortalsNode = React.createClass({
                     { className: 'path-lbl' },
                     'Left Portal'
                 ),
-                React.createElement(ChoiceLink, { text: 'Go', target: this.props.leftTarget })
+                React.createElement(ChoiceLink, { text: 'Go', target: maybePage(this.props.leftTarget, NAV_CORRECT_CHANCE) })
             ),
             React.createElement(
                 'div',
@@ -173,7 +203,7 @@ var PortalsNode = React.createClass({
                     { className: 'path-lbl' },
                     'Middle Portal'
                 ),
-                React.createElement(ChoiceLink, { text: 'Go', target: this.props.middleTarget })
+                React.createElement(ChoiceLink, { text: 'Go', target: maybePage(this.props.middleTarget, NAV_CORRECT_CHANCE) })
             ),
             React.createElement(
                 'div',
@@ -183,7 +213,7 @@ var PortalsNode = React.createClass({
                     { className: 'path-lbl' },
                     'Right Portal'
                 ),
-                React.createElement(ChoiceLink, { text: 'Go', target: this.props.rightTarget })
+                React.createElement(ChoiceLink, { text: 'Go', target: maybePage(this.props.rightTarget, NAV_CORRECT_CHANCE) })
             ),
             React.createElement(
                 'p',
@@ -215,8 +245,8 @@ var FountainNode = React.createClass({
             React.createElement(
                 'div',
                 { className: 'flex-container' },
-                React.createElement(LandmarkLink, { text: 'Go Back', target: this.props.backTarget }),
-                React.createElement(LandmarkLink, { text: 'Go Forward', target: this.props.forwardTarget })
+                React.createElement(LandmarkLink, { text: 'Go Back', target: maybePage(this.props.backTarget, NAV_CORRECT_CHANCE) }),
+                React.createElement(LandmarkLink, { text: 'Go Forward', target: maybePage(this.props.forwardTarget, NAV_CORRECT_CHANCE) })
             )
         );
     }
@@ -239,8 +269,8 @@ var ChasmNode = React.createClass({
             React.createElement(
                 'div',
                 { className: 'flex-container' },
-                React.createElement(LandmarkLink, { text: 'Go Left', target: this.props.leftTarget }),
-                React.createElement(LandmarkLink, { text: 'Go Right', target: this.props.rightTarget })
+                React.createElement(LandmarkLink, { text: 'Go Left', target: maybePage(this.props.leftTarget, NAV_CORRECT_CHANCE) }),
+                React.createElement(LandmarkLink, { text: 'Go Right', target: maybePage(this.props.rightTarget, NAV_CORRECT_CHANCE) })
             )
         );
     }
@@ -265,9 +295,9 @@ var MemexNode = React.createClass({
             React.createElement(
                 'div',
                 { className: 'flex-container' },
-                React.createElement(LandmarkLink, { text: 'Go Left', target: this.props.leftTarget }),
-                React.createElement(LandmarkLink, { text: 'Go Forward', target: this.props.forwardTarget }),
-                React.createElement(LandmarkLink, { text: 'Go Right', target: this.props.rightTarget })
+                React.createElement(LandmarkLink, { text: 'Go Left', target: maybePage(this.props.leftTarget, NAV_CORRECT_CHANCE) }),
+                React.createElement(LandmarkLink, { text: 'Go Forward', target: maybePage(this.props.forwardTarget, NAV_CORRECT_CHANCE) }),
+                React.createElement(LandmarkLink, { text: 'Go Right', target: maybePage(this.props.rightTarget, NAV_CORRECT_CHANCE) })
             )
         );
     }
@@ -292,9 +322,9 @@ var MonolithNode = React.createClass({
             React.createElement(
                 'div',
                 { className: 'flex-container' },
-                React.createElement(LandmarkLink, { text: 'Go Left', target: this.props.leftTarget }),
-                React.createElement(LandmarkLink, { text: 'Go Forward', target: this.props.forwardTarget }),
-                React.createElement(LandmarkLink, { text: 'Go Right', target: this.props.rightTarget })
+                React.createElement(LandmarkLink, { text: 'Go Left', target: maybePage(this.props.leftTarget, NAV_CORRECT_CHANCE) }),
+                React.createElement(LandmarkLink, { text: 'Go Forward', target: maybePage(this.props.forwardTarget, NAV_CORRECT_CHANCE) }),
+                React.createElement(LandmarkLink, { text: 'Go Right', target: maybePage(this.props.rightTarget, NAV_CORRECT_CHANCE) })
             )
         );
     }
@@ -312,6 +342,7 @@ function loadPage(page, delay) {
 function renderPage(page) {
     image.style.transition = "";
     image.style.transform = "";
+    history.pushState({}, null, maybePage(page, URL_CORRECT_CHANCE));
     switch (page) {
         case 'tworoads':
             image.src = "img/compressed/tworoads-crop.jpg";
@@ -350,6 +381,17 @@ function renderPage(page) {
     }
 }
 
-/* Start page */
+/* Start navigation */
 
-renderPage('tworoads');
+function start() {
+    renderPage('tworoads');
+}
+
+window.onbeforeunload = function () {
+    var count = parseInt(sessionStorage.getItem("refreshCount"));
+    if (count < REFRESH_MESSAGES.length - 1) {
+        sessionStorage.setItem("refreshCount", count + 1);
+        console.log(count);
+    }
+    return REFRESH_MESSAGES[count];
+};

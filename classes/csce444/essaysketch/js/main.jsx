@@ -1,4 +1,4 @@
-/*global React, ReactDOM, setInterval, document, console, setTimeout, Util, window */
+/*global React, ReactDOM, setInterval, document, console, setTimeout, Util, window, history, sessionStorage*/
 
 var doc = document;
 var container = document.getElementById('container');
@@ -6,6 +6,44 @@ var image = document.getElementById('background-img');
 var preview = document.getElementById('link-preview');
 
 var PAGES = ['tworoads', 'crossroads', 'portals', 'fountain', 'chasm', 'memex', 'monolith'];
+var BASE_URL = 'kadekeith.me/classes/csce444/essaysketch/';
+
+var REFRESH_MESSAGES = [
+    "Please refrain from navigating that way",
+    "Seriously, you might get lost",
+    "This is not how you are supposed to experience my site",
+    "Really?",
+    "Really?",
+    "Really?",
+    "Really?",
+    "Really?",
+    "Really?",
+    "Dang you are persistent",
+    "Really?"
+];
+
+//odds in % of things happening
+var LINK_PREVIEW_CHANCE = 75;
+var PREVIEW_CORRECT_CHANCE = 75;
+var NAV_CORRECT_CHANCE = 90;
+var URL_CORRECT_CHANCE = 75;
+
+/* Set flag so we know first time user visits page */ 
+if (!sessionStorage.getItem("visited")){
+    sessionStorage.setItem("visited", true);
+    sessionStorage.setItem("refreshCount", 0);
+}
+
+/** returns page chance % of the time. otherwise returns random page */
+function maybePage(page, chance){
+    var rand = Util.getRandom(0, 100);
+    if (rand < chance){
+        return page;
+    }
+    else {
+        return Util.getRandomEntry(PAGES);
+    }
+}
 
 /* Psuedo-Links */
 
@@ -18,8 +56,13 @@ function renderLink(){
 }
 
 function showLinkPreview(){
+    var rand = Util.getRandom(0, 100);
+    if (rand > LINK_PREVIEW_CHANCE){
+        return;
+    }
+    
     preview.style.display = "block";
-    preview.innerHTML = 'kadekeith.me/classes/csce444/essaysketch/' + this.props.target;
+    preview.innerHTML = BASE_URL + maybePage(this.props.target, PREVIEW_CORRECT_CHANCE);
 }
 
 function hideLinkPreview(){
@@ -58,11 +101,11 @@ var TwoRoadsNode = React.createClass({
             <article className="perceived-choice">
                 <div className="left-path choicenav">
                     <div className="path-lbl">Left Path</div>
-                    <ChoiceLink text="Go" target={this.props.leftRoadTarget}/>
+                    <ChoiceLink text="Go" target={maybePage(this.props.leftRoadTarget, NAV_CORRECT_CHANCE)}/>
                 </div>
                 <div className="right-path choicenav">
                     <div className="path-lbl">Right Path</div>
-                    <ChoiceLink text="Go" target={this.props.rightRoadTarget}/>
+                    <ChoiceLink text="Go" target={maybePage(this.props.rightRoadTarget, NAV_CORRECT_CHANCE)}/>
                 </div>
                 <p className="main-text">
                     Two roads diverge in the wood. Beyond the direction <br/>
@@ -83,15 +126,15 @@ var CrossRoadsNode = React.createClass({
             <article className="perceived-choice">
                 <div className="northwest-path choicenav">    
                     <div className="path-lbl">Northwest Path</div>
-                    <ChoiceLink text="Go" target={this.props.northwestTarget}/>
+                    <ChoiceLink text="Go" target={maybePage(this.props.northwestTarget, NAV_CORRECT_CHANCE)}/>
                 </div>
                 <div className="northeast-path choicenav">
                     <div className="path-lbl">Northeast Path</div>
-                    <ChoiceLink text="Go" target={this.props.northeastTarget}/>                
+                    <ChoiceLink text="Go" target={maybePage(this.props.northeastTarget, NAV_CORRECT_CHANCE)}/>                
                 </div>
                 <div className="east-path choicenav">    
                     <div className="path-lbl">East Path</div>
-                    <ChoiceLink text="Go" target={this.props.eastTarget}/>
+                    <ChoiceLink text="Go" target={maybePage(this.props.eastTarget, NAV_CORRECT_CHANCE)}/>
                 </div>    
                 <p className="main-text">
                     You approach a crossroads marked by a signpost. There are three options, <br/>
@@ -109,15 +152,15 @@ var PortalsNode = React.createClass({
             <article className="perceived-choice">
                 <div className="left-portal choicenav">    
                     <div className="path-lbl">Left Portal</div>
-                    <ChoiceLink text="Go" target={this.props.leftTarget}/>
+                    <ChoiceLink text="Go" target={maybePage(this.props.leftTarget, NAV_CORRECT_CHANCE)}/>
                 </div>
                 <div className="middle-portal choicenav">
                     <div className="path-lbl">Middle Portal</div>
-                    <ChoiceLink text="Go" target={this.props.middleTarget}/>                
+                    <ChoiceLink text="Go" target={maybePage(this.props.middleTarget, NAV_CORRECT_CHANCE)}/>                
                 </div>
                 <div className="right-portal choicenav">    
                     <div className="path-lbl">Right Portal</div>
-                    <ChoiceLink text="Go" target={this.props.rightTarget}/>
+                    <ChoiceLink text="Go" target={maybePage(this.props.rightTarget, NAV_CORRECT_CHANCE)}/>
                 </div>    
                 <p className="main-text">
                     There are three portals in the forest. They are large enough to walk through, <br/>
@@ -139,8 +182,8 @@ var FountainNode = React.createClass({
                     On the ground you see a plaque with the inscription, "Artist: Marcel Duchamp. Submitted by: unidan"
                 </p>
                 <div className="flex-container">
-                    <LandmarkLink text="Go Back" target={this.props.backTarget}/>
-                    <LandmarkLink text="Go Forward" target={this.props.forwardTarget}/>
+                    <LandmarkLink text="Go Back" target={maybePage(this.props.backTarget, NAV_CORRECT_CHANCE)}/>
+                    <LandmarkLink text="Go Forward" target={maybePage(this.props.forwardTarget, NAV_CORRECT_CHANCE)}/>
                 </div>
             </article>
         );
@@ -156,8 +199,8 @@ var ChasmNode = React.createClass({
                     On the other is a sign reading "Knowledge"
                 </p>
                 <div className="flex-container">
-                    <LandmarkLink text="Go Left" target={this.props.leftTarget}/>
-                    <LandmarkLink text="Go Right" target={this.props.rightTarget}/>
+                    <LandmarkLink text="Go Left" target={maybePage(this.props.leftTarget, NAV_CORRECT_CHANCE)}/>
+                    <LandmarkLink text="Go Right" target={maybePage(this.props.rightTarget, NAV_CORRECT_CHANCE)}/>
                 </div>
             </article>
         );
@@ -174,9 +217,9 @@ var MemexNode = React.createClass({
                     There is a plaque on the top of the machine that reads "Memex: Write your own adventure"
                 </p>
                 <div className="flex-container">
-                    <LandmarkLink text="Go Left" target={this.props.leftTarget}/>
-                    <LandmarkLink text="Go Forward" target={this.props.forwardTarget}/>
-                    <LandmarkLink text="Go Right" target={this.props.rightTarget}/>
+                    <LandmarkLink text="Go Left" target={maybePage(this.props.leftTarget, NAV_CORRECT_CHANCE)}/>
+                    <LandmarkLink text="Go Forward" target={maybePage(this.props.forwardTarget, NAV_CORRECT_CHANCE)}/>
+                    <LandmarkLink text="Go Right" target={maybePage(this.props.rightTarget, NAV_CORRECT_CHANCE)}/>
                 </div>
             </article>
         );
@@ -193,9 +236,9 @@ var MonolithNode = React.createClass({
                     You feel as though it is compelling you to move in a certain direction. 
                 </p>
                 <div className="flex-container">
-                    <LandmarkLink text="Go Left" target={this.props.leftTarget}/>
-                    <LandmarkLink text="Go Forward" target={this.props.forwardTarget}/>
-                    <LandmarkLink text="Go Right" target={this.props.rightTarget}/>
+                    <LandmarkLink text="Go Left" target={maybePage(this.props.leftTarget, NAV_CORRECT_CHANCE)}/>
+                    <LandmarkLink text="Go Forward" target={maybePage(this.props.forwardTarget, NAV_CORRECT_CHANCE)}/>
+                    <LandmarkLink text="Go Right" target={maybePage(this.props.rightTarget, NAV_CORRECT_CHANCE)}/>
                 </div>
             </article>
         );
@@ -214,6 +257,7 @@ function loadPage(page, delay){
 function renderPage(page){
     image.style.transition = "";
     image.style.transform = "";
+    history.pushState({}, null, maybePage(page, URL_CORRECT_CHANCE));
     switch(page){  
         case 'tworoads':
             image.src = "img/compressed/tworoads-crop.jpg";
@@ -276,6 +320,17 @@ function renderPage(page){
     }
 }
 
-/* Start page */ 
+/* Start navigation */ 
 
-renderPage('tworoads');
+function start(){
+    renderPage('tworoads');
+}
+
+window.onbeforeunload = function(){
+    var count = parseInt(sessionStorage.getItem("refreshCount"));
+    if (count < REFRESH_MESSAGES.length - 1){
+        sessionStorage.setItem("refreshCount", count + 1);
+        console.log(count);
+    }
+    return REFRESH_MESSAGES[count];
+};
