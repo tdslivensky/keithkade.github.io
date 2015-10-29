@@ -8,10 +8,12 @@ var doc = document; //shorthand
 var simTimeout;     //for starting and stopping the sim
 
 //boilerplate
-var scene, renderer, camera, light, polygon, plane;
+var scene, renderer, camera, light, polygon;
 var axes;
 
 var bass;
+//if fish is false then render as cube
+var fish = true;
 var clock;
 
 var CR = 0.5;   // coefficient of restitution. 1 is maximum bouncy
@@ -22,14 +24,9 @@ var H;              // Step time in seconds
 var H_MILLI;        // In milliseconds
 var G = new THREE.Vector3(0, -9.81, 0);  // The accel due to gravity in m/s^2 
 
-//use grid positions for more efficient collision detections
-var VOX_SIZE = 20;
-var gridVoxelsHash = []; //where the vertices are on the grid
-// TODO other stuff
+var collidables = [];
 
-var FACES = []; //for collision detection with barycentric coords
-
-var planeAttr = {
+var polyAttr = {
     p: [-5, -20 , 0],
     r: [Math.radians(90), Math.radians(60), Math.radians(0)]
 };
@@ -42,10 +39,11 @@ var v2_mut = new THREE.Vector3(0,0,0);
 var v3_mut = new THREE.Vector3(0,0,0);
 var v4_mut = new THREE.Vector3(0,0,0);
 
-var p0 = new THREE.Vector3(0,0,0);
-var p1 = new THREE.Vector3(0,0,0);
-var p2 = new THREE.Vector3(0,0,0);
+var p0_mut = new THREE.Vector3(0,0,0);
+var p1_mut = new THREE.Vector3(0,0,0);
+var p2_mut = new THREE.Vector3(0,0,0);
 var vNormal = new THREE.Vector3(0,0,0);
+var plane_mut = new THREE.Plane(new THREE.Vector3(0, 0, 0), 0);
 
 var vOld = new THREE.Vector3(0,0,0);
 var xOld = new THREE.Vector3(0,0,0);
@@ -62,8 +60,9 @@ window.onload = function(){
     camera = Boiler.initCamera();
     light = Boiler.initLight();
     axes = Boiler.initAxes();
-    polygon = Boiler.initPolygon(planeAttr);
-    plane = Boiler.initPlane(planeAttr, polygon);
+    polygon = Boiler.initPolygon(polyAttr);
+    
+    collidables.push(polygon);
     
     //change what the camera is looking at and add our controls
     camera.position.set(15, 50, 15);
@@ -71,8 +70,6 @@ window.onload = function(){
         
     render();
     
-    //if fish is false then render as cube
-    var fish = false;
     bass = new Bass(scene, loadIntegrationVars, fish);
     if (!fish){
         loadIntegrationVars();
@@ -115,16 +112,6 @@ function initMotion(){
 //gets the derivative of a state. plus external forces
 //returns deep copy of array
 function F(state){
-   
-    //update our grid of positions
-    for (var g = 0; g < bass.count; g++){
-        gridVoxelsHash[g] = [
-            Math.floor(state[g].x / VOX_SIZE),
-            Math.floor(state[g].y / VOX_SIZE),
-            Math.floor(state[g].z / VOX_SIZE)
-        ]; 
-    }
-    
     //for all the particles apply gravity
     for (var i = 0; i < bass.count; i++){
         state_mut[i].copy(state[i + bass.count]);
@@ -185,11 +172,27 @@ function simulate(){
     }
     
     //COLLISION DETECTION
+    
+    //TODO Edge-Edge Collision
+    for (var j=0; j<bass.edges; j++){
+        var edge = bass.edges;
+        var edgeResponse = edgeEdgeResponse(edge);
+        if(edgeResponse){
+            bass.STATE[edge[0]].copy(edgeResponse[0].xNew);
+            bass.STATE[edge[0] + bass.count].copy(edgeResponse[0].vNew);
+            bass.STATE[edge[1]].copy(edgeResponse[1].xNew);
+            bass.STATE[edge[1] + bass.count].copy(edgeResponse[1].vNew);            
+        }
+    }
+    
+    
+    //Vertex Face Collision
     for (var i = 0; i < bass.count; i++){
-        //collision detection and response. if there is no collision then no change
-        var collision = collisionDetectionAndResponse(oldState[i], bass.STATE[i], oldState[i + bass.count], bass.STATE[i + bass.count]);
-        bass.STATE[i].copy(collision.xNew);
-        bass.STATE[i + bass.count].copy(collision.vNew);
+        var vertexResponse = vertexFaceResponse(oldState[i], bass.STATE[i], oldState[i + bass.count], bass.STATE[i + bass.count]);
+        if (vertexResponse){
+            bass.STATE[i].copy(vertexResponse.xNew);
+            bass.STATE[i + bass.count].copy(vertexResponse.vNew);
+        }
     }
     
     bass.moveParticles();
@@ -208,73 +211,103 @@ function integrateVector(v1, v2, timestep){
     return v1_mut.add(v2_mut.multiplyScalar(timestep));
 }
 
-function collisionDetectionAndResponse(x1, x2, v1, v2){
-    
-    v1_mut.copy(x1);
-    v2_mut.copy(x2);
-    
-    var dOld = v1_mut.sub(plane.p).dot(plane.n);
-    var dNew = v2_mut.sub(plane.p).dot(plane.n);
-    //check if they have the same sign
-    if (dOld*dNew <= 0){
+//find results of any vertex face collisions
+function vertexFaceResponse(x1, x2, v1, v2){
         
-        var fraction = dOld / (dOld-dNew);
-        collisionX.copy(integrateVector(x1, v1, fraction * H));
+    //loop through all collidable objects
+    for (var p=0; p < collidables.length; p++){
+        var poly = collidables[p];
         
-        v1_mut.copy(v1);
-        vNormal.copy(plane.n).multiplyScalar(v1_mut.dot(plane.n));
-        
-        if (pointInPolygon(collisionX)){
+        //all faces on the object
+        for (var i=0; i < poly.geometry.faces.length; i++){
+            var face = poly.geometry.faces[i];
+
+            v1_mut.copy(x1);
+            v2_mut.copy(x2);
+
+            p0_mut.set(poly.geometry.vertices[face.a].x + poly.position.x, 
+                   poly.geometry.vertices[face.a].y + poly.position.y,
+                   poly.geometry.vertices[face.a].z + poly.position.z);
+            p1_mut.set(poly.geometry.vertices[face.b].x + poly.position.x, 
+                   poly.geometry.vertices[face.b].y + poly.position.y, 
+                   poly.geometry.vertices[face.b].z + poly.position.z);
+            p2_mut.set(poly.geometry.vertices[face.c].x + poly.position.x,
+                   poly.geometry.vertices[face.c].y + poly.position.y, 
+                   poly.geometry.vertices[face.c].z + poly.position.z);
+
+            /* THIS MIGHT HELP?
+            v3_mut.set((p0_mut.x + p1_mut.x + p2_mut.x)/3,
+                       (p0_mut.y + p1_mut.y + p2_mut.y)/3,
+                       (p0_mut.z + p1_mut.z + p2_mut.z)/3);
             
-            var response = {};
-            v1_mut.copy(x2);
-            v2_mut.copy(plane.n);
-            response.xNew = v1_mut.sub(v2_mut.multiplyScalar(dNew * (1 + CR))).clone();
+            //if the point is really far from the average of the face don't test further (maybe should check both)
+            if (v3_mut.distanceTo(xOld) > 20){
+              continue;
+            }
+            */
+            
+            plane_mut.setFromCoplanarPoints(p0_mut, p1_mut, p2_mut);
 
-            v1_mut.copy(v1);
-            var vTan = v1_mut.sub(vNormal);
+            var dOld = plane_mut.distanceToPoint(v1_mut);
+            var dNew = plane_mut.distanceToPoint(v2_mut);
 
-            response.vNew = vNormal.multiplyScalar(-1 * CR).add(vTan.multiplyScalar(1 - CF)).clone();
+            //check if they have the same sign
+            if (dOld*dNew <= 0){            
 
-            return response;
+                var fraction = dOld / (dOld-dNew);
+                collisionX.copy(integrateVector(x1, v1, fraction * H));
+
+                v1_mut.copy(v1);
+                vNormal.copy(plane_mut.normal).multiplyScalar(v1_mut.dot(plane_mut.normal));
+
+                if (pointInFace(collisionX, face, poly, p0_mut, p1_mut, p2_mut)){
+
+                    var response = {};
+                    v1_mut.copy(x2);
+                    v2_mut.copy(plane_mut.normal);
+                    response.xNew = v1_mut.sub(v2_mut.multiplyScalar(dNew * (1 + CR))).clone();
+
+                    v1_mut.copy(v1);
+                    var vTan = v1_mut.sub(vNormal);
+
+                    response.vNew = vNormal.multiplyScalar(-1 * CR).add(vTan.multiplyScalar(1 - CF)).clone();
+
+                    return response;
+                }
+            }
         }
     }
-    
-    return {xNew: x2, vNew: v2};
+    return false;
 }
 
-function pointInPolygon(x){
-
+function pointInFace(x, face, poly, p0, p1, p2){
+    //implementation in appendix wasn't working, so I based this off of http://www.blackpawn.com/texts/pointinpoly/
     var v0, v1, v2, dot00, dot01, dot02, dot11, dot12, denom, u, v;
-    for (var i=0; i < polygon.geometry.faces.length; i++){
-        
-        //implementation in appendix wasn't working, so I based this off of http://www.blackpawn.com/texts/pointinpoly/
-        p0.copy(FACES[i][0]);
-        p1.copy(FACES[i][1]);
-        p2.copy(FACES[i][2]);
-        
-        v0 = p2.sub(p0);
-        v1 = p1.sub(p0);
-        v1_mut.copy(x);
-        v2 = v1_mut.sub(p0);
-        
-        // Compute dot products
-        dot00 = v0.dot(v0);
-        dot01 = v0.dot(v1);
-        dot02 = v0.dot(v2);
-        dot11 = v1.dot(v1);
-        dot12 = v1.dot(v2);
 
-        // Compute barycentric coordinates
-        denom = 1 / (dot00 * dot11 - dot01 * dot01);
-        u = (dot11 * dot02 - dot01 * dot12) * denom;
-        v = (dot00 * dot12 - dot01 * dot02) * denom;        
-        
-        if ( u >= 0 && v >= 0 && (u+v) <= 1){
-            return true;
-        }
-        
+    v0 = p2.sub(p0);
+    v1 = p1.sub(p0);
+    v1_mut.copy(x);
+    v2 = v1_mut.sub(p0);
+
+    // Compute dot products
+    dot00 = v0.dot(v0);
+    dot01 = v0.dot(v1);
+    dot02 = v0.dot(v2);
+    dot11 = v1.dot(v1);
+    dot12 = v1.dot(v2);
+
+    // Compute barycentric coordinates
+    denom = 1 / (dot00 * dot11 - dot01 * dot01);
+    u = (dot11 * dot02 - dot01 * dot12) * denom;
+    v = (dot00 * dot12 - dot01 * dot02) * denom;        
+
+    if ( u >= 0 && v >= 0 && (u+v) <= 1){
+        return true;
     }
+}
+
+//find results of any edge edge collisions
+function edgeEdgeResponse(tuple){
     return false;
 }
 

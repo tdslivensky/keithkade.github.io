@@ -13,7 +13,7 @@ function Bass(scene, callback, fish){
     if (fish){
         var loader = new THREE.JSONLoader();
         loader.load( "js/bass_model.js", function( geometry ) {
-            this.mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial() );
+            this.mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial( { wireframe: true } ) );
             this.mesh.scale.set(1, 1, 1);
             this.mesh.position.y = 0;
             this.mesh.position.x = 0;
@@ -34,14 +34,21 @@ function Bass(scene, callback, fish){
                 );
                 this.STATE[i + this.count] = new THREE.Vector3(0,0,0);
             }
-
+            this.edges = [];
+            for (var j = 0; j < this.mesh.geometry.faces.length; j++){
+                var face = this.mesh.geometry.faces[j];
+                this.edges.push(Util.sortTwo([face.a, face.b]));
+                this.edges.push(Util.sortTwo([face.a, face.c]));
+                this.edges.push(Util.sortTwo([face.a, face.b]));
+            }
+            this.edges = this.edges.unique();
             scene.add(this.mesh);
             callback();
         }.bind(this) );
     }
     else {
         var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-        this.mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial() );
+        this.mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial( { wireframe: true } ) );
         this.mesh.scale.set(1, 1, 1);
         this.mesh.position.y = 0;
         this.mesh.position.x = 0;
@@ -62,9 +69,17 @@ function Bass(scene, callback, fish){
             );
             this.STATE[i + this.count] = new THREE.Vector3(0,0,0);
         }
-
+        this.edges = [];
+        for (var j = 0; j < this.mesh.geometry.faces.length; j++){
+            var face = this.mesh.geometry.faces[j];
+            this.edges.push(Util.sortTwo([face.a, face.b]));
+            this.edges.push(Util.sortTwo([face.a, face.c]));
+            this.edges.push(Util.sortTwo([face.a, face.b]));
+        }
+        this.edges = this.edges.unique();
         scene.add(this.mesh);
     }
+
 }
 
 /** remove the particle system */
