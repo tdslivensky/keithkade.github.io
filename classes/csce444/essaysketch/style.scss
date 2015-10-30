@@ -64,6 +64,24 @@ h1 {
     cursor: pointer;
 }
 
+.fade {
+    animation-name: fadeout;
+    animation-duration: 4s;
+}
+
+@keyframes fadeout {
+    from {opacity: 1;}
+    to {opacity: 0;}    
+}
+
+#about-link {
+    display: none;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    color: white;
+}
+
 /* User percieves everything through a window */
 
 #view-window {
@@ -94,6 +112,7 @@ h1 {
 #background-img {
     z-index: 1;
     opacity: 0.75;
+    transform: scale(1.15, 1.15);
 }
 
 #frame {
@@ -173,7 +192,7 @@ h1 {
     
     .left-portal {
         top: 100px;
-        left: 150px;
+        left: 100px;
     }
     
     .middle-portal {
@@ -183,7 +202,7 @@ h1 {
     
     .right-portal {
         top: 100px;
-        right: 130px;
+        right: 90px;
     }
     
 }

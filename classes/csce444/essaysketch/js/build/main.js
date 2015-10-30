@@ -6,6 +6,7 @@ var doc = document;
 var container = document.getElementById('container');
 var image = document.getElementById('background-img');
 var preview = document.getElementById('link-preview');
+var aboutLink = document.getElementById('about-link');
 
 var PAGES = ['tworoads', 'crossroads', 'portals', 'fountain', 'chasm', 'memex', 'monolith'];
 var BASE_URL = 'kadekeith.me/classes/csce444/essaysketch/';
@@ -15,7 +16,7 @@ var REFRESH_MESSAGES = ["Please refrain from navigating that way", "Seriously, y
 //odds in % of things happening
 var LINK_PREVIEW_CHANCE = 75;
 var PREVIEW_CORRECT_CHANCE = 75;
-var NAV_CORRECT_CHANCE = 90;
+var NAV_CORRECT_CHANCE = 95;
 var URL_CORRECT_CHANCE = 75;
 
 /* Set flag so we know first time user visits page */
@@ -66,7 +67,7 @@ var ChoiceLink = React.createClass({
         var yDelt = 310 - (event.clientY - 50);
         image.style.transition = '1s ease';
         image.style.transform = 'scale(1.3, 1.3) translate(' + xDelt / 4 + 'px,' + yDelt / 4 + 'px)';
-        loadPage(this.props.target, 1500);
+        loadPage(this.props.target, 1000);
         hideLinkPreview();
     },
     handleMouseOver: showLinkPreview,
@@ -78,12 +79,43 @@ var LandmarkLink = React.createClass({
     displayName: 'LandmarkLink',
 
     handleClick: function handleClick(event) {
-        loadPage(this.props.target, 600);
+        image.style.transition = '1s ease';
+        switch (this.props.text) {
+            case 'Go Forward':
+                image.style.transform = 'scale(1.3, 1.3)';
+                break;
+            case 'Go Back':
+                image.style.transform = 'scale(1, 1)';
+                break;
+            case 'Go Left':
+                image.style.transform = 'scale(1.15, 1.15) translate( 50px, 0px)';
+                break;
+            case 'Go Right':
+                image.style.transform = 'scale(1.15, 1.15) translate( -50px, 0px)';
+                break;
+            default:
+                image.style.transform = 'scale(1.1, 1.1)';
+                break;
+        }
+
+        loadPage(this.props.target, 1000);
         hideLinkPreview();
     },
     handleMouseOver: showLinkPreview,
     handleMouseOut: hideLinkPreview,
     render: renderLink
+});
+
+var FaderLink = React.createClass({
+    displayName: 'FaderLink',
+
+    render: function render() {
+        return React.createElement(
+            'div',
+            { className: 'link fade' },
+            this.props.text
+        );
+    }
 });
 
 /* Perceived Choice Nodes */
@@ -177,7 +209,6 @@ var CrossRoadsNode = React.createClass({
     }
 });
 
-//sends user random place
 var PortalsNode = React.createClass({
     displayName: 'PortalsNode',
 
@@ -220,7 +251,7 @@ var PortalsNode = React.createClass({
                 { className: 'main-text' },
                 'There are three portals in the forest. They are large enough to walk through, ',
                 React.createElement('br', null),
-                'but it is not clear what lies on the other side.'
+                'but it is not always clear what lies on the other side.'
             )
         );
     }
@@ -306,6 +337,8 @@ var MemexNode = React.createClass({
 var MonolithNode = React.createClass({
     displayName: 'MonolithNode',
 
+    //TODO fade choices out
+
     render: function render() {
         return React.createElement(
             'article',
@@ -322,9 +355,9 @@ var MonolithNode = React.createClass({
             React.createElement(
                 'div',
                 { className: 'flex-container' },
-                React.createElement(LandmarkLink, { text: 'Go Left', target: maybePage(this.props.leftTarget, NAV_CORRECT_CHANCE) }),
+                React.createElement(FaderLink, { text: 'Go Left', target: maybePage(this.props.leftTarget, NAV_CORRECT_CHANCE) }),
                 React.createElement(LandmarkLink, { text: 'Go Forward', target: maybePage(this.props.forwardTarget, NAV_CORRECT_CHANCE) }),
-                React.createElement(LandmarkLink, { text: 'Go Right', target: maybePage(this.props.rightTarget, NAV_CORRECT_CHANCE) })
+                React.createElement(FaderLink, { text: 'Go Right', target: maybePage(this.props.rightTarget, NAV_CORRECT_CHANCE) })
             )
         );
     }
@@ -343,10 +376,11 @@ function renderPage(page) {
     image.style.transition = "";
     image.style.transform = "";
     history.pushState({}, null, maybePage(page, URL_CORRECT_CHANCE));
+    aboutLink.href = "about#" + page;
     switch (page) {
         case 'tworoads':
             image.src = "img/compressed/tworoads-crop.jpg";
-            ReactDOM.render(React.createElement(TwoRoadsNode, { leftRoadTarget: 'fountain', rightRoadTarget: 'fountain' }), container);
+            ReactDOM.render(React.createElement(TwoRoadsNode, { leftRoadTarget: 'monolith', rightRoadTarget: 'monolith' }), container);
             break;
         case 'crossroads':
             image.src = "img/compressed/crossroads-crop.jpg";
@@ -387,7 +421,8 @@ function start() {
     for (var i = 0; i < 100; i++) {
         history.pushState({}, null, 'tworoads');
     }
-    renderPage('tworoads');
+    renderPage('monolith');
+    aboutLink.style.display = "block";
 }
 
 window.onbeforeunload = function () {

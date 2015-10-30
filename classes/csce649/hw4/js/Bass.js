@@ -15,8 +15,6 @@ function Bass(scene, callback, fish){
         loader.load( "js/bass_model.js", function( geometry ) {
             this.mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial( { wireframe: true } ) );
             this.mesh.scale.set(1, 1, 1);
-            this.mesh.position.y = 0;
-            this.mesh.position.x = 0;
 
             this.count = this.mesh.geometry.vertices.length;
             this.STATE = new Array(this.count * 2);
@@ -34,24 +32,19 @@ function Bass(scene, callback, fish){
                 );
                 this.STATE[i + this.count] = new THREE.Vector3(0,0,0);
             }
-            this.edges = [];
-            for (var j = 0; j < this.mesh.geometry.faces.length; j++){
-                var face = this.mesh.geometry.faces[j];
-                this.edges.push(Util.sortTwo([face.a, face.b]));
-                this.edges.push(Util.sortTwo([face.a, face.c]));
-                this.edges.push(Util.sortTwo([face.a, face.b]));
-            }
-            this.edges = this.edges.unique();
+            Util.addEdges(this.mesh);
             scene.add(this.mesh);
             callback();
         }.bind(this) );
     }
     else {
         var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+        geometry.rotateX(1);
+        geometry.rotateY(1);
+        geometry.rotateZ(1);
+
         this.mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial( { wireframe: true } ) );
         this.mesh.scale.set(1, 1, 1);
-        this.mesh.position.y = 0;
-        this.mesh.position.x = 0;
 
         this.count = this.mesh.geometry.vertices.length;
         this.STATE = new Array(this.count * 2);
@@ -69,14 +62,7 @@ function Bass(scene, callback, fish){
             );
             this.STATE[i + this.count] = new THREE.Vector3(0,0,0);
         }
-        this.edges = [];
-        for (var j = 0; j < this.mesh.geometry.faces.length; j++){
-            var face = this.mesh.geometry.faces[j];
-            this.edges.push(Util.sortTwo([face.a, face.b]));
-            this.edges.push(Util.sortTwo([face.a, face.c]));
-            this.edges.push(Util.sortTwo([face.a, face.b]));
-        }
-        this.edges = this.edges.unique();
+        Util.addEdges(this.mesh);
         scene.add(this.mesh);
     }
 

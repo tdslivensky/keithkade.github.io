@@ -13,7 +13,7 @@ var axes;
 
 var bass;
 //if fish is false then render as cube
-var fish = true;
+var fish = false;
 var clock;
 
 var CR = 0.5;   // coefficient of restitution. 1 is maximum bouncy
@@ -28,16 +28,20 @@ var collidables = [];
 
 var polyAttr = {
     p: [-5, -20 , 0],
-    r: [Math.radians(90), Math.radians(60), Math.radians(0)]
+    r: [Math.radians(90), Math.radians(60), Math.radians(10)]
 };
 
 //ugly, but saves time garbage collecting
 var state_mut;
 
-var v1_mut = new THREE.Vector3(0,0,0); //I keep a couple mutable vectors for all calculations
+var v1_mut = new THREE.Vector3(0,0,0); //I keep mutable vectors for all calculations
 var v2_mut = new THREE.Vector3(0,0,0);
 var v3_mut = new THREE.Vector3(0,0,0);
 var v4_mut = new THREE.Vector3(0,0,0);
+var v5_mut = new THREE.Vector3(0,0,0);
+var v6_mut = new THREE.Vector3(0,0,0);
+var v7_mut = new THREE.Vector3(0,0,0);
+var v8_mut = new THREE.Vector3(0,0,0);
 
 var p0_mut = new THREE.Vector3(0,0,0);
 var p1_mut = new THREE.Vector3(0,0,0);
@@ -54,6 +58,14 @@ var collisionX = new THREE.Vector3(0,0,0);
 var deriv;
 var K1, K2, K3, K4, oldState;
 
+//edge collisions
+var p1 = new THREE.Vector3(0,0,0);
+var p2 = new THREE.Vector3(0,0,0);
+var q1 = new THREE.Vector3(0,0,0);
+var q2 = new THREE.Vector3(0,0,0);
+var pa = new THREE.Vector3(0,0,0);
+var qa = new THREE.Vector3(0,0,0);
+
 window.onload = function(){
     scene = new THREE.Scene();
     renderer = Boiler.initRenderer();
@@ -63,6 +75,12 @@ window.onload = function(){
     polygon = Boiler.initPolygon(polyAttr);
     
     collidables.push(polygon);
+    
+    //add edges to the object    
+    for (var p=0; p < collidables.length; p++){
+        var mesh = collidables[p];
+        Util.addEdges(mesh);
+    }
     
     //change what the camera is looking at and add our controls
     camera.position.set(15, 50, 15);
@@ -137,7 +155,7 @@ function simulate(){
     //first order deriv
     deepCopy(deriv, F(bass.STATE));
 
-    if (true){ /******************************************* euler integration */ 
+    if (false){ /******************************************* euler integration */ 
         integrateState(bass.STATE, deriv, H);
     }
     else {      /******************************************* rk4 integration */ 
@@ -174,9 +192,9 @@ function simulate(){
     //COLLISION DETECTION
     
     //TODO Edge-Edge Collision
-    for (var j=0; j<bass.edges; j++){
-        var edge = bass.edges;
-        var edgeResponse = edgeEdgeResponse(edge);
+    for (var j=0; j<bass.mesh.edges.length; j++){
+        var edge = bass.mesh.edges[j];
+        var edgeResponse = edgeEdgeResponse(edge, bass.mesh);
         if(edgeResponse){
             bass.STATE[edge[0]].copy(edgeResponse[0].xNew);
             bass.STATE[edge[0] + bass.count].copy(edgeResponse[0].vNew);
@@ -216,24 +234,24 @@ function vertexFaceResponse(x1, x2, v1, v2){
         
     //loop through all collidable objects
     for (var p=0; p < collidables.length; p++){
-        var poly = collidables[p];
+        var mesh = collidables[p];
         
         //all faces on the object
-        for (var i=0; i < poly.geometry.faces.length; i++){
-            var face = poly.geometry.faces[i];
+        for (var i=0; i < mesh.geometry.faces.length; i++){
+            var face = mesh.geometry.faces[i];
 
             v1_mut.copy(x1);
             v2_mut.copy(x2);
 
-            p0_mut.set(poly.geometry.vertices[face.a].x + poly.position.x, 
-                   poly.geometry.vertices[face.a].y + poly.position.y,
-                   poly.geometry.vertices[face.a].z + poly.position.z);
-            p1_mut.set(poly.geometry.vertices[face.b].x + poly.position.x, 
-                   poly.geometry.vertices[face.b].y + poly.position.y, 
-                   poly.geometry.vertices[face.b].z + poly.position.z);
-            p2_mut.set(poly.geometry.vertices[face.c].x + poly.position.x,
-                   poly.geometry.vertices[face.c].y + poly.position.y, 
-                   poly.geometry.vertices[face.c].z + poly.position.z);
+            p0_mut.set(mesh.geometry.vertices[face.a].x + mesh.position.x, 
+                       mesh.geometry.vertices[face.a].y + mesh.position.y,
+                       mesh.geometry.vertices[face.a].z + mesh.position.z);
+            p1_mut.set(mesh.geometry.vertices[face.b].x + mesh.position.x, 
+                       mesh.geometry.vertices[face.b].y + mesh.position.y, 
+                       mesh.geometry.vertices[face.b].z + mesh.position.z);
+            p2_mut.set(mesh.geometry.vertices[face.c].x + mesh.position.x,
+                       mesh.geometry.vertices[face.c].y + mesh.position.y, 
+                       mesh.geometry.vertices[face.c].z + mesh.position.z);
 
             /* THIS MIGHT HELP?
             v3_mut.set((p0_mut.x + p1_mut.x + p2_mut.x)/3,
@@ -260,7 +278,7 @@ function vertexFaceResponse(x1, x2, v1, v2){
                 v1_mut.copy(v1);
                 vNormal.copy(plane_mut.normal).multiplyScalar(v1_mut.dot(plane_mut.normal));
 
-                if (pointInFace(collisionX, face, poly, p0_mut, p1_mut, p2_mut)){
+                if (pointInFace(collisionX, p0_mut, p1_mut, p2_mut)){
 
                     var response = {};
                     v1_mut.copy(x2);
@@ -280,7 +298,7 @@ function vertexFaceResponse(x1, x2, v1, v2){
     return false;
 }
 
-function pointInFace(x, face, poly, p0, p1, p2){
+function pointInFace(x, p0, p1, p2){
     //implementation in appendix wasn't working, so I based this off of http://www.blackpawn.com/texts/pointinpoly/
     var v0, v1, v2, dot00, dot01, dot02, dot11, dot12, denom, u, v;
 
@@ -307,7 +325,54 @@ function pointInFace(x, face, poly, p0, p1, p2){
 }
 
 //find results of any edge edge collisions
-function edgeEdgeResponse(tuple){
+function edgeEdgeResponse(bassEdge, bassMesh){
+    
+    p1.copy(bassMesh.geometry.vertices[bassEdge[0]]);
+    p2.copy(bassMesh.geometry.vertices[bassEdge[1]]);
+    
+    for (var i=0; i < collidables.length; i++){
+        var mesh = collidables[i];
+        for (var j=0; j < mesh.edges.length; j++){
+            var edge = mesh.edges[j];
+            
+            q1.set(mesh.geometry.vertices[edge[0]].x + mesh.position.x, 
+                        mesh.geometry.vertices[edge[0]].y + mesh.position.y,
+                        mesh.geometry.vertices[edge[0]].z + mesh.position.z);
+            q2.set(mesh.geometry.vertices[edge[1]].x + mesh.position.x, 
+                        mesh.geometry.vertices[edge[1]].y + mesh.position.y, 
+                        mesh.geometry.vertices[edge[1]].z + mesh.position.z);
+            
+            v1_mut.copy(p2).sub(p1); //a
+            v2_mut.copy(q2).sub(q1); //b
+            
+            v3_mut.copy(v1_mut).cross(v2_mut).normalize(); //nHat
+            
+            v4_mut.copy(q1).sub(p1); //r
+            
+            v5_mut.copy(v1_mut).normalize(); //aHat
+            v6_mut.copy(v2_mut).normalize(); //bHat
+            
+            v7_mut.copy(v3_mut).cross(v5_mut); //nHat x aHat
+            v8_mut.copy(v3_mut).cross(v6_mut); //nHat x bHat
+            
+            var s = v4_mut.dot(v7_mut) / v1_mut.dot(v8_mut);        // r . (bHat x nHat) / a . (bHat x nHat)
+            var t = -1 * v4_mut.dot(v8_mut) / v2_mut.dot(v7_mut);   // -r . (aHat x nHat) / b . (aHat x nHat)
+            
+            if (s < 0 || s > 1 || t < 0 || t > 1){
+                return false;
+            }
+            else {
+                pa = v1_mut.multiplyScalar(s).add(p1); //pa = p1 +sa
+                qa = v2_mut.multiplyScalar(t).add(q1); //qa = q1 +tb   
+                var dist = qa.sub(pa).length();
+                if (dist < 1){
+                    console.log('collision detected');                    
+                    console.log(dist);
+                }
+            }
+        }
+    }
+    
     return false;
 }
 

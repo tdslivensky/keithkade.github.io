@@ -18,6 +18,18 @@ Util.sortTwo = function(tuple){
         return [tuple[1], tuple[0]];
 };
 
+/** add a list of unique edges to a mesh */
+Util.addEdges = function(mesh){
+    mesh.edges = [];
+    for (var j = 0; j < mesh.geometry.faces.length; j++){
+        var face = mesh.geometry.faces[j];
+        mesh.edges.push(Util.sortTwo([face.a, face.b]));
+        mesh.edges.push(Util.sortTwo([face.a, face.c]));
+        mesh.edges.push(Util.sortTwo([face.a, face.b]));
+    }
+    mesh.edges = mesh.edges.uniqueTuples();
+};
+
 // Source: http://cwestblog.com/2012/11/12/javascript-degree-and-radian-conversion/
 /** Converts from degrees to radians. */
 Math.radians = function(degrees) {
@@ -31,13 +43,30 @@ Math.degrees = function(radians) {
 
 // Source: http://codereview.stackexchange.com/questions/60128/removing-duplicates-from-an-array-quickly
 /** removes duplicates from array */
-Array.prototype.unique = function() {
+Array.prototype.uniqueTuples = function() {
     return this.reduce(function(accum, current) {
-        if (accum.indexOf(current) < 0) {
+        if (accum.indexOfTuple(current) < 0) {
             accum.push(current);
         }
         return accum;
     }, []);
+};
+
+Array.prototype.indexOfTuple = function(tuple){
+    for(var i = 0; i < this.length; i++) {
+        if (this[i].equalsTupleArr(tuple)) return i;
+    }
+    return -1;
+};
+
+Array.prototype.equalsTupleArr = function(arr){
+    if (this.length !== arr.length)
+        return false;
+    for(var i = 0; i < this.length; i++) {
+        if (this[i] !== arr[i]) 
+            return false;
+    }
+    return true;
 };
 
 /************* THREE.js boilerplate *************/
