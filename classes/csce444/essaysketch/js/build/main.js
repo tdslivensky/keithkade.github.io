@@ -18,6 +18,11 @@ var LINK_PREVIEW_CHANCE = 75;
 var PREVIEW_CORRECT_CHANCE = 75;
 var NAV_CORRECT_CHANCE = 95;
 var URL_CORRECT_CHANCE = 75;
+var PREVIEW_IMAGE_CHANCE = 100;
+
+//these two can change
+var ROTATE_CHANCE = 5;
+var SKEW_CHANCE = 5;
 
 /* Set flag so we know first time user visits page */
 if (!sessionStorage.getItem("visited")) {
@@ -160,9 +165,6 @@ var TwoRoadsNode = React.createClass({
 
 var CrossRoadsNode = React.createClass({
     displayName: 'CrossRoadsNode',
-
-    //TODO {this.props.northwestTarget}
-    //add image to landmark maybe
 
     render: function render() {
         return React.createElement(
@@ -411,15 +413,34 @@ function renderPage(page) {
             ReactDOM.render(React.createElement(PortalsNode, { leftTarget: Util.getRandomEntry(PAGES), middleTarget: Util.getRandomEntry(PAGES), rightTarget: Util.getRandomEntry(PAGES) }), container);
             break;
     }
+    //make glitches more likely
+    if (ROTATE_CHANCE < 15) {
+        ROTATE_CHANCE++;
+        SKEW_CHANCE++;
+    }
+
+    //fade out the appropriate links   
     setTimeout(fadeLinks, 1000);
+    //maybe glitch the visual
+    setTimeout(glitchImage, 500, page);
 }
 
 function fadeLinks() {
-    //fade out the appropriate links
     var links = doc.getElementsByClassName('fade');
     for (var i = 0; i < links.length; i++) {
-        links[i].style.transition = '3s';
+        links[i].style.transition = '2s';
         links[i].style.opacity = '0';
+    }
+}
+
+function glitchImage(page) {
+    var rand = Util.getRandom(0, 100);
+    if (rand < ROTATE_CHANCE) {
+        image.style.transform = image.style.transform + ' rotate(3deg)';
+    }
+    rand = Util.getRandom(0, 100);
+    if (rand < SKEW_CHANCE) {
+        image.style.transform = image.style.transform + ' skewX(6deg)';
     }
 }
 
@@ -429,7 +450,7 @@ function start() {
     for (var i = 0; i < 20; i++) {
         history.pushState({}, null, 'tworoads');
     }
-    renderPage('monolith');
+    renderPage('tworoads');
     aboutLink.style.display = "block";
 }
 
