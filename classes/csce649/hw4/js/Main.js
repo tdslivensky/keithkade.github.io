@@ -28,7 +28,7 @@ var collidables = [];
 
 var polyAttr = {
     p: [-5, -20 , 0],
-    r: [Math.radians(90), Math.radians(60), Math.radians(10)]
+    r: [Math.radians(10), Math.radians(10), Math.radians(10)]
 };
 
 //ugly, but saves time garbage collecting
@@ -195,6 +195,9 @@ function simulate(){
     for (var j=0; j<bass.mesh.edges.length; j++){
         var edge = bass.mesh.edges[j];
         var edgeResponse = edgeEdgeResponse(edge, bass.mesh);
+        if (edgeResponse == "STAAHP"){
+            return;
+        }        
         if(edgeResponse){
             bass.STATE[edge[0]].copy(edgeResponse[0].xNew);
             bass.STATE[edge[0] + bass.count].copy(edgeResponse[0].vNew);
@@ -342,6 +345,9 @@ function edgeEdgeResponse(bassEdge, bassMesh){
                         mesh.geometry.vertices[edge[1]].y + mesh.position.y, 
                         mesh.geometry.vertices[edge[1]].z + mesh.position.z);
             
+            //if (edge[0] == 1 && edge[1] == 3)
+            //    return "STAAHP";
+            
             v1_mut.copy(p2).sub(p1); //a
             v2_mut.copy(q2).sub(q1); //b
             
@@ -359,13 +365,14 @@ function edgeEdgeResponse(bassEdge, bassMesh){
             var t = -1 * v4_mut.dot(v8_mut) / v2_mut.dot(v7_mut);   // -r . (aHat x nHat) / b . (aHat x nHat)
             
             if (s < 0 || s > 1 || t < 0 || t > 1){
-                return false;
+                continue;
             }
             else {
                 pa = v1_mut.multiplyScalar(s).add(p1); //pa = p1 +sa
                 qa = v2_mut.multiplyScalar(t).add(q1); //qa = q1 +tb   
-                var dist = qa.sub(pa).length();
-                if (dist < 1){
+                var dist = qa.clone().sub(pa).length(); //clone is for debugging
+                if (dist < 2){ 
+                    Boiler.drawPoint(qa);
                     console.log('collision detected');                    
                     console.log(dist);
                 }

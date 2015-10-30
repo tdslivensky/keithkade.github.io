@@ -25,7 +25,7 @@ Util.addEdges = function(mesh){
         var face = mesh.geometry.faces[j];
         mesh.edges.push(Util.sortTwo([face.a, face.b]));
         mesh.edges.push(Util.sortTwo([face.a, face.c]));
-        mesh.edges.push(Util.sortTwo([face.a, face.b]));
+        mesh.edges.push(Util.sortTwo([face.b, face.c]));
     }
     mesh.edges = mesh.edges.uniqueTuples();
 };
@@ -206,7 +206,7 @@ Boiler.drawPoint = function(x){
     });
 
     var sprite = new THREE.Sprite(material);
-    sprite.scale.set( 5, 5, 1 ); 
+    sprite.scale.set( 1, 1, 1 ); 
     sprite.position.set(x.x, x.y, x.z);
     scene.add(sprite);
 };
