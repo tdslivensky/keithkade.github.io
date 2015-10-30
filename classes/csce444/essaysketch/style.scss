@@ -64,16 +64,6 @@ h1 {
     cursor: pointer;
 }
 
-.fade {
-    animation-name: fadeout;
-    animation-duration: 4s;
-}
-
-@keyframes fadeout {
-    from {opacity: 1;}
-    to {opacity: 0;}    
-}
-
 #about-link {
     display: none;
     position: fixed;

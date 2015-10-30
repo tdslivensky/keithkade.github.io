@@ -256,8 +256,6 @@ var MemexNode = React.createClass({
 });
 
 var MonolithNode = React.createClass({
-    //TODO fade choices out
-    
     render: function() {
         return (
             <article className="landmark">
@@ -350,12 +348,22 @@ function renderPage(page){
             );
             break;
     }
+    setTimeout(fadeLinks, 1000);
+}
+
+function fadeLinks(){
+    //fade out the appropriate links
+    var links = doc.getElementsByClassName('fade');
+    for (var i=0; i < links.length; i++){
+        links[i].style.transition = '3s';
+        links[i].style.opacity = '0';
+    }
 }
 
 /* Start navigation */ 
 
 function start(){
-    for (var i=0; i<100; i++){
+    for (var i=0; i<20; i++){
         history.pushState({}, null, 'tworoads');
     }
     renderPage('monolith');
