@@ -191,13 +191,15 @@ function simulate(){
     
     //COLLISION DETECTION
     
-    //TODO Edge-Edge Collision
+    //Edge-Edge Collision
     for (var j=0; j<bass.mesh.edges.length; j++){
         var edge = bass.mesh.edges[j];
         var edgeResponse = edgeEdgeResponse(edge, bass.mesh);
         if (edgeResponse == "STAAHP"){
             return;
-        }        
+        }     
+        //TODO barycentric weighting scheme
+        //TODO response
         if(edgeResponse){
             bass.STATE[edge[0]].copy(edgeResponse[0].xNew);
             bass.STATE[edge[0] + bass.count].copy(edgeResponse[0].vNew);
@@ -205,7 +207,6 @@ function simulate(){
             bass.STATE[edge[1] + bass.count].copy(edgeResponse[1].vNew);            
         }
     }
-    
     
     //Vertex Face Collision
     for (var i = 0; i < bass.count; i++){
