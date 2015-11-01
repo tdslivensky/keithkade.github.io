@@ -18,9 +18,9 @@ var LINK_PREVIEW_CHANCE = 75;
 var PREVIEW_CORRECT_CHANCE = 75;
 var NAV_CORRECT_CHANCE = 95;
 var URL_CORRECT_CHANCE = 75;
-var PREVIEW_IMAGE_CHANCE = 100;
+var ZOOM_CORRECT_CHANCE = 90;
 
-//these two can change
+//these two grow over time
 var ROTATE_CHANCE = 5;
 var SKEW_CHANCE = 5;
 
@@ -70,6 +70,16 @@ var ChoiceLink = React.createClass({
     handleClick: function handleClick(event) {
         var xDelt = window.innerWidth / 2 - event.clientX;
         var yDelt = 310 - (event.clientY - 50);
+
+        var rand = Util.getRandom(0, 100);
+        if (rand > ZOOM_CORRECT_CHANCE) {
+            xDelt *= -1;
+        }
+        rand = Util.getRandom(0, 100);
+        if (rand > ZOOM_CORRECT_CHANCE) {
+            yDelt *= -1;
+        }
+
         image.style.transition = '1s ease';
         image.style.transform = 'scale(1.3, 1.3) translate(' + xDelt / 4 + 'px,' + yDelt / 4 + 'px)';
         loadPage(this.props.target, 1000);
@@ -111,6 +121,7 @@ var LandmarkLink = React.createClass({
     render: renderLink
 });
 
+/** These fade out after a few seconds and are not clickable */
 var FaderLink = React.createClass({
     displayName: 'FaderLink',
 
@@ -365,7 +376,7 @@ var MonolithNode = React.createClass({
 
 /* Page Transitions */
 
-//there should be a realistic delay
+/** there should be a realistic delay when switching pages */
 function loadPage(page, delay) {
     Util.deleteChildren(container);
     setTimeout(renderPage, delay, page);
@@ -378,6 +389,7 @@ function renderPage(page) {
     history.pushState({}, null, maybePage(page, URL_CORRECT_CHANCE));
     aboutLink.href = "about#" + page;
     switch (page) {
+        //choices
         case 'tworoads':
             image.src = "img/compressed/tworoads-crop.jpg";
             ReactDOM.render(React.createElement(TwoRoadsNode, { leftRoadTarget: 'monolith', rightRoadTarget: 'monolith' }), container);
@@ -413,7 +425,7 @@ function renderPage(page) {
             ReactDOM.render(React.createElement(PortalsNode, { leftTarget: Util.getRandomEntry(PAGES), middleTarget: Util.getRandomEntry(PAGES), rightTarget: Util.getRandomEntry(PAGES) }), container);
             break;
     }
-    //make glitches more likely
+    //make glitches more likely over time
     if (ROTATE_CHANCE < 15) {
         ROTATE_CHANCE++;
         SKEW_CHANCE++;
@@ -454,6 +466,7 @@ function start() {
     aboutLink.style.display = "block";
 }
 
+/** display messages when user tries to refresh */
 window.onbeforeunload = function () {
     var count = parseInt(sessionStorage.getItem("refreshCount"));
     if (count < REFRESH_MESSAGES.length - 1) {
