@@ -13,11 +13,14 @@ var axes;
 
 var bass;
 //if fish is false then render as cube
-var fish = false;
+var fish = true;
 var clock;
 
 var CR = 0.5;   // coefficient of restitution. 1 is maximum bouncy
 var CF = 0.5;   // coefficient of friction. 0 is no friction
+
+var K = 10;
+var D = 3;
 
 //variables that the user sets
 var H;              // Step time in seconds
@@ -51,7 +54,6 @@ var plane_mut = new THREE.Plane(new THREE.Vector3(0, 0, 0), 0);
 
 var vOld = new THREE.Vector3(0,0,0);
 var xOld = new THREE.Vector3(0,0,0);
-var acceleration = new THREE.Vector3(0,0,0);
 var vNew = new THREE.Vector3(0,0,0);
 var xNew = new THREE.Vector3(0,0,0);
 var collisionX = new THREE.Vector3(0,0,0);
@@ -59,8 +61,6 @@ var deriv;
 var K1, K2, K3, K4, oldState;
 
 //edge collisions
-var p1 = new THREE.Vector3(0,0,0);
-var p2 = new THREE.Vector3(0,0,0);
 var q1 = new THREE.Vector3(0,0,0);
 var q2 = new THREE.Vector3(0,0,0);
 var pa = new THREE.Vector3(0,0,0);
@@ -79,7 +79,7 @@ window.onload = function(){
     //add edges to the object    
     for (var p=0; p < collidables.length; p++){
         var mesh = collidables[p];
-        Util.addEdges(mesh);
+        Util.addStruts(mesh);
     }
     
     //change what the camera is looking at and add our controls
@@ -131,15 +131,45 @@ function initMotion(){
 //returns deep copy of array
 function F(state){
     //for all the particles apply gravity
-    for (var i = 0; i < bass.count; i++){
-        state_mut[i].copy(state[i + bass.count]);
+    for (var n = 0; n < bass.count; n++){
+        state_mut[n].copy(state[n + bass.count]);
         
-        xOld.copy(state[i]);
-        vOld.copy(state[i + bass.count]);
+        xOld.copy(state[n]);
+        vOld.copy(state[n + bass.count]);
 
-        acceleration.copy(G);                 
-        state_mut[i + bass.count].copy(acceleration);
+        state_mut[n + bass.count].copy(G); //accel due to gravity
     }
+    
+    for (var k = 0; k < bass.mesh.struts.length; k++){
+        var strut = bass.mesh.struts[k];
+        var i = strut.vertices[0];
+        var j = strut.vertices[1];
+        v1_mut.copy(state[i]); //x_i
+        v2_mut.copy(state[j]); //x_j
+        v3_mut.copy(v2_mut).sub(v1_mut); //x_ij
+        var l = v3_mut.length();
+        v4_mut.copy(v3_mut).normalize(); //x_ij_hat
+        
+        v5_mut.copy(v4_mut).multiplyScalar( (l - strut.rl) * strut.k); //fs
+        
+        //force to accel (breaks if mass < 1)
+        v8_mut.copy(v5_mut).multiplyScalar(1/bass.mesh.geometry.vertices[i].mass);
+        state_mut[i + bass.count].add(v8_mut); 
+        v8_mut.copy(v5_mut).multiplyScalar(1/bass.mesh.geometry.vertices[j].mass);        
+        state_mut[j + bass.count].sub(v5_mut);
+        
+        v6_mut.copy(state[j + bass.count]); // v_j
+        v6_mut.sub(state[i + bass.count]); //v_j - v_i
+        v7_mut.copy(v4_mut).multiplyScalar(v6_mut.dot(v4_mut) * strut.d);
+        
+        //force to accel
+        v8_mut.copy(v7_mut).multiplyScalar(1/bass.mesh.geometry.vertices[i].mass);
+        state_mut[i + bass.count].add(v8_mut); 
+        v8_mut.copy(v7_mut).multiplyScalar(1/bass.mesh.geometry.vertices[j].mass);
+        state_mut[j + bass.count].sub(v8_mut);
+    }
+    
+
     return state_mut;
 }
 
@@ -192,19 +222,24 @@ function simulate(){
     //COLLISION DETECTION
     
     //Edge-Edge Collision
-    for (var j=0; j<bass.mesh.edges.length; j++){
-        var edge = bass.mesh.edges[j];
-        var edgeResponse = edgeEdgeResponse(edge, bass.mesh);
+    for (var j=0; j<bass.mesh.struts.length; j++){
+        var strut = bass.mesh.struts[j].vertices;
+        var edgeResponse = edgeEdgeResponse(strut, 
+                                            bass.mesh, 
+                                            bass.STATE[strut[0]], 
+                                            bass.STATE[strut[1]], 
+                                            bass.STATE[strut[0] + bass.count], 
+                                            bass.STATE[strut[1] + bass.count]);
         if (edgeResponse == "STAAHP"){
             return;
         }     
         //TODO barycentric weighting scheme
-        //TODO response
+        //TODO fix issue where two edges collide w/ same edge and preference
         if(edgeResponse){
-            bass.STATE[edge[0]].copy(edgeResponse[0].xNew);
-            bass.STATE[edge[0] + bass.count].copy(edgeResponse[0].vNew);
-            bass.STATE[edge[1]].copy(edgeResponse[1].xNew);
-            bass.STATE[edge[1] + bass.count].copy(edgeResponse[1].vNew);            
+            bass.STATE[strut[0]].copy(edgeResponse[0].xNew);
+            bass.STATE[strut[0] + bass.count].copy(edgeResponse[0].vNew);
+            bass.STATE[strut[1]].copy(edgeResponse[1].xNew);
+            bass.STATE[strut[1] + bass.count].copy(edgeResponse[1].vNew);            
         }
     }
     
@@ -329,22 +364,19 @@ function pointInFace(x, p0, p1, p2){
 }
 
 //find results of any edge edge collisions
-function edgeEdgeResponse(bassEdge, bassMesh){
-    
-    p1.copy(bassMesh.geometry.vertices[bassEdge[0]]);
-    p2.copy(bassMesh.geometry.vertices[bassEdge[1]]);
+function edgeEdgeResponse(bassStrut, bassMesh, p1, p2, v1, v2){
     
     for (var i=0; i < collidables.length; i++){
         var mesh = collidables[i];
-        for (var j=0; j < mesh.edges.length; j++){
-            var edge = mesh.edges[j];
+        for (var j=0; j < mesh.struts.length; j++){
+            var strut = mesh.struts[j].vertices;
             
-            q1.set(mesh.geometry.vertices[edge[0]].x + mesh.position.x, 
-                        mesh.geometry.vertices[edge[0]].y + mesh.position.y,
-                        mesh.geometry.vertices[edge[0]].z + mesh.position.z);
-            q2.set(mesh.geometry.vertices[edge[1]].x + mesh.position.x, 
-                        mesh.geometry.vertices[edge[1]].y + mesh.position.y, 
-                        mesh.geometry.vertices[edge[1]].z + mesh.position.z);
+            q1.set(mesh.geometry.vertices[strut[0]].x + mesh.position.x, 
+                        mesh.geometry.vertices[strut[0]].y + mesh.position.y,
+                        mesh.geometry.vertices[strut[0]].z + mesh.position.z);
+            q2.set(mesh.geometry.vertices[strut[1]].x + mesh.position.x, 
+                        mesh.geometry.vertices[strut[1]].y + mesh.position.y, 
+                        mesh.geometry.vertices[strut[1]].z + mesh.position.z);
             
             //if (edge[0] == 1 && edge[1] == 3)
             //    return "STAAHP";
@@ -359,23 +391,43 @@ function edgeEdgeResponse(bassEdge, bassMesh){
             v5_mut.copy(v1_mut).normalize(); //aHat
             v6_mut.copy(v2_mut).normalize(); //bHat
             
-            v7_mut.copy(v3_mut).cross(v5_mut); //nHat x aHat
-            v8_mut.copy(v3_mut).cross(v6_mut); //nHat x bHat
+            v7_mut.copy(v5_mut).cross(v3_mut); // aHat x nHat 
+            v8_mut.copy(v6_mut).cross(v3_mut); // bHat x nHat 
             
-            var s = v4_mut.dot(v7_mut) / v1_mut.dot(v8_mut);        // r . (bHat x nHat) / a . (bHat x nHat)
-            var t = -1 * v4_mut.dot(v8_mut) / v2_mut.dot(v7_mut);   // -r . (aHat x nHat) / b . (aHat x nHat)
+            var s = v4_mut.dot(v8_mut) / v1_mut.dot(v8_mut);        // r . (bHat x nHat) / a . (bHat x nHat)
+            var t = -1 * v4_mut.dot(v7_mut) / v2_mut.dot(v7_mut);   // -r . (aHat x nHat) / b . (aHat x nHat)
             
             if (s < 0 || s > 1 || t < 0 || t > 1){
                 continue;
             }
             else {
-                pa = v1_mut.multiplyScalar(s).add(p1); //pa = p1 +sa
-                qa = v2_mut.multiplyScalar(t).add(q1); //qa = q1 +tb   
+                pa.copy(v1_mut).multiplyScalar(s).add(p1); //pa = p1 +sa
+                qa.copy(v2_mut).multiplyScalar(t).add(q1); //qa = q1 +tb   
                 var dist = qa.clone().sub(pa).length(); //clone is for debugging
-                if (dist < 2){ 
-                    Boiler.drawPoint(qa);
-                    console.log('collision detected');                    
-                    console.log(dist);
+                if (dist < 0.5){ 
+                    
+                    var magnitude = v1_mut.copy(v1).add(v2).multiplyScalar(0.5).length(); //average magnitude
+                    v4_mut.copy(v3_mut).multiplyScalar(magnitude); //points move in opposite direction
+                
+                    var response = [{
+                        xNew : new THREE.Vector3(0,0,0),
+                        vNew : new THREE.Vector3(0,0,0)
+                    },{
+                        xNew : new THREE.Vector3(0,0,0),
+                        vNew : new THREE.Vector3(0,0,0) 
+                    }];
+                    response[0].vNew.copy(v4_mut);
+                    response[1].vNew.copy(v4_mut); 
+                    
+                    response[0].xNew.copy(integrateVector(p1, v4_mut, H));
+                    response[1].xNew.copy(integrateVector(p2, v4_mut, H));
+                        
+                    //Boiler.drawPoint(response[0].xNew);
+                    //Boiler.drawPoint(qa);
+                    //Boiler.drawPoint(p1);
+                    //Boiler.drawPoint(p2);
+                    
+                    return response;    
                 }
             }
         }

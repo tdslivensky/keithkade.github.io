@@ -9,7 +9,7 @@ var START_V = new THREE.Vector3(0,0,0);
 
 var startGeom;
 
-function Bass(scene, callback, fish){   
+function Bass(scene, callback, fish){ 
     if (fish){
         var loader = new THREE.JSONLoader();
         loader.load( "js/bass_model.js", function( geometry ) {
@@ -24,6 +24,7 @@ function Bass(scene, callback, fish){
                 this.mesh.geometry.vertices[i].x *= 100;
                 this.mesh.geometry.vertices[i].y *= 100;
                 this.mesh.geometry.vertices[i].z *= 100;
+                this.mesh.geometry.vertices[i].mass = 1;
 
                 this.STATE[i] = new THREE.Vector3(
                     this.mesh.geometry.vertices[i].x,
@@ -32,7 +33,7 @@ function Bass(scene, callback, fish){
                 );
                 this.STATE[i + this.count] = new THREE.Vector3(0,0,0);
             }
-            Util.addEdges(this.mesh);
+            Util.addStruts(this.mesh);
             scene.add(this.mesh);
             callback();
         }.bind(this) );
@@ -54,6 +55,7 @@ function Bass(scene, callback, fish){
             this.mesh.geometry.vertices[i].x *= 10;
             this.mesh.geometry.vertices[i].y *= 10;
             this.mesh.geometry.vertices[i].z *= 10;
+            this.mesh.geometry.vertices[i].mass = 1;
 
             this.STATE[i] = new THREE.Vector3(
                 this.mesh.geometry.vertices[i].x,
@@ -62,7 +64,7 @@ function Bass(scene, callback, fish){
             );
             this.STATE[i + this.count] = new THREE.Vector3(0,0,0);
         }
-        Util.addEdges(this.mesh);
+        Util.addStruts(this.mesh);
         scene.add(this.mesh);
     }
 

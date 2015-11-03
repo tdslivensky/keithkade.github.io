@@ -1,4 +1,4 @@
-/*global THREE, window, doc, scene, renderer, axes, SPREAD, FACES */
+/*global THREE, window, doc, scene, renderer, axes, SPREAD, FACES, K, D */
 
 /**
  * Returns a random number between min (inclusive) and max (exclusive). 
@@ -18,16 +18,42 @@ Util.sortTwo = function(tuple){
         return [tuple[1], tuple[0]];
 };
 
-/** add a list of unique edges to a mesh */
-Util.addEdges = function(mesh){
-    mesh.edges = [];
+/** 
+ * add a list of unique edges to a mesh 
+ * inefficient, but only runs once
+ */
+Util.addStruts = function(mesh){
+    var struts = [];
+    var vArr = mesh.geometry.vertices;
+    
     for (var j = 0; j < mesh.geometry.faces.length; j++){
         var face = mesh.geometry.faces[j];
-        mesh.edges.push(Util.sortTwo([face.a, face.b]));
-        mesh.edges.push(Util.sortTwo([face.a, face.c]));
-        mesh.edges.push(Util.sortTwo([face.b, face.c]));
+        struts.push(
+            {
+                vertices : Util.sortTwo([face.a, face.b]),
+                faces : [j],
+                rl : vArr[face.a].distanceTo(vArr[face.b])
+            }
+        );
+        
+        struts.push(
+            {
+                vertices : Util.sortTwo([face.a, face.c]),
+                faces : [j],
+                rl : vArr[face.a].distanceTo(vArr[face.c])
+            }
+        );
+        
+        struts.push(
+            {
+                vertices : Util.sortTwo([face.b, face.c]),
+                faces : [j],
+                rl : vArr[face.b].distanceTo(vArr[face.c])
+            }
+        );
     }
-    mesh.edges = mesh.edges.uniqueTuples();
+    
+    mesh.struts = struts.uniqueStruts();
 };
 
 // Source: http://cwestblog.com/2012/11/12/javascript-degree-and-radian-conversion/
@@ -41,12 +67,17 @@ Math.degrees = function(radians) {
   return radians * 180 / Math.PI;
 };
 
-// Source: http://codereview.stackexchange.com/questions/60128/removing-duplicates-from-an-array-quickly
-/** removes duplicates from array */
-Array.prototype.uniqueTuples = function() {
+/** removes duplicates from array and add the faces back to the data structure */
+Array.prototype.uniqueStruts = function() {
     return this.reduce(function(accum, current) {
-        if (accum.indexOfTuple(current) < 0) {
+        var index = accum.indexOfTuple(current.vertices);
+        if (index < 0) {
+            current.d = K;
+            current.k = D;
             accum.push(current);
+        }
+        else {
+            accum[index].faces = accum[index].faces.concat(current.faces);
         }
         return accum;
     }, []);
@@ -54,7 +85,7 @@ Array.prototype.uniqueTuples = function() {
 
 Array.prototype.indexOfTuple = function(tuple){
     for(var i = 0; i < this.length; i++) {
-        if (this[i].equalsTupleArr(tuple)) return i;
+        if (this[i].vertices.equalsTupleArr(tuple)) return i;
     }
     return -1;
 };
