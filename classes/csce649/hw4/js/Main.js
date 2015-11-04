@@ -1,3 +1,4 @@
+/*jshint -W004*/
 /*global document, THREE, setInterval, setTimeout, requestAnimationFrame, waitTime, console, window, Util, Bass, getUserInputs, Boiler*/ 
 
 /** 
@@ -13,31 +14,38 @@ var axes;
 
 var bass;
 //if fish is false then render as cube
-var fish = true;
+var fish = false;
 var clock;
+var vertArr; //shorthand reference to the vertice array of the bass
 
 var CR = 0.5;   // coefficient of restitution. 1 is maximum bouncy
 var CF = 0.5;   // coefficient of friction. 0 is no friction
 
 var K = 10;
+var KTOR = 100;
 var D = 3;
+var DTOR = 30;
 
 //variables that the user sets
 var H;              // Step time in seconds
 var H_MILLI;        // In milliseconds
 var G = new THREE.Vector3(0, -9.81, 0);  // The accel due to gravity in m/s^2 
+var useRK4 = false;
+
 
 var collidables = [];
 
-var polyAttr = {
-    p: [-5, -20 , 0],
-    r: [Math.radians(10), Math.radians(10), Math.radians(10)]
+var cubeAttr = {
+    p: [-10, -30 , 0],
+    r: [Math.radians(10), Math.radians(30), Math.radians(30)],
+    scale: 20
 };
 
 //ugly, but saves time garbage collecting
 var state_mut;
 
-var v1_mut = new THREE.Vector3(0,0,0); //I keep mutable vectors for all calculations
+var v0_mut = new THREE.Vector3(0,0,0); //I keep mutable vectors for all calculations
+var v1_mut = new THREE.Vector3(0,0,0); 
 var v2_mut = new THREE.Vector3(0,0,0);
 var v3_mut = new THREE.Vector3(0,0,0);
 var v4_mut = new THREE.Vector3(0,0,0);
@@ -45,12 +53,30 @@ var v5_mut = new THREE.Vector3(0,0,0);
 var v6_mut = new THREE.Vector3(0,0,0);
 var v7_mut = new THREE.Vector3(0,0,0);
 var v8_mut = new THREE.Vector3(0,0,0);
+var v9_mut = new THREE.Vector3(0,0,0);
+var v10_mut = new THREE.Vector3(0,0,0);
+var v11_mut = new THREE.Vector3(0,0,0);
+var v12_mut = new THREE.Vector3(0,0,0);
 
+var fr0_mut = new THREE.Vector3(0,0,0); //I keep mutable vectors for all calculations
+var fr1_mut = new THREE.Vector3(0,0,0); 
+var fr2_mut = new THREE.Vector3(0,0,0);
+var fr3_mut = new THREE.Vector3(0,0,0);
+
+var r0_mut = new THREE.Vector3(0,0,0); //I keep mutable vectors for all calculations
+var r1_mut = new THREE.Vector3(0,0,0); 
+var r2_mut = new THREE.Vector3(0,0,0);
+var r3_mut = new THREE.Vector3(0,0,0);
+
+var torque = new THREE.Vector3(0,0,0);
 var p0_mut = new THREE.Vector3(0,0,0);
 var p1_mut = new THREE.Vector3(0,0,0);
 var p2_mut = new THREE.Vector3(0,0,0);
 var vNormal = new THREE.Vector3(0,0,0);
 var plane_mut = new THREE.Plane(new THREE.Vector3(0, 0, 0), 0);
+
+var f1_mut = new THREE.Face3();
+var f2_mut = new THREE.Face3();
 
 var vOld = new THREE.Vector3(0,0,0);
 var xOld = new THREE.Vector3(0,0,0);
@@ -72,7 +98,7 @@ window.onload = function(){
     camera = Boiler.initCamera();
     light = Boiler.initLight();
     axes = Boiler.initAxes();
-    polygon = Boiler.initPolygon(polyAttr);
+    polygon = Boiler.initCube(cubeAttr);
     
     collidables.push(polygon);
     
@@ -89,6 +115,8 @@ window.onload = function(){
     render();
     
     bass = new Bass(scene, loadIntegrationVars, fish);
+    vertArr = bass.mesh.geometry.vertices; //shorthand
+
     if (!fish){
         loadIntegrationVars();
     }
@@ -130,7 +158,8 @@ function initMotion(){
 //gets the derivative of a state. plus external forces
 //returns deep copy of array
 function F(state){
-    //for all the particles apply gravity
+    
+    //gravity
     for (var n = 0; n < bass.count; n++){
         state_mut[n].copy(state[n + bass.count]);
         
@@ -140,6 +169,7 @@ function F(state){
         state_mut[n + bass.count].copy(G); //accel due to gravity
     }
     
+    //edge springs
     for (var k = 0; k < bass.mesh.struts.length; k++){
         var strut = bass.mesh.struts[k];
         var i = strut.vertices[0];
@@ -150,12 +180,12 @@ function F(state){
         var l = v3_mut.length();
         v4_mut.copy(v3_mut).normalize(); //x_ij_hat
         
-        v5_mut.copy(v4_mut).multiplyScalar( (l - strut.rl) * strut.k); //fs
+        v5_mut.copy(v4_mut).multiplyScalar( (l - strut.rlength) * strut.k); //fs
         
         //force to accel (breaks if mass < 1)
-        v8_mut.copy(v5_mut).multiplyScalar(1/bass.mesh.geometry.vertices[i].mass);
+        v8_mut.copy(v5_mut).multiplyScalar(1/vertArr[i].mass);
         state_mut[i + bass.count].add(v8_mut); 
-        v8_mut.copy(v5_mut).multiplyScalar(1/bass.mesh.geometry.vertices[j].mass);        
+        v8_mut.copy(v5_mut).multiplyScalar(1/vertArr[j].mass);        
         state_mut[j + bass.count].sub(v5_mut);
         
         v6_mut.copy(state[j + bass.count]); // v_j
@@ -163,10 +193,62 @@ function F(state){
         v7_mut.copy(v4_mut).multiplyScalar(v6_mut.dot(v4_mut) * strut.d);
         
         //force to accel
-        v8_mut.copy(v7_mut).multiplyScalar(1/bass.mesh.geometry.vertices[i].mass);
+        v8_mut.copy(v7_mut).multiplyScalar(1/vertArr[i].mass);
         state_mut[i + bass.count].add(v8_mut); 
-        v8_mut.copy(v7_mut).multiplyScalar(1/bass.mesh.geometry.vertices[j].mass);
+        v8_mut.copy(v7_mut).multiplyScalar(1/vertArr[j].mass);
         state_mut[j + bass.count].sub(v8_mut);
+    }
+    
+    //torsional springs
+    for (var k = 0; k < bass.mesh.struts.length; k++){
+        var strut = bass.mesh.struts[k];
+        
+        f1_mut.copy(bass.mesh.geometry.faces[strut.faces[0]]); //left triangle
+        f2_mut.copy(bass.mesh.geometry.faces[strut.faces[1]]); //right triangle
+        
+        v0_mut.copy(vertArr[strut.vertices[0]]); //x0
+        v1_mut.copy(vertArr[strut.vertices[1]]); //x1
+        var x2_index = getOtherVertex(f1_mut, strut.vertices[0], strut.vertices[1]);
+        var x3_index = getOtherVertex(f2_mut, strut.vertices[0], strut.vertices[1]);
+        v2_mut.copy(vertArr[x2_index]); //x2
+        v3_mut.copy(vertArr[x3_index]); //x3
+        
+        v4_mut.copy(v0_mut).sub(v1_mut); //x_01
+        v5_mut.copy(v4_mut).normalize(); //x_01_hat = h_hat
+        
+        v6_mut.copy(v0_mut).sub(v2_mut); //x_02
+        v7_mut.copy(v0_mut).sub(v3_mut); //x_03
+
+        v8_mut.copy(v5_mut).multiplyScalar(v6_mut.dot(v5_mut)); // h_hat * (x_02 . h_hat)
+        v9_mut.copy(v5_mut).multiplyScalar(v7_mut.dot(v5_mut)); // h_hat * (x_03 . h_hat)
+        
+        v10_mut.copy(v6_mut).sub(v8_mut); // r_l
+        v11_mut.copy(v7_mut).sub(v9_mut); // r_r
+        
+        var theta = f1_mut.normal.angleTo(f2_mut.normal);
+        var otherTheta = Math.atan2(f1_mut.normal.clone().cross(f2_mut.normal).dot(v5_mut) , f1_mut.normal.dot(f2_mut.normal));
+        
+        var thetaDotL = state[x2_index + bass.count].dot(f1_mut.normal) / v10_mut.length();
+        var thetaDotR = state[x3_index + bass.count].dot(f2_mut.normal) / v11_mut.length();
+
+        torque.copy(v5_mut).multiplyScalar(strut.ktor * (theta - strut.rtheta) - strut.dtor * (thetaDotL + thetaDotR));
+        
+        fr2_mut.copy(f1_mut.normal).multiplyScalar(torque.dot(v5_mut) / v10_mut.length()); //f2
+        fr3_mut.copy(f2_mut.normal).multiplyScalar(torque.dot(v5_mut) / v11_mut.length()); //f3
+        
+        var d02 = v6_mut.dot(v5_mut);
+        var d03 = v7_mut.dot(v5_mut);
+        
+        v12_mut.copy(fr3_mut);
+        fr1_mut.copy(fr2_mut).multiplyScalar(d02).add(v12_mut.multiplyScalar(d03)).multiplyScalar(-1 / v4_mut.length());
+        
+        fr0_mut.copy(fr1_mut).add(fr2_mut).add(fr3_mut).multiplyScalar(-1);
+        
+        //add forces!
+        state_mut[strut.vertices[0] + bass.count].add(fr0_mut);
+        state_mut[strut.vertices[1] + bass.count].add(fr1_mut);
+        state_mut[x2_index + bass.count].add(fr2_mut);
+        state_mut[x3_index + bass.count].add(fr3_mut);
     }
     
 
@@ -185,10 +267,7 @@ function simulate(){
     //first order deriv
     deepCopy(deriv, F(bass.STATE));
 
-    if (false){ /******************************************* euler integration */ 
-        integrateState(bass.STATE, deriv, H);
-    }
-    else {      /******************************************* rk4 integration */ 
+    if (useRK4) {       /******************************************* rk4 integration */ 
         deepCopy(K1, deriv);//K1 = F(Xn)
 
         //second order deriv
@@ -218,6 +297,9 @@ function simulate(){
         //Xn+1 = Xn + (K1 + 2*K2 + 2*K3 + K4)/6
         integrateState(bass.STATE, K1, H/6);
     }
+    else {              /******************************************* euler integration */ 
+        integrateState(bass.STATE, deriv, H);
+    }
     
     //COLLISION DETECTION
     
@@ -229,12 +311,8 @@ function simulate(){
                                             bass.STATE[strut[0]], 
                                             bass.STATE[strut[1]], 
                                             bass.STATE[strut[0] + bass.count], 
-                                            bass.STATE[strut[1] + bass.count]);
-        if (edgeResponse == "STAAHP"){
-            return;
-        }     
+                                            bass.STATE[strut[1] + bass.count]);    
         //TODO barycentric weighting scheme
-        //TODO fix issue where two edges collide w/ same edge and preference
         if(edgeResponse){
             bass.STATE[strut[0]].copy(edgeResponse[0].xNew);
             bass.STATE[strut[0] + bass.count].copy(edgeResponse[0].vNew);
@@ -254,6 +332,7 @@ function simulate(){
     
     bass.moveParticles();
     bass.mesh.geometry.verticesNeedUpdate = true;
+    bass.mesh.geometry.computeFaceNormals();
 
     var waitTime = H_MILLI - clock.getDelta(); 
     if (waitTime < 4){ //4 milliseconds is the minimum wait for most browsers
@@ -278,7 +357,7 @@ function vertexFaceResponse(x1, x2, v1, v2){
         //all faces on the object
         for (var i=0; i < mesh.geometry.faces.length; i++){
             var face = mesh.geometry.faces[i];
-
+            
             v1_mut.copy(x1);
             v2_mut.copy(x2);
 
@@ -345,7 +424,7 @@ function pointInFace(x, p0, p1, p2){
     v1 = p1.sub(p0);
     v1_mut.copy(x);
     v2 = v1_mut.sub(p0);
-
+    
     // Compute dot products
     dot00 = v0.dot(v0);
     dot01 = v0.dot(v1);
@@ -377,9 +456,6 @@ function edgeEdgeResponse(bassStrut, bassMesh, p1, p2, v1, v2){
             q2.set(mesh.geometry.vertices[strut[1]].x + mesh.position.x, 
                         mesh.geometry.vertices[strut[1]].y + mesh.position.y, 
                         mesh.geometry.vertices[strut[1]].z + mesh.position.z);
-            
-            //if (edge[0] == 1 && edge[1] == 3)
-            //    return "STAAHP";
             
             v1_mut.copy(p2).sub(p1); //a
             v2_mut.copy(q2).sub(q1); //b
@@ -421,12 +497,7 @@ function edgeEdgeResponse(bassStrut, bassMesh, p1, p2, v1, v2){
                     
                     response[0].xNew.copy(integrateVector(p1, v4_mut, H));
                     response[1].xNew.copy(integrateVector(p2, v4_mut, H));
-                        
-                    //Boiler.drawPoint(response[0].xNew);
-                    //Boiler.drawPoint(qa);
-                    //Boiler.drawPoint(p1);
-                    //Boiler.drawPoint(p2);
-                    
+                                        
                     return response;    
                 }
             }
@@ -458,4 +529,21 @@ function deepCopy(state1, state2){
     for (var i = 0; i < state1.length; i++){
         state1[i].copy(state2[i]);
     }          
+}
+
+function toggleRK4(elem){
+    useRK4 = elem.checked;
+}
+
+/** gets the other vertex of a face */
+function getOtherVertex(face, v1, v2){
+    if ((face.a == v1 || face.a == v2) && (face.b == v1 || face.b == v2)){
+        return face.c; 
+    }
+    else if ((face.c == v1 || face.c == v2) && (face.b == v1 || face.b == v2)){
+        return face.a; 
+    }
+    else {
+        return face.b;
+    }
 }

@@ -7,8 +7,6 @@
 var START_X = new THREE.Vector3(0,0,0);
 var START_V = new THREE.Vector3(0,0,0);
 
-var startGeom;
-
 function Bass(scene, callback, fish){ 
     if (fish){
         var loader = new THREE.JSONLoader();
@@ -18,7 +16,7 @@ function Bass(scene, callback, fish){
 
             this.count = this.mesh.geometry.vertices.length;
             this.STATE = new Array(this.count * 2);
-
+			
             for (var i = 0; i < this.count; i++) {
                 //scale the mesh
                 this.mesh.geometry.vertices[i].x *= 100;
@@ -33,6 +31,7 @@ function Bass(scene, callback, fish){
                 );
                 this.STATE[i + this.count] = new THREE.Vector3(0,0,0);
             }
+            this.mesh.geometry.computeFaceNormals();
             Util.addStruts(this.mesh);
             scene.add(this.mesh);
             callback();
@@ -64,6 +63,7 @@ function Bass(scene, callback, fish){
             );
             this.STATE[i + this.count] = new THREE.Vector3(0,0,0);
         }
+        this.mesh.geometry.computeFaceNormals();    
         Util.addStruts(this.mesh);
         scene.add(this.mesh);
     }

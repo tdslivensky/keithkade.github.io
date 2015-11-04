@@ -1,4 +1,4 @@
-/*global THREE, window, doc, scene, renderer, axes, SPREAD, FACES, K, D */
+/*global THREE, window, doc, scene, renderer, axes, SPREAD, FACES, K, D, KTOR, DTOR */
 
 /**
  * Returns a random number between min (inclusive) and max (exclusive). 
@@ -32,7 +32,7 @@ Util.addStruts = function(mesh){
             {
                 vertices : Util.sortTwo([face.a, face.b]),
                 faces : [j],
-                rl : vArr[face.a].distanceTo(vArr[face.b])
+                rlength : vArr[face.a].distanceTo(vArr[face.b])
             }
         );
         
@@ -40,7 +40,7 @@ Util.addStruts = function(mesh){
             {
                 vertices : Util.sortTwo([face.a, face.c]),
                 faces : [j],
-                rl : vArr[face.a].distanceTo(vArr[face.c])
+                rlength : vArr[face.a].distanceTo(vArr[face.c])
             }
         );
         
@@ -48,12 +48,26 @@ Util.addStruts = function(mesh){
             {
                 vertices : Util.sortTwo([face.b, face.c]),
                 faces : [j],
-                rl : vArr[face.b].distanceTo(vArr[face.c])
+                rlength : vArr[face.b].distanceTo(vArr[face.c])
             }
         );
     }
     
-    mesh.struts = struts.uniqueStruts();
+    mesh.struts = uniqueStruts(struts);
+    
+    for (var i = 0; i < mesh.struts.length; i++){
+        var strut = mesh.struts[i];
+        var face1 = mesh.geometry.faces[strut.faces[0]];
+        var face2 = mesh.geometry.faces[strut.faces[1]];
+        
+        //if object is 2d
+        if (!face1 || !face2){
+            strut.rtheta = null;    
+        }
+        else {
+            strut.rtheta = face1.normal.angleTo(face2.normal);
+        }
+    }
 };
 
 // Source: http://cwestblog.com/2012/11/12/javascript-degree-and-radian-conversion/
@@ -67,13 +81,18 @@ Math.degrees = function(radians) {
   return radians * 180 / Math.PI;
 };
 
-/** removes duplicates from array and add the faces back to the data structure */
-Array.prototype.uniqueStruts = function() {
-    return this.reduce(function(accum, current) {
+/** 
+ * removes duplicates from array and add the faces back to the data structure 
+ * also gets rest face lengths
+*/
+function uniqueStruts(arr, mesh) {
+    return arr.reduce(function(accum, current) {
         var index = accum.indexOfTuple(current.vertices);
         if (index < 0) {
             current.d = K;
             current.k = D;
+            current.ktor = KTOR;
+            current.dtor = DTOR;
             accum.push(current);
         }
         else {
@@ -81,7 +100,7 @@ Array.prototype.uniqueStruts = function() {
         }
         return accum;
     }, []);
-};
+}
 
 Array.prototype.indexOfTuple = function(tuple){
     for(var i = 0; i < this.length; i++) {
@@ -142,25 +161,29 @@ Boiler.initLight = function(){
     return pointLight;
 };
 
-/** the surface that bass will bounce off of. */
-Boiler.initPolygon = function(polyAttr){
-    var geometry = new THREE.PlaneGeometry(20, 20);
-    var material = new THREE.MeshBasicMaterial( {color: 0xa0a0ff, side: THREE.DoubleSide} );
-    var polygon = new THREE.Mesh( geometry, material );
+/** the object that bass will bounce off of. */
+Boiler.initCube = function(cubeAttr){
+    var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    var material = new THREE.MeshNormalMaterial( /* { wireframe: true } */ );
+    var cube = new THREE.Mesh( geometry, material );
         
-    polygon.position.set(polyAttr.p[0], polyAttr.p[1], polyAttr.p[2]);
+    cube.position.set(cubeAttr.p[0], cubeAttr.p[1], cubeAttr.p[2]);
+
+    for (var i = 0; i < cube.geometry.vertices.length; i++) {
+        //scale the mesh
+        cube.geometry.vertices[i].x *= cubeAttr.scale;
+        cube.geometry.vertices[i].y *= cubeAttr.scale;
+        cube.geometry.vertices[i].z *= cubeAttr.scale;
+    }
     
-    polygon.geometry.applyMatrix(
+    cube.geometry.applyMatrix(
         new THREE.Matrix4().makeRotationFromEuler(
-            new THREE.Euler( polyAttr.r[0], polyAttr.r[1], polyAttr.r[2])
+            new THREE.Euler( cubeAttr.r[0], cubeAttr.r[1], cubeAttr.r[2])
         )
     );
-        
-    var wireframe = new THREE.WireframeHelper( polygon, 0x00ff00 );
-    scene.add(wireframe);
 
-    scene.add(polygon);
-    return polygon;
+    scene.add(cube);
+    return cube;
 };
 
 /** draw x, y and z axes */
@@ -227,8 +250,8 @@ Boiler.initLabel = function(text, color, coords){
     var sprite = new THREE.Sprite(mat);
     sprite.scale.set( 10, 10, 1 ); 
     sprite.position.set(coords[0], coords[1], coords[2]);
-    return sprite;  
     
+    return sprite;  
 };
 
 Boiler.drawPoint = function(x){

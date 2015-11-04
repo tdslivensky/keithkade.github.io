@@ -35,6 +35,9 @@
             <li><input id="H" type="number" value="0.02" min=".001" step=".001" onchange="inputChange()"> - Time Step </li>
         </ul>
         <label><input class="checkbox" type="checkbox" onclick='Boiler.toggleAxes(this)' checked> Show XYZ Axes</label>
+        <br/>
+        <br/>
+        <label><input class="checkbox" type="checkbox" onclick='toggleRK4(this)' checked> RK4 integration</label>        
         <button class="restart-btn" onclick="initMotion()">Drop the Bass</button>
     </div>
     <div id="webgl-container"></div>
