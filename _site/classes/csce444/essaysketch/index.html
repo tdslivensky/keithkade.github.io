@@ -12,7 +12,30 @@
 </head>
 
 <body>
-    <div id="container"></div>
+    <div id="view-window">
+        <div class="windowed" id="frame"></div>
+        <img class="windowed" id="background-img"/>
+        <div class="windowed" id="container">
+            <div id="welcome">
+                <p>
+                    Welcome to my essaysketch.
+                    <br/>
+                    <br/>
+                    Use the links to navigate the site I have created.
+                    You will have many navigational choices.
+                    Keep an eye out for landmarks, they can help you orient yourself.
+                </p>
+                <br/>
+                <button onclick="start();">Start</button>
+                <br/>
+                <br/>
+                <a href="about" target="_blank" style="color: white">About the site</a>
+            </div>
+        </div>
+    </div>
+    
+    <a id="about-link" target="_blank">About this node</a>
+    <div id="link-preview"></div>
 </body>
 
 <script src="js/build/react.js"></script>

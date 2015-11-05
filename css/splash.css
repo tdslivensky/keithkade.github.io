@@ -1,21 +1,21 @@
-/* line 1, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+/* line 1, /Users/kadekeith/Desktop/keithkade.github/css/splash.scss */
 html {
   height: 100%; }
 
-/* line 5, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+/* line 5, /Users/kadekeith/Desktop/keithkade.github/css/splash.scss */
 body {
   font-family: 'Lato', sans-serif;
   color: white;
-  background: url(../img/backgroundEdit.png) no-repeat center center fixed;
+  background: url(../img/compressed/backgroundEdit.png) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover; }
 
-/* line 16, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+/* line 16, /Users/kadekeith/Desktop/keithkade.github/css/splash.scss */
 #content {
   margin-left: 96px; }
-  /* line 20, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+  /* line 20, /Users/kadekeith/Desktop/keithkade.github/css/splash.scss */
   #content h1 {
     font-weight: 300;
     font-size: 60px;
@@ -23,28 +23,28 @@ body {
     padding: 0;
     margin-bottom: 0;
     margin-left: -4px; }
-  /* line 29, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+  /* line 29, /Users/kadekeith/Desktop/keithkade.github/css/splash.scss */
   #content p {
     font-size: 30px;
     font-weight: 300;
     margin-top: 2px; }
-  /* line 35, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+  /* line 35, /Users/kadekeith/Desktop/keithkade.github/css/splash.scss */
   #content nav ul {
     margin: 0;
     padding: 0; }
-    /* line 39, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+    /* line 39, /Users/kadekeith/Desktop/keithkade.github/css/splash.scss */
     #content nav ul li {
       list-style: none;
       margin-top: 30px;
       margin-left: -14px;
       animation: fadein 1s; }
-    /* line 46, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+    /* line 46, /Users/kadekeith/Desktop/keithkade.github/css/splash.scss */
     #content nav ul a {
       font-size: 18px;
       padding: 16px;
       color: white;
       text-decoration: none; }
-    /* line 53, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+    /* line 53, /Users/kadekeith/Desktop/keithkade.github/css/splash.scss */
     #content nav ul a:hover {
       color: dimgrey; }
 
@@ -54,7 +54,7 @@ body {
   to {
     opacity: 1; } }
 
-/* line 64, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+/* line 64, /Users/kadekeith/Desktop/keithkade.github/css/splash.scss */
 #fll {
   color: white;
   position: fixed;
@@ -63,14 +63,14 @@ body {
   font-size: 20px; }
 
 @media (max-width: 560px) {
-  /* line 73, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+  /* line 73, /Users/kadekeith/Desktop/keithkade.github/css/splash.scss */
   #content {
     margin-left: 16px; }
-    /* line 76, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+    /* line 76, /Users/kadekeith/Desktop/keithkade.github/css/splash.scss */
     #content h1 {
       margin-top: 40px;
       font-size: 40px; }
-    /* line 80, /Users/kadekeith/Desktop/keithkade.github.io/css/splash.scss */
+    /* line 80, /Users/kadekeith/Desktop/keithkade.github/css/splash.scss */
     #content p {
       font-size: 20px; } }
 

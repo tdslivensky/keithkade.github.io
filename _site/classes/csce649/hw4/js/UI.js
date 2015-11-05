@@ -11,7 +11,6 @@ function inputChange(elem, id){
         doc.getElementById(id).value = elem.value;
     }
     getUserInputs();
-    moveZooka();
 }
 
 /** these might be able to be be optimized. lots of code */ 
