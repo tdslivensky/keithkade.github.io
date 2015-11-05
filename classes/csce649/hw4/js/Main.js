@@ -14,7 +14,7 @@ var axes;
 
 var springy;
 //if fish is false then render as cube
-var fish = true;
+var fish = false;
 var clock;
 var vertArr; //shorthand reference to the vertice array of the bass
 
