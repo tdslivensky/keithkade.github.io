@@ -22,8 +22,8 @@
             </li>
             <li>
                 Y
-                <input id="g.y-slider" class="slider" type="range" value="-9.81" step=".01" min="-10" max="10" oninput="inputChange(this, 'g.y')">
-                <input id="g.y" type="number" value="-9.81" step="any" oninput="inputChange(this, 'g.y-slider')">
+                <input id="g.y-slider" class="slider" type="range" value="0" step=".01" min="-10" max="10" oninput="inputChange(this, 'g.y')">
+                <input id="g.y" type="number" value="0" step="any" oninput="inputChange(this, 'g.y-slider')">
             </li>
             <li>
                 Z
@@ -34,11 +34,12 @@
         <ul>
             <li><input id="H" type="number" value="0.02" min=".001" step=".001" onchange="inputChange()"> - Time Step </li>
         </ul>
-        <label><input class="checkbox" type="checkbox" onclick='Boiler.toggleAxes(this)' checked> Show XYZ Axes</label>
+        <label><input class="checkbox" type="checkbox" onclick='Boiler.toggleAxes(this)'> Show XYZ Axes</label>
         <br/>
         <br/>
         <label><input class="checkbox" type="checkbox" onclick='toggleRK4(this)' checked> RK4 integration</label>        
-        <button class="restart-btn" onclick="initMotion()">Drop the Bass</button>
+        <button class="restart-btn" onclick="initMotion()">Start</button>
+        <button class="restart-btn" onclick="nudge()">Nudge</button>
     </div>
     <div id="webgl-container"></div>
 </body>
@@ -46,7 +47,7 @@
 <script src="js/three.min.js"></script>
 <script src="js/OrbitControls.js"></script>    
 <script src="js/Util.js"></script>    
-<script src="js/Bass.js"></script>
+<script src="js/Springy.js"></script>
 <script src="js/Main.js"></script>
 <script src="js/UI.js"></script> 
     

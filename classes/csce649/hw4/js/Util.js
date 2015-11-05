@@ -1,3 +1,4 @@
+/*jshint -W004*/
 /*global THREE, window, doc, scene, renderer, axes, SPREAD, FACES, K, D, KTOR, DTOR */
 
 /**
@@ -23,9 +24,28 @@ Util.sortTwo = function(tuple){
  * inefficient, but only runs once
  */
 Util.addStruts = function(mesh){
+        
     var struts = [];
     var vArr = mesh.geometry.vertices;
     
+    for (var i=0; i < vArr.length; i++){
+        for (var j=i; j < vArr.length; j++){
+            if (i==j) continue;
+            var strut = {
+                vertices : [j,i],
+                rlength : vArr[j].distanceTo(vArr[i]),
+                k : K,
+                d : D
+            };
+            struts.push(strut);
+        }
+    }
+    
+    mesh.struts = struts;
+    
+    //old implementation used faces. new I use cross springs
+/*  
+
     for (var j = 0; j < mesh.geometry.faces.length; j++){
         var face = mesh.geometry.faces[j];
         struts.push(
@@ -35,7 +55,7 @@ Util.addStruts = function(mesh){
                 rlength : vArr[face.a].distanceTo(vArr[face.b])
             }
         );
-        
+
         struts.push(
             {
                 vertices : Util.sortTwo([face.a, face.c]),
@@ -43,7 +63,7 @@ Util.addStruts = function(mesh){
                 rlength : vArr[face.a].distanceTo(vArr[face.c])
             }
         );
-        
+
         struts.push(
             {
                 vertices : Util.sortTwo([face.b, face.c]),
@@ -52,14 +72,15 @@ Util.addStruts = function(mesh){
             }
         );
     }
-    
+
     mesh.struts = uniqueStruts(struts);
-    
-    for (var i = 0; i < mesh.struts.length; i++){
+
+    for (var i = 0; i < len; i++){
         var strut = mesh.struts[i];
+
         var face1 = mesh.geometry.faces[strut.faces[0]];
         var face2 = mesh.geometry.faces[strut.faces[1]];
-        
+
         //if object is 2d
         if (!face1 || !face2){
             strut.rtheta = null;    
@@ -67,7 +88,7 @@ Util.addStruts = function(mesh){
         else {
             strut.rtheta = face1.normal.angleTo(face2.normal);
         }
-    }
+    }*/
 };
 
 // Source: http://cwestblog.com/2012/11/12/javascript-degree-and-radian-conversion/
@@ -89,15 +110,15 @@ function uniqueStruts(arr, mesh) {
     return arr.reduce(function(accum, current) {
         var index = accum.indexOfTuple(current.vertices);
         if (index < 0) {
-            current.d = K;
-            current.k = D;
-            current.ktor = KTOR;
-            current.dtor = DTOR;
+            current.k = K;
+            current.d = D;
+//            current.ktor = KTOR;
+//            current.dtor = DTOR;
             accum.push(current);
         }
-        else {
-            accum[index].faces = accum[index].faces.concat(current.faces);
-        }
+//        else {
+//            accum[index].faces = accum[index].faces.concat(current.faces);
+//        }
         return accum;
     }, []);
 }
@@ -201,7 +222,7 @@ Boiler.initAxes = function(){
     axes.add(Boiler.initLabel('Y','#00ff00', [0, 25, 0]));
     axes.add(Boiler.initLabel('Z','#0000ff', [0, 0, 25]));
     
-    scene.add(axes);
+    //scene.add(axes);
     return axes;
 };
 

@@ -1,5 +1,5 @@
 /*jshint -W004*/
-/*global document, THREE, setInterval, setTimeout, requestAnimationFrame, waitTime, console, window, Util, Bass, getUserInputs, Boiler*/ 
+/*global document, THREE, setInterval, setTimeout, requestAnimationFrame, waitTime, console, window, Util, Springy, getUserInputs, Boiler*/ 
 
 /** 
  *   @author: Kade Keith
@@ -9,36 +9,41 @@ var doc = document; //shorthand
 var simTimeout;     //for starting and stopping the sim
 
 //boilerplate
-var scene, renderer, camera, light, polygon;
+var scene, renderer, camera, light;
 var axes;
 
-var bass;
+var springy;
 //if fish is false then render as cube
-var fish = false;
+var fish = true;
 var clock;
 var vertArr; //shorthand reference to the vertice array of the bass
 
 var CR = 0.5;   // coefficient of restitution. 1 is maximum bouncy
 var CF = 0.5;   // coefficient of friction. 0 is no friction
 
-var K = 10;
-var KTOR = 100;
-var D = 3;
-var DTOR = 30;
+var K = 50;
+//var KTOR = 10;
+var D = 1;
+//var DTOR = 1; 
 
 //variables that the user sets
 var H;              // Step time in seconds
 var H_MILLI;        // In milliseconds
-var G = new THREE.Vector3(0, -9.81, 0);  // The accel due to gravity in m/s^2 
-var useRK4 = false;
-
+var G = new THREE.Vector3(0, 0, 0);  // The accel due to gravity in m/s^2 
+var useRK4 = true;
 
 var collidables = [];
 
-var cubeAttr = {
-    p: [-10, -30 , 0],
+var cubeAttr1 = {
+    p: [-7, -30 , 0],
     r: [Math.radians(10), Math.radians(30), Math.radians(30)],
     scale: 20
+};
+
+var cubeAttr2 = {
+    p: [50, -90 , 0],
+    r: [Math.radians(0), Math.radians(0), Math.radians(30)],
+    scale: 50
 };
 
 //ugly, but saves time garbage collecting
@@ -98,9 +103,11 @@ window.onload = function(){
     camera = Boiler.initCamera();
     light = Boiler.initLight();
     axes = Boiler.initAxes();
-    polygon = Boiler.initCube(cubeAttr);
+    var polygon1 = Boiler.initCube(cubeAttr1);
+    collidables.push(polygon1);
     
-    collidables.push(polygon);
+    var polygon2 = Boiler.initCube(cubeAttr2);
+    collidables.push(polygon2);
     
     //add edges to the object    
     for (var p=0; p < collidables.length; p++){
@@ -109,13 +116,12 @@ window.onload = function(){
     }
     
     //change what the camera is looking at and add our controls
-    camera.position.set(15, 50, 15);
+    camera.position.set(0, 0, 45);
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
         
     render();
     
-    bass = new Bass(scene, loadIntegrationVars, fish);
-    vertArr = bass.mesh.geometry.vertices; //shorthand
+    springy = new Springy(scene, loadIntegrationVars, fish);
 
     if (!fish){
         loadIntegrationVars();
@@ -124,15 +130,17 @@ window.onload = function(){
 
 /* load up all the mutables for integration */
 function loadIntegrationVars(){
-    state_mut = new Array(bass.count * 2);
-    deriv = new Array(bass.count * 2);    
-    K1 = new Array(bass.count * 2);
-    K2 = new Array(bass.count * 2);
-    K3 = new Array(bass.count * 2);
-    K4 = new Array(bass.count * 2);
-    oldState = new Array(bass.count * 2);
+    vertArr = springy.mesh.geometry.vertices; //shorthand
     
-    for (var l = 0; l < bass.count * 2; l++){
+    state_mut = new Array(springy.count * 2);
+    deriv = new Array(springy.count * 2);    
+    K1 = new Array(springy.count * 2);
+    K2 = new Array(springy.count * 2);
+    K3 = new Array(springy.count * 2);
+    K4 = new Array(springy.count * 2);
+    oldState = new Array(springy.count * 2);
+    
+    for (var l = 0; l < springy.count * 2; l++){
         state_mut[l] = new THREE.Vector3(0,0,0);
         K1[l] = new THREE.Vector3(0,0,0);
         K2[l] = new THREE.Vector3(0,0,0);
@@ -143,8 +151,16 @@ function loadIntegrationVars(){
     }  
 }
 
+/** for demoing rk4 vs euler */
+function nudge(){
+    springy.STATE[3].x += 5;
+    springy.mesh.geometry.computeFaceNormals();   
+}
+
 /** create the sphere and set it according to user inputs, then start simulation and rendering */
 function initMotion(){
+    //nudge();
+    
     getUserInputs();
 
     clock = new THREE.Clock();
@@ -160,18 +176,18 @@ function initMotion(){
 function F(state){
     
     //gravity
-    for (var n = 0; n < bass.count; n++){
-        state_mut[n].copy(state[n + bass.count]);
+    for (var n = 0; n < springy.count; n++){
+        state_mut[n].copy(state[n + springy.count]);
         
         xOld.copy(state[n]);
-        vOld.copy(state[n + bass.count]);
+        vOld.copy(state[n + springy.count]);
 
-        state_mut[n + bass.count].copy(G); //accel due to gravity
+        state_mut[n + springy.count].copy(G); //accel due to gravity
     }
     
     //edge springs
-    for (var k = 0; k < bass.mesh.struts.length; k++){
-        var strut = bass.mesh.struts[k];
+    for (var k = 0; k < springy.mesh.struts.length; k++){
+        var strut = springy.mesh.struts[k];
         var i = strut.vertices[0];
         var j = strut.vertices[1];
         v1_mut.copy(state[i]); //x_i
@@ -182,36 +198,40 @@ function F(state){
         
         v5_mut.copy(v4_mut).multiplyScalar( (l - strut.rlength) * strut.k); //fs
         
-        //force to accel (breaks if mass < 1)
-        v8_mut.copy(v5_mut).multiplyScalar(1/vertArr[i].mass);
-        state_mut[i + bass.count].add(v8_mut); 
-        v8_mut.copy(v5_mut).multiplyScalar(1/vertArr[j].mass);        
-        state_mut[j + bass.count].sub(v5_mut);
+        v8_mut.copy(v5_mut).multiplyScalar(1/vertArr[i].mass); //f_s_i / mass
+        state_mut[i + springy.count].add(v8_mut); 
         
-        v6_mut.copy(state[j + bass.count]); // v_j
-        v6_mut.sub(state[i + bass.count]); //v_j - v_i
+        v8_mut.copy(v5_mut).multiplyScalar(1/vertArr[j].mass); //f_s_j / mass       
+        state_mut[j + springy.count].sub(v8_mut);
+        
+        v6_mut.copy(state[j + springy.count]); // v_j
+        v6_mut.sub(state[i + springy.count]); //v_j - v_i
         v7_mut.copy(v4_mut).multiplyScalar(v6_mut.dot(v4_mut) * strut.d);
         
         //force to accel
-        v8_mut.copy(v7_mut).multiplyScalar(1/vertArr[i].mass);
-        state_mut[i + bass.count].add(v8_mut); 
-        v8_mut.copy(v7_mut).multiplyScalar(1/vertArr[j].mass);
-        state_mut[j + bass.count].sub(v8_mut);
+        v8_mut.copy(v7_mut).multiplyScalar(1/vertArr[i].mass); //f_s_i / mass
+        state_mut[i + springy.count].add(v8_mut); 
+        
+        v8_mut.copy(v7_mut).multiplyScalar(1/vertArr[j].mass); //f_s_j / mass
+        state_mut[j + springy.count].sub(v8_mut);
     }
     
-    //torsional springs
-    for (var k = 0; k < bass.mesh.struts.length; k++){
-        var strut = bass.mesh.struts[k];
+    //torsional springs. not working
+    /*
+    for (var k = 0; k < springy.mesh.struts.length; k++){
+        var strut = springy.mesh.struts[k];
         
-        f1_mut.copy(bass.mesh.geometry.faces[strut.faces[0]]); //left triangle
-        f2_mut.copy(bass.mesh.geometry.faces[strut.faces[1]]); //right triangle
+        if (strut.faces.length == 1) continue; //edges
         
-        v0_mut.copy(vertArr[strut.vertices[0]]); //x0
-        v1_mut.copy(vertArr[strut.vertices[1]]); //x1
+        f1_mut.copy(springy.mesh.geometry.faces[strut.faces[0]]); //left triangle
+        f2_mut.copy(springy.mesh.geometry.faces[strut.faces[1]]); //right triangle
+        
+        v0_mut.copy(state[strut.vertices[0]]); //x0
+        v1_mut.copy(state[strut.vertices[1]]); //x1
         var x2_index = getOtherVertex(f1_mut, strut.vertices[0], strut.vertices[1]);
         var x3_index = getOtherVertex(f2_mut, strut.vertices[0], strut.vertices[1]);
-        v2_mut.copy(vertArr[x2_index]); //x2
-        v3_mut.copy(vertArr[x3_index]); //x3
+        v2_mut.copy(state[x2_index]); //x2
+        v3_mut.copy(state[x3_index]); //x3
         
         v4_mut.copy(v0_mut).sub(v1_mut); //x_01
         v5_mut.copy(v4_mut).normalize(); //x_01_hat = h_hat
@@ -225,13 +245,22 @@ function F(state){
         v10_mut.copy(v6_mut).sub(v8_mut); // r_l
         v11_mut.copy(v7_mut).sub(v9_mut); // r_r
         
+        //FIXME
+        //f1_mut= f1_mut.clone();
+        //f1_mut.normal.multiplyScalar(-1);
+        
         var theta = f1_mut.normal.angleTo(f2_mut.normal);
         var otherTheta = Math.atan2(f1_mut.normal.clone().cross(f2_mut.normal).dot(v5_mut) , f1_mut.normal.dot(f2_mut.normal));
         
-        var thetaDotL = state[x2_index + bass.count].dot(f1_mut.normal) / v10_mut.length();
-        var thetaDotR = state[x3_index + bass.count].dot(f2_mut.normal) / v11_mut.length();
+        var thetaDotL = state[x2_index + springy.count].dot(f1_mut.normal) / v10_mut.length();
+        var thetaDotR = state[x3_index + springy.count].dot(f2_mut.normal) / v11_mut.length();
 
+        //numerical error can cause there to be a difference when there shouldn't be
         torque.copy(v5_mut).multiplyScalar(strut.ktor * (theta - strut.rtheta) - strut.dtor * (thetaDotL + thetaDotR));
+        //tolerance
+        //if (torque.x < 0.000000001) torque.x = 0;
+        //if (torque.y < 0.000000001) torque.y = 0;
+        //if (torque.z < 0.000000001) torque.z = 0;
         
         fr2_mut.copy(f1_mut.normal).multiplyScalar(torque.dot(v5_mut) / v10_mut.length()); //f2
         fr3_mut.copy(f2_mut.normal).multiplyScalar(torque.dot(v5_mut) / v11_mut.length()); //f3
@@ -245,13 +274,13 @@ function F(state){
         fr0_mut.copy(fr1_mut).add(fr2_mut).add(fr3_mut).multiplyScalar(-1);
         
         //add forces!
-        state_mut[strut.vertices[0] + bass.count].add(fr0_mut);
-        state_mut[strut.vertices[1] + bass.count].add(fr1_mut);
-        state_mut[x2_index + bass.count].add(fr2_mut);
-        state_mut[x3_index + bass.count].add(fr3_mut);
+        state_mut[strut.vertices[0] + springy.count].add(fr0_mut.multiplyScalar(1/vertArr[strut.vertices[0]].mass));
+        state_mut[strut.vertices[1] + springy.count].add(fr1_mut.multiplyScalar(1/vertArr[strut.vertices[1]].mass));
+        state_mut[x2_index + springy.count].add(fr2_mut.multiplyScalar(1/vertArr[x2_index].mass));
+        state_mut[x3_index + springy.count].add(fr3_mut.multiplyScalar(1/vertArr[x3_index].mass));
     }
+    */
     
-
     return state_mut;
 }
 
@@ -265,7 +294,7 @@ function integrateState(state, deriv, H){
 function simulate(){ 
 
     //first order deriv
-    deepCopy(deriv, F(bass.STATE));
+    deepCopy(deriv, F(springy.STATE));
 
     if (useRK4) {       /******************************************* rk4 integration */ 
         deepCopy(K1, deriv);//K1 = F(Xn)
@@ -273,19 +302,19 @@ function simulate(){
         //second order deriv
         deepCopy(deriv, K1);
         stateMultScalar(deriv, H * 0.5);
-        addState(deriv, bass.STATE);
+        addState(deriv, springy.STATE);
         deepCopy(K2, F(deriv)); //K2 = F(Xn + 1/2 * H * K1)
 
         //third order deriv
         deepCopy(deriv, K2);
         stateMultScalar(deriv, H * 0.5);
-        addState(deriv, bass.STATE);
+        addState(deriv, springy.STATE);
         deepCopy(K3, F(deriv)); //K3 = F(Xn + 1/2 * H * K2)
 
         //fourth order deriv
         deepCopy(deriv, K3);
         stateMultScalar(deriv, H);
-        addState(deriv, bass.STATE);
+        addState(deriv, springy.STATE);
         deepCopy(K4, F(deriv)); //K4 = F(Xn + H * K3)
 
         stateMultScalar(K2, 2);
@@ -295,44 +324,46 @@ function simulate(){
         addState(K1, K4);
         
         //Xn+1 = Xn + (K1 + 2*K2 + 2*K3 + K4)/6
-        integrateState(bass.STATE, K1, H/6);
+        integrateState(springy.STATE, K1, H/6);
     }
     else {              /******************************************* euler integration */ 
-        integrateState(bass.STATE, deriv, H);
+        integrateState(springy.STATE, deriv, H);
     }
     
-    //COLLISION DETECTION
+    //COLLISION DETECTIO
     
     //Edge-Edge Collision
-    for (var j=0; j<bass.mesh.struts.length; j++){
-        var strut = bass.mesh.struts[j].vertices;
+    for (var j=0; j<springy.mesh.struts.length; j++){
+        var strut = springy.mesh.struts[j].vertices;
         var edgeResponse = edgeEdgeResponse(strut, 
-                                            bass.mesh, 
-                                            bass.STATE[strut[0]], 
-                                            bass.STATE[strut[1]], 
-                                            bass.STATE[strut[0] + bass.count], 
-                                            bass.STATE[strut[1] + bass.count]);    
-        //TODO barycentric weighting scheme
+                                            springy.mesh, 
+                                            springy.STATE[strut[0]], 
+                                            springy.STATE[strut[1]], 
+                                            springy.STATE[strut[0] + springy.count], 
+                                            springy.STATE[strut[1] + springy.count]);    
         if(edgeResponse){
-            bass.STATE[strut[0]].copy(edgeResponse[0].xNew);
-            bass.STATE[strut[0] + bass.count].copy(edgeResponse[0].vNew);
-            bass.STATE[strut[1]].copy(edgeResponse[1].xNew);
-            bass.STATE[strut[1] + bass.count].copy(edgeResponse[1].vNew);            
+            springy.STATE[strut[0]].copy(edgeResponse[0].xNew);
+            springy.STATE[strut[0] + springy.count].copy(edgeResponse[0].vNew);
+            springy.STATE[strut[1]].copy(edgeResponse[1].xNew);
+            springy.STATE[strut[1] + springy.count].copy(edgeResponse[1].vNew);
+            
+            //only one collision per frame
+            break;
         }
     }
     
     //Vertex Face Collision
-    for (var i = 0; i < bass.count; i++){
-        var vertexResponse = vertexFaceResponse(oldState[i], bass.STATE[i], oldState[i + bass.count], bass.STATE[i + bass.count]);
+    for (var i = 0; i < springy.count; i++){
+        var vertexResponse = vertexFaceResponse(oldState[i], springy.STATE[i], oldState[i + springy.count], springy.STATE[i + springy.count]);
         if (vertexResponse){
-            bass.STATE[i].copy(vertexResponse.xNew);
-            bass.STATE[i + bass.count].copy(vertexResponse.vNew);
+            springy.STATE[i].copy(vertexResponse.xNew);
+            springy.STATE[i + springy.count].copy(vertexResponse.vNew);
         }
     }
-    
-    bass.moveParticles();
-    bass.mesh.geometry.verticesNeedUpdate = true;
-    bass.mesh.geometry.computeFaceNormals();
+        
+    springy.moveParticles();
+    springy.mesh.geometry.verticesNeedUpdate = true;
+    springy.mesh.geometry.computeFaceNormals();
 
     var waitTime = H_MILLI - clock.getDelta(); 
     if (waitTime < 4){ //4 milliseconds is the minimum wait for most browsers
@@ -443,7 +474,7 @@ function pointInFace(x, p0, p1, p2){
 }
 
 //find results of any edge edge collisions
-function edgeEdgeResponse(bassStrut, bassMesh, p1, p2, v1, v2){
+function edgeEdgeResponse(springyStrut, springyMesh, p1, p2, v1, v2){
     
     for (var i=0; i < collidables.length; i++){
         var mesh = collidables[i];
@@ -451,11 +482,11 @@ function edgeEdgeResponse(bassStrut, bassMesh, p1, p2, v1, v2){
             var strut = mesh.struts[j].vertices;
             
             q1.set(mesh.geometry.vertices[strut[0]].x + mesh.position.x, 
-                        mesh.geometry.vertices[strut[0]].y + mesh.position.y,
-                        mesh.geometry.vertices[strut[0]].z + mesh.position.z);
+                    mesh.geometry.vertices[strut[0]].y + mesh.position.y,
+                    mesh.geometry.vertices[strut[0]].z + mesh.position.z);
             q2.set(mesh.geometry.vertices[strut[1]].x + mesh.position.x, 
-                        mesh.geometry.vertices[strut[1]].y + mesh.position.y, 
-                        mesh.geometry.vertices[strut[1]].z + mesh.position.z);
+                    mesh.geometry.vertices[strut[1]].y + mesh.position.y, 
+                    mesh.geometry.vertices[strut[1]].z + mesh.position.z);
             
             v1_mut.copy(p2).sub(p1); //a
             v2_mut.copy(q2).sub(q1); //b
@@ -480,7 +511,7 @@ function edgeEdgeResponse(bassStrut, bassMesh, p1, p2, v1, v2){
                 pa.copy(v1_mut).multiplyScalar(s).add(p1); //pa = p1 +sa
                 qa.copy(v2_mut).multiplyScalar(t).add(q1); //qa = q1 +tb   
                 var dist = qa.clone().sub(pa).length(); //clone is for debugging
-                if (dist < 0.5){ 
+                if (dist < 0.3){ 
                     
                     var magnitude = v1_mut.copy(v1).add(v2).multiplyScalar(0.5).length(); //average magnitude
                     v4_mut.copy(v3_mut).multiplyScalar(magnitude); //points move in opposite direction
@@ -492,11 +523,15 @@ function edgeEdgeResponse(bassStrut, bassMesh, p1, p2, v1, v2){
                         xNew : new THREE.Vector3(0,0,0),
                         vNew : new THREE.Vector3(0,0,0) 
                     }];
-                    response[0].vNew.copy(v4_mut);
-                    response[1].vNew.copy(v4_mut); 
+
+                    v5_mut.copy(v4_mut).multiplyScalar(s-1);
+                    v6_mut.copy(v4_mut).multiplyScalar(s);
                     
-                    response[0].xNew.copy(integrateVector(p1, v4_mut, H));
-                    response[1].xNew.copy(integrateVector(p2, v4_mut, H));
+                    response[0].vNew.copy(v5_mut);
+                    response[1].vNew.copy(v6_mut); 
+                    
+                    response[0].xNew.copy(integrateVector(p1, v5_mut, H));
+                    response[1].xNew.copy(integrateVector(p2, v6_mut, H));
                                         
                     return response;    
                 }
