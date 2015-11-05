@@ -16,11 +16,16 @@ iframe, video {
   margin: 10px; }
 
 /* line 26, /Users/kadekeith/Desktop/keithkade.github/fll/fll.scss */
-p {
+.subhead {
   width: 100%;
   text-align: left;
   background-color: #484848;
   margin: 0;
   padding: 10px; }
+
+/* line 34, /Users/kadekeith/Desktop/keithkade.github/fll/fll.scss */
+.howdy {
+  width: 800px;
+  margin: 10px auto 0 auto; }
 
 /*# sourceMappingURL=fll.css.map */
