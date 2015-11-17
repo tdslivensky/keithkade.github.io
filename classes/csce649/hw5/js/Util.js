@@ -1,5 +1,5 @@
 /*jshint -W004*/
-/*global THREE, window, doc, scene, renderer, axes, SPREAD, FACES, K, D, KTOR, DTOR */
+/*global THREE, window, doc, scene, renderer, axes*/
 
 /**
  * Returns a random number between min (inclusive) and max (exclusive). 
@@ -7,33 +7,90 @@
  */
 var Util = {};
 
+function State(){
+    this.x = new THREE.Vector3(0,0,0);   //position              X
+    this.q = new THREE.Quaternion();     //rotation quaternion   q
+    this.P = new THREE.Vector3(0,0,0);   //linear momentum.      P = m*v
+    this.L = new THREE.Vector3(0,0,0);   //angular momentum.     L = I*w
+}
+
+State.prototype.copy = function(state){
+    this.x.copy(state.x);
+    this.q.copy(state.q);
+    this.P.copy(state.P);
+    this.L.copy(state.L);
+};
+
+State.prototype.add = function(state){
+    this.x.add(state.x);
+    this.q.set(this.q.x + state.q.x, this.q.y + state.q.y, this.q.z + state.q.z, this.q.w + state.q.w);
+    this.P.add(state.P);
+    this.L.add(state.L);
+};
+
+State.prototype.multScalar = function(scalar){
+    this.x.multiplyScalar(scalar);
+    this.q.set(this.q.x * scalar, this.q.y * scalar, this.q.z * scalar, this.q.w * scalar);
+    this.P.multiplyScalar(scalar);
+    this.L.multiplyScalar(scalar);
+};
+
 /** uniformily distributed random numbers  */
 Util.getRandom = function (min, max) {
   return Math.random() * (max - min) + min;
 };
 
+
+Util.sortTwo = function(tuple){
+    if (tuple[0] <= tuple[1])
+        return tuple;
+    else 
+        return [tuple[1], tuple[0]];
+};
+
 /** 
  * add a list of unique edges to a mesh 
+ * inefficient, but only runs once
  */
-Util.addStruts = function(mesh){
-        
-    var struts = [];
-    var vArr = mesh.geometry.vertices;
+Util.addEdges = function(mesh){
+    var edges = [];
     
-    for (var i=0; i < vArr.length; i++){
-        for (var j=i; j < vArr.length; j++){
-            if (i==j) continue;
-            var strut = {
-                vertices : [j,i],
-                rlength : vArr[j].distanceTo(vArr[i]),
-                k : K,
-                d : D
-            };
-            struts.push(strut);
-        }
+    for (var j = 0; j < mesh.geometry.faces.length; j++){
+        var face = mesh.geometry.faces[j];
+        edges.push(Util.sortTwo([face.a, face.b]));
+        edges.push(Util.sortTwo([face.a, face.c]));        
+        edges.push(Util.sortTwo([face.b, face.c]));
     }
     
-    mesh.struts = struts;
+    mesh.edges = edges.uniqueEdges();
+};
+
+/** removes duplicates from array */
+Array.prototype.uniqueEdges = function() {
+    return this.reduce(function(accum, current) {
+        var index = accum.indexOfTuple(current);
+        if (index < 0) {
+            accum.push(current);
+        }
+        return accum;
+    }, []);
+};
+
+Array.prototype.indexOfTuple = function(tuple){
+    for(var i = 0; i < this.length; i++) {
+        if (this[i].equalsTupleArr(tuple)) return i;
+    }
+    return -1;
+};
+
+Array.prototype.equalsTupleArr = function(arr){
+    if (this.length !== arr.length)
+        return false;
+    for(var i = 0; i < this.length; i++) {
+        if (this[i] !== arr[i]) 
+            return false;
+    }
+    return true;
 };
 
 // Source: http://cwestblog.com/2012/11/12/javascript-degree-and-radian-conversion/
