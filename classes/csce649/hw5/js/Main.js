@@ -132,12 +132,12 @@ function initMotion(){
 }
 
 //gets the derivative of a state. plus external forces. returns deep copy of array
-function F(state){
+function F(state, m, I_0_inv){
     
     state_mut.x.copy(state.P).multiplyScalar(1 / body.mass); //Velocity
     
     var R = new THREE.Matrix4().makeRotationFromQuaternion(state_mut.q);
-    var I_inv = R.clone().transpose().multiply(body.I_0_inv).multiply(R);
+    var I_inv = R.clone().transpose().multiply(I_0_inv).multiply(R);
     var w = new THREE.Vector3().copy(state.L).applyMatrix4(I_inv);
     
     var omegaQ = new THREE.Quaternion(0, w.x, w.y, w.z);
@@ -145,7 +145,9 @@ function F(state){
     state_mut.q.set(state_mut.q.x / 2, state_mut.q.y / 2, state_mut.q.w / 2, state_mut.q.z / 2);
     
     state_mut.P.copy(G);   //Force
-    state_mut.L = new THREE.Vector3();
+    //TODO dissapears if not 0
+    state_mut.L = new THREE.Vector3(0,0,0);
+    
     
     /*
     for Vector3 Fi do
@@ -175,7 +177,7 @@ function integrateVector(v1, v2, timestep){
 function simulate(){ 
 
     //first order deriv
-    deriv.copy(F(body.STATE));
+    deriv.copy(F(body.STATE, body.mass, body.I));
 
     if (useRK4) {       /******************************************* rk4 integration */ 
         K1.copy(deriv);//K1 = F(Xn)
@@ -184,19 +186,19 @@ function simulate(){
         deriv.copy(K1);
         deriv.multScalar(H * 0.5);
         deriv.add(body.STATE);
-        K2.copy(F(deriv)); //K2 = F(Xn + 1/2 * H * K1)
+        K2.copy(F(deriv, body.mass, body.I)); //K2 = F(Xn + 1/2 * H * K1)
 
         //third order deriv
         deriv.copy(K2);
         deriv.multScalar(H * 0.5);
         deriv.add(body.STATE);
-        K3.copy(F(deriv)); //K3 = F(Xn + 1/2 * H * K2)
+        K3.copy(F(deriv, body.mass, body.I)); //K3 = F(Xn + 1/2 * H * K2)
 
         //fourth order deriv
         deriv.copy(K3);
         deriv.multScalar(H);
         deriv.add(body.STATE);
-        K4.copy(F(deriv)); //K4 = F(Xn + H * K3)
+        K4.copy(F(deriv, body.mass, body.I)); //K4 = F(Xn + H * K3)
 
         K2.multScalar(2);
         K3.multScalar(2);
@@ -238,13 +240,18 @@ function simulate(){
         }
     }
         
-    //TODO update MOI (I = RI_0R^T)
+    // update MOI (I = RI_0R^T)
+    var R = new THREE.Matrix4().makeRotationFromQuaternion(body.STATE.q);
+    body.I = R.clone().multiply(body.I_0).multiply(R.transpose());
+    
     body.mesh.geometry.verticesNeedUpdate = true;
 
     //translate
     body.mesh.position.copy(body.STATE.x);
     //rotate
     body.mesh.setRotationFromQuaternion(body.STATE.q);
+    
+    body.STATE.q.normalize();
 
     var waitTime = H_MILLI - clock.getDelta(); 
     if (waitTime < 4){ //4 milliseconds is the minimum wait for most browsers
