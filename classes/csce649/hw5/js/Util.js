@@ -8,10 +8,10 @@
 var Util = {};
 
 function State(){
-    this.x = new THREE.Vector3(0,0,0);   //position              X
-    this.q = new THREE.Quaternion();     //rotation quaternion   q
-    this.P = new THREE.Vector3(0,0,0);   //linear momentum.      P = m*v
-    this.L = new THREE.Vector3(0,0,0);   //angular momentum.     L = I*w
+    this.x = new THREE.Vector3(0,0,0);      //position              X
+    this.q = new THREE.Quaternion();        //rotation quaternion   q
+    this.P = new THREE.Vector3(0,0,0);      //linear momentum.      P = m*v
+    this.L = new THREE.Vector3(0,0,0);      //angular momentum.     L = I*w
 }
 
 State.prototype.copy = function(state){

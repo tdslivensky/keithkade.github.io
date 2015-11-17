@@ -34,7 +34,6 @@ function RigidBody(scene, callback, fish){
         this.I = this.I_0.clone();
         
         this.STATE = new State();
-        this.STATE.q.setFromAxisAngle(new THREE.Vector3(1,0,0), 2);
         this.mesh.geometry.verticesNeedUpdate = true;
         
         for (var i = 0; i < this.mesh.geometry.vertices.length; i++) {

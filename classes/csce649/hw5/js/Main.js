@@ -24,7 +24,7 @@ var CF = 0.5;   // coefficient of friction. 0 is no friction
 var H;              // Step time in seconds
 var H_MILLI;        // In milliseconds
 var G = new THREE.Vector3(0, -10, 0);  // The accel due to gravity in m/s^2 
-var useRK4 = true;
+var useRK4 = false;
 
 var collidables = [];
 
@@ -128,6 +128,9 @@ function initMotion(){
     clock.getDelta();
         
     window.clearTimeout(simTimeout);
+    
+    //give it an initial angular velocity
+    body.STATE.L.set(1,0,0);
     simulate();
 }
 
@@ -136,24 +139,37 @@ function F(state, m, I_0_inv){
     
     state_mut.x.copy(state.P).multiplyScalar(1 / body.mass); //Velocity
     
-    var R = new THREE.Matrix4().makeRotationFromQuaternion(state_mut.q);
-    var I_inv = R.clone().transpose().multiply(I_0_inv).multiply(R);
-    var w = new THREE.Vector3().copy(state.L).applyMatrix4(I_inv);
+    var R = new THREE.Matrix4().makeRotationFromQuaternion(state.q);            //Rotation matrix
+    var I_inv = R.clone().multiply(I_0_inv).multiply(R.clone().transpose());    //new inverse moi
+    var w = new THREE.Vector3().copy(state.L).applyMatrix4(I_inv);              //
     
-    var omegaQ = new THREE.Quaternion(0, w.x, w.y, w.z);
-    state_mut.q = omegaQ.clone().multiply(state.q); 
-    state_mut.q.set(state_mut.q.x / 2, state_mut.q.y / 2, state_mut.q.w / 2, state_mut.q.z / 2);
+    //dumb way of increasing magnitude
+    w.multiplyScalar(100);
+    var omegaQ = new THREE.Quaternion().setFromAxisAngle(w.clone().normalize(), Math.radians(w.length()));
+    //var omegaQ = new THREE.Quaternion(w.x, w.y, w.z, 0);
+    state_mut.q.copy(state.q.clone().multiply(omegaQ)); 
+    state_mut.q.set(state_mut.q.x / 2, state_mut.q.y / 2, state_mut.q.z / 2, state_mut.q.w / 2);
     
-    state_mut.P.copy(G);   //Force
-    //TODO dissapears if not 0
-    state_mut.L = new THREE.Vector3(0,0,0);
+    //state_mut.P.copy(G);    //Force
+    state_mut.P.set(0,0,0);
+    state_mut.L.set(0,0,0);
+    
+    
+    //test torque
+    /*
+    var F = new THREE.Vector3(1,0,0);
+    state_mut.P.add(F);
+    
+    var r = new THREE.Vector3(0,0,0).copy(body.mesh.localToWorld(body.mesh.geometry.vertices[0].clone())).sub(state.x);
+    state_mut.L.copy(r).cross(F);
+    */
     
     
     /*
     for Vector3 Fi do
         deriv.P+ = Fi;
         if Fi is applied at a point p then
-            Vector3 r = p   S.x;
+            Vector3 r = p - S.x;
             deriv.L+ = r ⇥ Fi; 
     end
     */
@@ -177,8 +193,9 @@ function integrateVector(v1, v2, timestep){
 function simulate(){ 
 
     //first order deriv
-    deriv.copy(F(body.STATE, body.mass, body.I));
-
+    deriv.copy(F(body.STATE, body.mass, body.I_0)); //weird that it doesn't matter whether i use body.I or body.I_0
+    deriv.q.normalize();
+    
     if (useRK4) {       /******************************************* rk4 integration */ 
         K1.copy(deriv);//K1 = F(Xn)
 
@@ -186,20 +203,23 @@ function simulate(){
         deriv.copy(K1);
         deriv.multScalar(H * 0.5);
         deriv.add(body.STATE);
-        K2.copy(F(deriv, body.mass, body.I)); //K2 = F(Xn + 1/2 * H * K1)
-
+        K2.copy(F(deriv, body.mass, body.I_0)); //K2 = F(Xn + 1/2 * H * K1)
+        K2.q.normalize();
+        
         //third order deriv
         deriv.copy(K2);
         deriv.multScalar(H * 0.5);
         deriv.add(body.STATE);
-        K3.copy(F(deriv, body.mass, body.I)); //K3 = F(Xn + 1/2 * H * K2)
-
+        K3.copy(F(deriv, body.mass, body.I_0)); //K3 = F(Xn + 1/2 * H * K2)
+        K3.q.normalize();
+        
         //fourth order deriv
         deriv.copy(K3);
         deriv.multScalar(H);
         deriv.add(body.STATE);
-        K4.copy(F(deriv, body.mass, body.I)); //K4 = F(Xn + H * K3)
-
+        K4.copy(F(deriv, body.mass, body.I_0)); //K4 = F(Xn + H * K3)
+        K4.q.normalize();
+        
         K2.multScalar(2);
         K3.multScalar(2);
         K1.add(K2);
@@ -212,6 +232,8 @@ function simulate(){
         integrateState(body.STATE, deriv, H);
     }
     
+    body.STATE.q.normalize();
+
     //COLLISION DETECTION
     
     //Edge-Edge Collision
@@ -240,9 +262,10 @@ function simulate(){
         }
     }
         
+    // the transpose may happen first
     // update MOI (I = RI_0R^T)
     var R = new THREE.Matrix4().makeRotationFromQuaternion(body.STATE.q);
-    body.I = R.clone().multiply(body.I_0).multiply(R.transpose());
+    body.I.copy(R.clone().multiply(body.I_0).multiply(R.transpose()));
     
     body.mesh.geometry.verticesNeedUpdate = true;
 
@@ -251,7 +274,6 @@ function simulate(){
     //rotate
     body.mesh.setRotationFromQuaternion(body.STATE.q);
     
-    body.STATE.q.normalize();
 
     var waitTime = H_MILLI - clock.getDelta(); 
     if (waitTime < 4){ //4 milliseconds is the minimum wait for most browsers
