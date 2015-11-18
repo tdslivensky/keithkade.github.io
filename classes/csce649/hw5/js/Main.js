@@ -43,7 +43,7 @@ var cubeAttr2 = {
 //ugly, but saves time garbage collecting
 var state_mut = new State();
 
-var v0_mut = new THREE.Vector3(0,0,0); //I keep mutable vectors for all calculations
+//I keep mutable vectors for all calculations
 var v1_mut = new THREE.Vector3(0,0,0); 
 var v2_mut = new THREE.Vector3(0,0,0);
 var v3_mut = new THREE.Vector3(0,0,0);
@@ -52,10 +52,14 @@ var v5_mut = new THREE.Vector3(0,0,0);
 var v6_mut = new THREE.Vector3(0,0,0);
 var v7_mut = new THREE.Vector3(0,0,0);
 var v8_mut = new THREE.Vector3(0,0,0);
-var v9_mut = new THREE.Vector3(0,0,0);
-var v10_mut = new THREE.Vector3(0,0,0);
-var v11_mut = new THREE.Vector3(0,0,0);
-var v12_mut = new THREE.Vector3(0,0,0);
+
+var m1_mut = new THREE.Matrix4();
+var m2_mut = new THREE.Matrix4();
+var m3_mut = new THREE.Matrix4();
+var m4_mut = new THREE.Matrix4();
+
+var q1_mut = new THREE.Quaternion();
+var q2_mut = new THREE.Quaternion();
 
 var p0_mut = new THREE.Vector3(0,0,0);
 var p1_mut = new THREE.Vector3(0,0,0);
@@ -63,8 +67,6 @@ var p2_mut = new THREE.Vector3(0,0,0);
 var vNormal = new THREE.Vector3(0,0,0);
 var plane_mut = new THREE.Plane(new THREE.Vector3(0, 0, 0), 0);
 
-var vOld = new THREE.Vector3(0,0,0);
-var xOld = new THREE.Vector3(0,0,0);
 var vNew = new THREE.Vector3(0,0,0);
 var xNew = new THREE.Vector3(0,0,0);
 var collisionX = new THREE.Vector3(0,0,0);
@@ -130,7 +132,7 @@ function initMotion(){
     window.clearTimeout(simTimeout);
     
     //give it an initial angular velocity
-    body.STATE.L.set(1,0,0);
+    body.STATE.L.set(1,1,0);
     simulate();
 }
 
@@ -139,25 +141,26 @@ function F(state, m, I_0_inv){
     
     state_mut.x.copy(state.P).multiplyScalar(1 / body.mass); //Velocity
     
-    var R = new THREE.Matrix4().makeRotationFromQuaternion(state.q);            //Rotation matrix
-    var I_inv = R.clone().multiply(I_0_inv).multiply(R.clone().transpose());    //new inverse moi
-    var w = new THREE.Vector3().copy(state.L).applyMatrix4(I_inv);              //
+    m1_mut.makeRotationFromQuaternion(state.q); //Rotation matrix - R
+    m2_mut.copy(m1_mut).transpose(); //R transpose
+    m3_mut.copy(m1_mut).multiply(I_0_inv).multiply(m2_mut);    //new inverse moi
     
-    //dumb way of increasing magnitude
-    w.multiplyScalar(100);
-    var omegaQ = new THREE.Quaternion().setFromAxisAngle(w.clone().normalize(), Math.radians(w.length()));
-    //var omegaQ = new THREE.Quaternion(w.x, w.y, w.z, 0);
-    state_mut.q.copy(state.q.clone().multiply(omegaQ)); 
+    v1_mut.copy(state.L).applyMatrix4(m3_mut); //w
+    v2_mut.copy(v1_mut).normalize();       
+    
+    //dumb way of increasing magnitude. not sure about w ==> quaternion (0, w) notation
+    v1_mut.multiplyScalar(100);
+    q1_mut.setFromAxisAngle(v2_mut, Math.radians(v1_mut.length()));    
+    state_mut.q.copy(state.q).multiply(q1_mut);
     state_mut.q.set(state_mut.q.x / 2, state_mut.q.y / 2, state_mut.q.z / 2, state_mut.q.w / 2);
     
-    //state_mut.P.copy(G);    //Force
-    state_mut.P.set(0,0,0);
+    state_mut.P.copy(G);    //Force do to gravity
     state_mut.L.set(0,0,0);
     
     
     //test torque
     /*
-    var F = new THREE.Vector3(1,0,0);
+    var F = new THREE.Vector3(1,1,1);
     state_mut.P.add(F);
     
     var r = new THREE.Vector3(0,0,0).copy(body.mesh.localToWorld(body.mesh.geometry.vertices[0].clone())).sub(state.x);
@@ -193,7 +196,10 @@ function integrateVector(v1, v2, timestep){
 function simulate(){ 
 
     //first order deriv
-    deriv.copy(F(body.STATE, body.mass, body.I_0)); //weird that it doesn't matter whether i use body.I or body.I_0
+    deriv.copy(F(body.STATE, body.mass, body.I_0)); 
+    //weird that it doesn't matter whether i use body.I or body.I_0
+    //i think it is because I am using a cube
+    
     deriv.q.normalize();
     
     if (useRK4) {       /******************************************* rk4 integration */ 
@@ -254,8 +260,16 @@ function simulate(){
     }
     
     //Vertex Face Collision
-    for (var i = 0; i < body.count; i++){
-        var vertexResponse = vertexFaceResponse(oldState[i], body.STATE[i], oldState[i + body.count], body.STATE[i + body.count]);
+    for (var i = 0; i < vertArr.length; i++){
+        v1_mut.copy(vertArr[i]);
+        v2_mut.copy(vertArr[i]);
+        body.mesh.localToWorld(v1_mut); //xOld
+        v2_mut.applyQuaternion(body.STATE.q);
+        v2_mut.add(body.STATE.x);
+
+        
+        
+        var vertexResponse = vertexFaceResponse(v1_mut, v2_mut, new THREE.Vector3(0,0,0), new THREE.Vector3(0,0,0));
         if (vertexResponse){
             body.STATE[i].copy(vertexResponse.xNew);
             body.STATE[i + body.count].copy(vertexResponse.vNew);
@@ -264,8 +278,9 @@ function simulate(){
         
     // the transpose may happen first
     // update MOI (I = RI_0R^T)
-    var R = new THREE.Matrix4().makeRotationFromQuaternion(body.STATE.q);
-    body.I.copy(R.clone().multiply(body.I_0).multiply(R.transpose()));
+    m1_mut.makeRotationFromQuaternion(body.STATE.q); //Rotation matrix - R
+    m2_mut.copy(m1_mut).transpose(); //R transpose
+    body.I.copy(m1_mut.multiply(body.I_0).multiply(m2_mut));
     
     body.mesh.geometry.verticesNeedUpdate = true;
 
@@ -273,7 +288,6 @@ function simulate(){
     body.mesh.position.copy(body.STATE.x);
     //rotate
     body.mesh.setRotationFromQuaternion(body.STATE.q);
-    
 
     var waitTime = H_MILLI - clock.getDelta(); 
     if (waitTime < 4){ //4 milliseconds is the minimum wait for most browsers
@@ -320,7 +334,13 @@ function vertexFaceResponse(x1, x2, v1, v2){
                 v1_mut.copy(v1);
                 vNormal.copy(plane_mut.normal).multiplyScalar(v1_mut.dot(plane_mut.normal));
 
-                if (pointInFace(collisionX, p0_mut, p1_mut, p2_mut)){
+                console.log('collision with plane');
+                
+                //TODO actual collision detection. doesn't work because velocity isn't simple
+                //guess at it by integrating for half timestep
+                
+                if (false){
+                //if (pointInFace(collisionX, p0_mut, p1_mut, p2_mut)){
 
                     var response = {};
                     v1_mut.copy(x2);
