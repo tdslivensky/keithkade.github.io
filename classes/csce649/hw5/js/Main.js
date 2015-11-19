@@ -245,15 +245,20 @@ function simulate(){
     //Edge-Edge Collision
     for (var j=0; j<body.mesh.edges.length; j++){
         var edge = body.mesh.edges[j];
+
+        p1_mut.copy(vertArr[edge[0]]);
+        p2_mut.copy(vertArr[edge[1]]);
+        body.mesh.localToWorld(p1_mut); 
+        body.mesh.localToWorld(p2_mut); 
+
+        //TODO response w/ velocities
         
-        //TODO
+        var edgeResponse = edgeEdgeResponse(p1_mut, 
+                                            p2_mut, 
+                                            new THREE.Vector3(0,0,0), 
+                                            new THREE.Vector3(0,0,0));    
         /*
-        var edgeResponse = edgeEdgeResponse(body.STATE[edge[0]], 
-                                            body.STATE[edge[1]], 
-                                            body.STATE[edge[0] + body.count], 
-                                            body.STATE[edge[1] + body.count]);    
         if(edgeResponse){
-            //TODO
             break;  //only one collision per frame
         }
         */
@@ -267,7 +272,7 @@ function simulate(){
         v2_mut.applyQuaternion(body.STATE.q);
         v2_mut.add(body.STATE.x);
 
-        
+        //TODO response w/ velocities
         
         var vertexResponse = vertexFaceResponse(v1_mut, v2_mut, new THREE.Vector3(0,0,0), new THREE.Vector3(0,0,0));
         if (vertexResponse){
@@ -425,6 +430,8 @@ function edgeEdgeResponse(p1, p2, v1, v2){
                 qa.copy(v2_mut).multiplyScalar(t).add(q1); //qa = q1 +tb   
                 var dist = qa.clone().sub(pa).length(); //clone is for debugging
                 if (dist < 0.3){ 
+                    console.log('edge-edge collision');
+                    
                     
                     var magnitude = v1_mut.copy(v1).add(v2).multiplyScalar(0.5).length(); //average magnitude
                     v4_mut.copy(v3_mut).multiplyScalar(magnitude); //points move in opposite direction
