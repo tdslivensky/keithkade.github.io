@@ -104,6 +104,13 @@ Math.degrees = function(radians) {
   return radians * 180 / Math.PI;
 };
 
+Util.addMatrix4 = function(mat1, mat2){
+  for (var i = 0; i < mat1.elements.length; i++){
+      mat1.elements[i] += mat2.elements[i];
+  }  
+    
+};
+
 /************* THREE.js boilerplate *************/
 
 var panelWidth = 300;

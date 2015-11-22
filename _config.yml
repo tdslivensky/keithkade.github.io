@@ -12,3 +12,5 @@ collections:
 
 # Build settings
 markdown: kramdown
+
+exclude: [classes/csce444/CitationViz]

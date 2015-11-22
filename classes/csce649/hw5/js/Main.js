@@ -15,6 +15,11 @@ var body, clock;
 
 //if fish is false then render as cube
 var fish = false;
+function toggleFish(elem){
+    fish = elem.checked;
+    initBody();
+}
+
 var vertArr;    //shorthand reference to the vertice array of the body
 
 var CR = 0.5;   // coefficient of restitution. 1 is maximum bouncy
@@ -108,13 +113,21 @@ window.onload = function(){
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
         
     render();
-    
+    initBody();   
+};
+
+function initBody(){
+    if (body){        
+        scene.remove(body.mesh);
+        window.clearTimeout(simTimeout);
+    }
+        
     body = new RigidBody(scene, loadIntegrationVars, fish);
 
     if (!fish){
         loadIntegrationVars();
     }
-};
+}
 
 /* load up all the mutables for integration */
 function loadIntegrationVars(){
@@ -132,7 +145,7 @@ function initMotion(){
     window.clearTimeout(simTimeout);
     
     //give it an initial angular velocity
-    body.STATE.L.set(1,1,0);
+    body.STATE.L.set(0,0,1);
     simulate();
 }
 
@@ -148,15 +161,13 @@ function F(state, m, I_0_inv){
     v1_mut.copy(state.L).applyMatrix4(m3_mut); //w
     v2_mut.copy(v1_mut).normalize();       
     
-    //dumb way of increasing magnitude. not sure about w ==> quaternion (0, w) notation
-    v1_mut.multiplyScalar(100);
-    q1_mut.setFromAxisAngle(v2_mut, Math.radians(v1_mut.length()));    
+    // w => (0,w)
+    q1_mut.set(v2_mut.x, v2_mut.y, v2_mut.z, 0);
     state_mut.q.copy(state.q).multiply(q1_mut);
     state_mut.q.set(state_mut.q.x / 2, state_mut.q.y / 2, state_mut.q.z / 2, state_mut.q.w / 2);
     
     state_mut.P.copy(G);    //Force do to gravity
     state_mut.L.set(0,0,0);
-    
     
     //test torque
     /*
@@ -167,13 +178,12 @@ function F(state, m, I_0_inv){
     state_mut.L.copy(r).cross(F);
     */
     
-    
     /*
     for Vector3 Fi do
         deriv.P+ = Fi;
         if Fi is applied at a point p then
             Vector3 r = p - S.x;
-            deriv.L+ = r ⇥ Fi; 
+            deriv.L += r ⇥ Fi; 
     end
     */
     
@@ -248,11 +258,12 @@ function simulate(){
 
         p1_mut.copy(vertArr[edge[0]]);
         p2_mut.copy(vertArr[edge[1]]);
-        body.mesh.localToWorld(p1_mut); 
-        body.mesh.localToWorld(p2_mut); 
-
-        //TODO response w/ velocities
+        p1_mut.applyQuaternion(body.STATE.q); //xOld
+        p1_mut.add(body.STATE.x);
+        p2_mut.applyQuaternion(body.STATE.q); //xNew
+        p2_mut.add(body.STATE.x);
         
+        //TODO response w/ velocities
         var edgeResponse = edgeEdgeResponse(p1_mut, 
                                             p2_mut, 
                                             new THREE.Vector3(0,0,0), 
@@ -266,18 +277,23 @@ function simulate(){
     
     //Vertex Face Collision
     for (var i = 0; i < vertArr.length; i++){
-        v1_mut.copy(vertArr[i]);
-        v2_mut.copy(vertArr[i]);
-        body.mesh.localToWorld(v1_mut); //xOld
-        v2_mut.applyQuaternion(body.STATE.q);
-        v2_mut.add(body.STATE.x);
+        v4_mut.copy(vertArr[i]); //xOld
+        v5_mut.copy(vertArr[i]); //xNew
+        body.mesh.localToWorld(v4_mut); //xOld
+        v5_mut.applyQuaternion(body.STATE.q); //xNew
+        v5_mut.add(body.STATE.x);
 
         //TODO response w/ velocities
+        v6_mut.clone(v5_mut).sub(v4_mut).multiplyScalar(1/H); //velocity
+
         
-        var vertexResponse = vertexFaceResponse(v1_mut, v2_mut, new THREE.Vector3(0,0,0), new THREE.Vector3(0,0,0));
+        var vertexResponse = vertexFaceResponse(v4_mut, 
+                                                v5_mut, 
+                                                v6_mut);
         if (vertexResponse){
-            body.STATE[i].copy(vertexResponse.xNew);
-            body.STATE[i + body.count].copy(vertexResponse.vNew);
+            console.log('vertex face collision detection');
+            //body.STATE[i].copy(vertexResponse.xNew);
+            //body.STATE[i + body.count].copy(vertexResponse.vNew);
         }
     }
         
@@ -302,7 +318,7 @@ function simulate(){
 }
 
 /** find results of any vertex face collisions */
-function vertexFaceResponse(x1, x2, v1, v2){
+function vertexFaceResponse(x1, x2, vAvg){
         
     //loop through all collidable objects
     for (var p=0; p < collidables.length; p++){
@@ -334,30 +350,21 @@ function vertexFaceResponse(x1, x2, v1, v2){
             if (dOld*dNew <= 0){            
 
                 var fraction = dOld / (dOld-dNew);
-                collisionX.copy(integrateVector(x1, v1, fraction * H));
-
-                v1_mut.copy(v1);
-                vNormal.copy(plane_mut.normal).multiplyScalar(v1_mut.dot(plane_mut.normal));
-
-                console.log('collision with plane');
+                collisionX.copy(integrateVector(x1, vAvg, fraction * H));
                 
-                //TODO actual collision detection. doesn't work because velocity isn't simple
-                //guess at it by integrating for half timestep
+                // TODO be more accurate by binary search integration
                 
-                if (false){
-                //if (pointInFace(collisionX, p0_mut, p1_mut, p2_mut)){
+                if (pointInFace(collisionX, p0_mut, p1_mut, p2_mut)){
 
-                    var response = {};
-                    v1_mut.copy(x2);
-                    v2_mut.copy(plane_mut.normal);
-                    response.xNew = v1_mut.sub(v2_mut.multiplyScalar(dNew * (1 + CR))).clone();
+                    var r1 = new THREE.Vector3().copy(body.STATE.x).sub(collisionX); 
+                    
+                    var j = vAvg.clone().multiplyScalar(-(1+CR)).dot(plane_mut.normal) /
+                            1 + r1.cross(plane_mut.normal.applyMatrix4(body.I.clone().getInverse(body.I))).dot(plane_mut.normal);
 
-                    v1_mut.copy(v1);
-                    var vTan = v1_mut.sub(vNormal);
-
-                    response.vNew = vNormal.multiplyScalar(-1 * CR).add(vTan.multiplyScalar(1 - CF)).clone();
-
-                    return response;
+                            // 1/m1 + 1/m2 + (i1_inv(r1 x nHat) x r1 + i2_inv(r2 x nHat) x r2) . nHat
+                    
+                    //TODO apply impulse
+                    return j;
                 }
             }
         }

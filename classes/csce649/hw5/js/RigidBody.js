@@ -13,6 +13,51 @@ function RigidBody(scene, callback, fish){
         var loader = new THREE.JSONLoader();
         loader.load( "js/bass_reduced.js", function( geometry ) {
             this.mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial( /*{ wireframe: true }*/ ) );
+            this.mesh.scale.set(1, 1, 1);
+
+            this.mass = 2;
+
+
+            //TODO find for fish
+            this.I_0 = new THREE.Matrix4().set(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1);
+
+            var len = this.mesh.geometry.vertices.length;
+            var pMass = this.mass / len;            
+
+            //point-mass method. each has a mass of one
+            for (var j = 0; j<this.mesh.geometry.vertices.length; j++){
+                var v = this.mesh.geometry.vertices[j];
+
+                Util.addMatrix4(
+                    this.I_0, 
+                    new THREE.Matrix4().set(  
+                        (v.y*v.y + v.z*v.z)*pMass,  -(v.x*v.y)*pMass,           -(v.x*v.z)*pMass,           0,
+                        -(v.x*v.y)*pMass,           (v.x*v.x + v.z*v.z)*pMass,  -(v.y*v.z),                 0,
+                        -(v.x*v.z)*pMass,           -(v.y*v.z)*pMass,           (v.x*v.x + v.y*v.y)*pMass,  0,
+                        0,                          0,                          0,                          0
+                    )
+                );
+            }
+        
+            
+            
+            this.I_0_inv = new THREE.Matrix4().getInverse(this.I_0);
+
+            this.I = this.I_0.clone();
+
+            this.STATE = new State();
+            this.mesh.geometry.verticesNeedUpdate = true;
+
+            for (var i = 0; i < this.mesh.geometry.vertices.length; i++) {
+                //scale the mesh in local coordinates
+                this.mesh.geometry.vertices[i].x *= 100;
+                this.mesh.geometry.vertices[i].y *= 100;
+                this.mesh.geometry.vertices[i].z *= 100;
+            }
+            Util.addEdges(this.mesh);
+            scene.add(this.mesh);
+
+            
             callback();
         }.bind(this) );
     }
