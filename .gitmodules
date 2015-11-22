@@ -1,0 +1,3 @@
+[submodule "classes/csce444/CitationViz"]
+	path = classes/csce444/CitationViz
+	url = https://github.com/keithkade/CitationViz.git
