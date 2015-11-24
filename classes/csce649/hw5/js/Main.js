@@ -22,27 +22,26 @@ function toggleFish(elem){
 
 var vertArr;    //shorthand reference to the vertice array of the body
 
-var CR = 1;   // coefficient of restitution. 1 is maximum bouncy
-var CF = 0.5;   // coefficient of friction. 0 is no friction
+var CR = 0.6;   // coefficient of restitution. 1 is maximum bouncy
 
 //variables that the user sets
-var H;              // Step time in seconds
-var H_MILLI;        // In milliseconds
-var G = new THREE.Vector3(0, -10, 0);  // The accel due to gravity in m/s^2 
+var H;                                  // Step time in seconds
+var H_MILLI;                            // In milliseconds
+var G = new THREE.Vector3(0, -10, 0);   // The accel due to gravity in m/s^2 
 var useRK4 = true;
 
 var collidables = [];
 
 var cubeAttr1 = {
-    p: [8, -50 , 0],
-    r: [Math.radians(10), Math.radians(20), Math.radians(20)],
-    scale: 40
+    p: [-9, -40 , -20],
+    r: [Math.radians(30), Math.radians(-10), Math.radians(30)],
+    scale: 30
 };
 
 var cubeAttr2 = {
-    p: [50, -90 , 0],
-    r: [Math.radians(0), Math.radians(0), Math.radians(30)],
-    scale: 50
+    p: [50, -110 , 0],
+    r: [Math.radians(0), Math.radians(0), Math.radians(50)],
+    scale: 70
 };
 
 //ugly, but saves time garbage collecting
@@ -69,6 +68,8 @@ var q2_mut = new THREE.Quaternion();
 var p0_mut = new THREE.Vector3(0,0,0);
 var p1_mut = new THREE.Vector3(0,0,0);
 var p2_mut = new THREE.Vector3(0,0,0);
+var p3_mut = new THREE.Vector3(0,0,0);
+var p4_mut = new THREE.Vector3(0,0,0);
 var vNormal = new THREE.Vector3(0,0,0);
 var plane_mut = new THREE.Plane(new THREE.Vector3(0, 0, 0), 0);
 
@@ -146,6 +147,7 @@ function initMotion(){
     
     //give it an initial angular velocity
     //body.STATE.L.set(0, 0, 1);
+    
     simulate();
 }
 
@@ -168,25 +170,7 @@ function F(state, m, I_0_inv){
     v2_mut.copy(G).multiplyScalar(m);
     state_mut.P.copy(v2_mut);    //Force do to gravity
     state_mut.L.set(0,0,0); 
-    
-    //test torque
-    /*
-    var F = new THREE.Vector3(1,1,1);
-    state_mut.P.add(F);
-    
-    var r = new THREE.Vector3(0,0,0).copy(body.mesh.localToWorld(body.mesh.geometry.vertices[0].clone())).sub(state.x);
-    state_mut.L.copy(r).cross(F);
-    */
-    
-    /*
-    for Vector3 Fi do
-        deriv.P+ = Fi;
-        if Fi is applied at a point p then
-            Vector3 r = p - S.x;
-            deriv.L += r ⇥ Fi; 
-    end
-    */
-    
+        
     return state_mut;
 }
 
@@ -275,7 +259,14 @@ function simulate(){
             p2_mut.applyQuaternion(body.STATE.q); //p2
             p2_mut.add(body.STATE.x);
 
-            response = edgeEdgeResponse(p1_mut, p2_mut);
+            p3_mut.copy(vertArr[edge[0]]);
+            p4_mut.copy(vertArr[edge[1]]);
+            p3_mut.applyQuaternion(oldState.q); //op1
+            p3_mut.add(oldState.x);
+            p4_mut.applyQuaternion(oldState.q); //op2
+            p4_mut.add(oldState.x);
+            
+            response = edgeEdgeResponse(p1_mut, p2_mut, p3_mut, p4_mut);
             if(response){
                 break;
             }
@@ -283,34 +274,53 @@ function simulate(){
 
         }
 
-        //Vertex Face Collision
-        for (var i = 0; i < vertArr.length; i++){
-            v4_mut.copy(vertArr[i]); //xOld            
-            v4_mut.applyQuaternion(oldState.q); 
-            v4_mut.add(oldState.x);
-        
-            v5_mut.copy(vertArr[i]); //xNew
-            v5_mut.applyQuaternion(body.STATE.q); 
-            v5_mut.add(body.STATE.x);
-            
-            v6_mut.copy(v5_mut).sub(v4_mut).multiplyScalar(1/timestep); //velocity
+        if(!response){
+            //Vertex Face Collision
+            for (var i = 0; i < vertArr.length; i++){
+                v4_mut.copy(vertArr[i]); //xOld            
+                v4_mut.applyQuaternion(oldState.q); 
+                v4_mut.add(oldState.x);
 
-            response = vertexFaceResponse(v4_mut, v5_mut, v6_mut);
-            if (response){
-                console.log(v6_mut.length());
-                break;
+                v5_mut.copy(vertArr[i]); //xNew
+                v5_mut.applyQuaternion(body.STATE.q); 
+                v5_mut.add(body.STATE.x);
+
+                v6_mut.copy(v5_mut).sub(v4_mut).multiplyScalar(1/timestep); //velocity
+
+                response = vertexFaceResponse(v4_mut, v5_mut, v6_mut);
+                if (response){
+                    break;
+                }
             }
         }
 
         if (response){
+            //console.log(response.type);
             var J = response.nHat.clone().multiplyScalar(response.j);
-            Boiler.drawPoint(collisionX);
+            //Boiler.drawPoint(response.collisionX);
 
+            timestep = response.fraction * timestep; //conservative estimate
+            if (response.type == 'vertex'){
+                timestep = timestep * 0.9; //conservative estimate
+            }
+
+            
+            body.STATE.copy(oldState);
+            
+            if (useRK4) {       /******************************************* rk4 integration */ 
+                rk4Integrate(body.STATE, body.mass, body.I, timestep);
+            }
+            else {              /******************************************* euler integration */ 
+                eulerIntegrate(body.STATE, body.mass, body.I, timestep);
+            }            
+            
             body.STATE.P.add(J);
             body.STATE.L.add(response.r.clone().cross(J));
-            body.STATE.x.copy(response.collisionX.sub(response.r));
-            timestep = response.fraction * timestep;
             
+            if (response.type == 'edge'){
+                //give it a little nudge in the normal to avoid clipping through
+                body.STATE.x.add(new THREE.Vector3().copy(response.nHat).multiplyScalar(1));
+            }
         }
         else {
             timestep = timestepRemain;
@@ -379,8 +389,7 @@ function vertexFaceResponse(x1, x2, vAvg){
                     var j = vAvg.clone().multiplyScalar(-(1+CR)).dot(plane_mut.normal) /
                             ((1/body.mass) + r1.clone().cross(nHat).applyMatrix4(I_a_inv).cross(r1).dot(nHat)); 
                     
-                    //cludge cludge cludge
-                    return {j: j*20, nHat: nHat.clone(), r: r1, fraction: fraction, collisionX: collisionX.clone()};
+                    return {j: j, nHat: nHat.clone(), r: r1, fraction: fraction, collisionX: collisionX.clone(), type: 'vertex'};
                 }
             }
         }
@@ -415,7 +424,7 @@ function pointInFace(x, p0, p1, p2){
 }
 
 /** find results of any edge edge collisions */
-function edgeEdgeResponse(p1, p2){
+function edgeEdgeResponse(p1, p2, op1, op2){
     
     for (var i=0; i < collidables.length; i++){
         var mesh = collidables[i];
@@ -452,25 +461,18 @@ function edgeEdgeResponse(p1, p2){
                 pa.copy(v1_mut).multiplyScalar(s).add(p1); //pa = p1 +sa
                 qa.copy(v2_mut).multiplyScalar(t).add(q1); //qa = q1 +tb   
                 var dist = qa.clone().sub(pa).length(); //clone is for debugging
-                if (dist < 0.3){ 
-                                                            
+                if (dist < 0.5){ 
                     var r1 = new THREE.Vector3().copy(pa).sub(body.STATE.x); 
-                    
                     var w = body.STATE.L.clone().applyMatrix4(body.I.clone().getInverse(body.I));
-                    
                     var v = body.STATE.P.clone().multiplyScalar(1/body.mass).add(w.clone().cross(r1));
-                    
-                    var nHat = qa.clone().sub(pa);
-                    
+                    var nHat = pa.clone().sub(qa);
                     var I_a_inv = new THREE.Matrix4().getInverse(body.I);
 
                     var j = v.clone().multiplyScalar(-(1+CR)).dot(nHat) /
                             ((1/body.mass) + r1.clone().cross(nHat).applyMatrix4(I_a_inv).cross(r1).dot(nHat));  
-                                        
-                    // 1/m1 + 1/m2 + (i1_inv(r1 x nHat) x r1 + i2_inv(r2 x nHat) x r2) . nHat
-                    
-                    //TODO collision response and fraction
-                    return {j: j, nHat: nHat.clone(), r: r1};    
+                                                            
+                    return {j: j, nHat: nHat.clone(), r: r1, fraction: 1, collisionX: new THREE.Vector3().copy(pa), type: 'edge'};
+
                 }
             }
         }
