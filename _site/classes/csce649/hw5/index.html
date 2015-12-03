@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="I'm Kade Keith, a Computer Scientist specializing in front end development. I try to make complicated things simple.">
+    <title>Kade Keith | CSCE 649 HW 5</title>
+    <link rel="icon" href="/img/compressed/kFavicon.png">
+    <link rel="stylesheet" href="style.css">
+</head>    
+<body>
+    <div id="control-panel">
+        <h3>Simulation Settings</h3>
+        <ul>
+            <li>Gravity</li>
+            <li>
+                X
+                <input id="g.x-slider" class="slider" type="range" value="0" step=".01" min="-10" max="10" oninput="inputChange(this, 'g.x')">
+                <input id="g.x" type="number" value="0" step="any" oninput="inputChange(this, 'g.x-slider')">
+            </li>
+            <li>
+                Y
+                <input id="g.y-slider" class="slider" type="range" value="-10" step=".01" min="-10" max="10" oninput="inputChange(this, 'g.y')">
+                <input id="g.y" type="number" value="-10" step="any" oninput="inputChange(this, 'g.y-slider')">
+            </li>
+            <li>
+                Z
+                <input id="g.z-slider" class="slider" type="range" value="0" step=".01" min="-10" max="10" oninput="inputChange(this, 'g.z')">
+                <input id="g.z" type="number" value="0" step="any" oninput="inputChange(this, 'g.z-slider')">
+            </li>
+        </ul>
+        <ul>
+            <li><input id="H" type="number" value="0.02" min=".001" step=".001" onchange="inputChange()"> - Time Step </li>
+        </ul>
+        <label><input class="checkbox" type="checkbox" onclick='Boiler.toggleAxes(this)'> Show XYZ Axes</label>
+        <br/>
+        <br/>
+        <label><input class="checkbox" type="checkbox" onclick='toggleRK4(this)' checked> RK4 integration</label> 
+        <br/>
+        <br/>
+        <label><input class="checkbox" type="checkbox" onclick='toggleFish(this)' checked> Use Fish</label>                
+        <button class="restart-btn" onclick="initMotion()">DO THE THING</button>
+    </div>
+    <div id="webgl-container"></div>
+</body>
+
+<script src="js/three.min.js"></script>
+<script src="js/OrbitControls.js"></script>    
+<script src="js/Util.js"></script>    
+<script src="js/RigidBody.js"></script>
+<script src="js/Main.js"></script>
+<script src="js/UI.js"></script> 
+    
+</html>

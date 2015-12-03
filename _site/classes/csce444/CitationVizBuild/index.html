@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta name="description" content="I'm Kade Keith, a Computer Scientist specializing in front end development. I try to make complicated things simple.">
+    <title>Kade Keith | CitationViz</title>
+    <link rel="icon" href="img/kFavicon.png">    
+    <style>
+        body {
+            color: white;
+            background-color: #333333;
+            font-family: sans-serif;
+        }
+        
+        a {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Citation Viz</h1>
+    <p> Below, you can see the raw data structure for our graph consisting of ~700 documents. We have also worked on the UI components/mockups of the <a href="app/">app</a>.</p>
+    <pre id="json">Loading Data</pre>
+    
+    <script src="data.js"></script>
+    <script>
+        //the data is assigned to a variable g 
+        document.getElementById('json').innerHTML = JSON.stringify(graph, null, 2);
+    </script>
+    
+</body> 
+    
+    
+</html>
