@@ -1,2 +1,0 @@
-# CitationViz
-Maaaaaaaaagic

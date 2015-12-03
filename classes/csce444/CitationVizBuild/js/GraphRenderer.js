@@ -77,7 +77,7 @@ function makeTextSprite( message, parameters )
     context.fillText( message, borderThickness, fontsize + borderThickness);
 
     // canvas contents will be used for a texture
-    var texture = new THREE.Texture(canvas)
+    var texture = new THREE.Texture(canvas);
     texture.needsUpdate = true;
 
     var spriteMaterial = new THREE.SpriteMaterial( { map: texture} );
@@ -104,14 +104,17 @@ function roundRect(ctx, x, y, w, h, r)
 }
 
 GraphRenderer.prototype.loadObjects = function(graphNodeMap) {
+    var count =0;
     for ( var key in graphNodeMap ) {
         var node = graphNodeMap[key];
         var object = this.createObject( node );
         this.scene.add( object );
-        object.position.set( Math.random() * 5 -2.5 , Math.random() * 5 -2.5 ,Math.random() * 5- 2.5);
-        var spritey = makeTextSprite( " World! ", { fontsize: 32, fontface: "Georgia", borderColor: {r:0, g:0, b:255, a:1.0} } );
-        spritey.position.clone(object.position);
-        //this.scene.add( spritey );
+        object.position.set( count , count ,count);
+        var spritey = makeTextSprite( node.title, { fontsize: 32, fontface: "Georgia", borderColor: {r:0, g:0, b:255, a:1.0} } );
+        spritey.position.set( object.position.x , object.position.y , object.position.z );
+        count++;
+        this.scene.add( spritey );
+        object.sprite = spritey;
         this.objects.push(object);
     }
 };
@@ -120,8 +123,6 @@ GraphRenderer.prototype.createObject = function() {
     var geometry = new THREE.SphereGeometry( 1, 32,32 );
     var material = new THREE.MeshBasicMaterial( { color: 0x000000 } ); // TODO set sphere color
     var sphere = new THREE.Mesh( geometry, material );
-
-
 
     return sphere;
 };
@@ -139,6 +140,7 @@ GraphRenderer.prototype.updateObjectPositions = function() {
     for ( var i = 0; i < this.keyArray.length; i++) {
         var newPos = state[i];
         this.objects[i].position.copy(newPos);
+        this.objects[i].sprite.position.copy(newPos.clone().add(new THREE.Vector3(0,1,0)));
     }
 };
 
