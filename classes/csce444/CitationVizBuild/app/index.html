@@ -2,23 +2,103 @@
 <html lang="en">
 <head>
 	<title>444 Final</title>
-    
+    <script> var application_name = 'dod'</script>
 	<!-- CSS! -->
 	<link href="css/style.css" rel="stylesheet" media="screen">
 
 	<!-- Scripts! -->
-	<script src="js/Util.js"></script>    
-	<script src="js/UIComponents.js"></script>
+    <script src="libs/three.js"></script>
+    <script src="libs/examples/js/controls/TrackballControls.js"></script>
+	<script src="js/Util.js"></script>
+    <script src="js/RenderUtil.js"></script>
+    <script src="js/UIComponents.js"></script>
+    <script src="js/GraphExample.js"></script>
+    <script src="js/GraphRenderer.js"></script>
+    <script src="libs/examples/js/renderers/Projector.js"></script>
+    <script src="js/Simulation.js"></script>
+    <script src="js/Filter.js"></script>
+
+    <!--Dat files-->
+    <script src="../metadataCache.js"></script>
+    <script src="../graphMap.js"></script>
+
+
+    <!-- The mouse made me... -->
+    <!-- CSS! -->
+    <link href="../BigSemanticsJavaScript/houseMICE/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../BigSemanticsJavaScript/houseMICE/css/prettify.css" type="text/css" rel="stylesheet" />
+    <link href="dod.css" rel="stylesheet" media="screen">
+    <link href="../BigSemanticsJavaScript/renderers/styles/metadataRenderer.css" rel="stylesheet" type="text/css">
+    <link href="../BigSemanticsJavaScript/renderers/styles/twitterMICE.css" rel="stylesheet" type="text/css">
+
+    <!-- Libaries! -->
+    <script src="../BigSemanticsJavaScript/libraries/jquery-2.0.0.min.js"></script>
+    <script src="../BigSemanticsJavaScript/libraries/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/houseMICE/js/prettify.js"></script>
+
+    <!-- bsjsCore Files -->
+    <script type="text/javascript" src="../BigSemanticsJavaScript/bsjsCore/Readyable.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/bsjsCore/BSAutoSwitch.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/bsjsCore/BSService.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/bsjsCore/BSExtension.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/bsjsCore/BSUtils.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/bsjsCore/MetadataTask.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/bsjsCore/MetadataViewModel.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/bsjsCore/Readyable.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/bsjsCore/Downloader.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/bsjsCore/ParsedURL.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/bsjsCore/Downloader.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/bsjsCore/RepoMan.js"></script>
+
+    <!-- Required renderer files -->
+    <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/interfaceStyle.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/TweetBubbleRenderingTask.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/TweetBubbleRenderer.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/RendererBase.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/RenderingTask.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/twitterICE.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/ICE.js"></script>
+    <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/VanillaMICE.js"></script>
+
+    <!-- Just the simpl things -->
+    <script type="text/javascript" src="../BigSemanticsJavaScript/bsjsCore/simpl/simplBase.js"></script>
+
+    <script type="text/javascript" src="../../BigSemanticsJavaScript/libraries/jsonpath-0.8.0.js"></script>
+    <script type="text/javascript" src="../../BigSemanticsJavaScript/bsjsCore/JsonPathParser.js"></script>
+    <script type="text/javascript" src="toMetadata-twitter.js"></script>
+
 
 </head>
 <body>
 
-    <div class="settings-panel">
+    <div class="settings-panel" id='settings-panel'>
+        <h4>Physics Settings</h4>
         <div id="shared-keyword-sliders"></div>
+        <div id="shared-classification-sliders"></div>
+        <div id="shared-author-sliders"></div>
+        <div id="cited-sliders"></div>
         
+        <h4>Filters</h4>
         <div id="year-filter"></div>
         <div id="citation-count-filter"></div>        
+    
+        <ul id="keyword-filter"></ul>
+        
     </div>
+
+    <div id="explore-graph"></div>
+    <div id="personal-graph">
+        App takes a second to load because it is initializing the Meta-Metadata repo. <br/>
+        Left click + drag to rotate the graph. <br/>
+        Right click + drag to pan. <br/>
+        Clicking on a node will bring up a MICE preview. <br/>
+        Holding down shift brings up physics and filtering options. <br/>
+        Filter by year and citation count works. Filter by keyword does not yet. <br/>
+        This area will eventually be the local graph. <br/>
+        <button onclick='start()'>Apply Physics</button>
+        <a href='../index.html'>About</a>
+    </div>
+    <div id="mice">MICE Preview area. Click on a node for a preview.</div>
     
 </body>
     

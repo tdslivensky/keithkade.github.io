@@ -1,8 +1,21 @@
-$dark-grey:     #333333;
-$light-grey:    #666666;
+$dark-grey:     #333339;
+$dark-grey-translucent: rgba(51, 51, 51, 0.8);
+$light-grey:    #555558;
 $green:         #c8e600;
 $purple:        #e600c8;
 $teal:          #00c8e6;
+
+$filter-knob-width: 8px;
+$filter-slide-height: 20px;
+$filter-slide-width: 250px;   
+
+$phys-slide-width: 250px;
+$phys-slide-height: 22px;
+$grabby-radius: 4px;
+
+$settings-width: 400px;
+$personal-graph-width: 540px;
+$mice-height: 280px;
 
 * {
     margin: 0;
@@ -13,29 +26,116 @@ html, body {
     width: 100%;
     height: 100%;
     font-family: sans-serif;
-    color: white;
 }
 
+//to give my styles more specifity and higher preference over pesky bootstrap
+html {
+
 .settings-panel {
-    width: 300px;
-    height: 100%;
-    background-color: $dark-grey;
-    padding: 10px;
+    width: $settings-width;
+    height: 80%;
+    background-color: $dark-grey-translucent;
+    padding: 0 10px 0 10px;
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    position: relative;
+    z-index: 5;
+    opacity: 0.85;
+    border-radius: 5px;
+    display: none;
+}
+
+h4 {
+    font-weight: 400;  
+    padding: 10px 0 0 0;
+    margin: 0;
+}
+
+#explore-graph {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: $personal-graph-width;
+    border-right: 2px solid $dark-grey;
+}
+
+#personal-graph {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    right: 0;
+    bottom: $mice-height;
+    width: $personal-graph-width;
+}
+
+#mice {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: $mice-height;
+    width: $personal-graph-width;
+    background-color: white;
+    
+    .ecologylab-metadataContainer {
+        min-width: $personal-graph-width;
+    }
 }
 
 /* UI components */
 
-.filter-slider{
-    $filter-knob-width: 8px;
-    $filter-slide-height: 20px;
-    $filter-slide-width: 200px;    
+.filter-dropdown {
+    font-size: 14px;
+    margin: 10px 0 10px 0;
     
+    .dropdown-title {
+        background-color: $light-grey;
+        padding: 2px;
+        border: 1px solid black;
+        box-shadow: 0px 1px 2px 0px rgba(0,0,0,1);
+        position: relative;
+        top: -2px;
+        left: -1px;
+        cursor: pointer;
+
+        .dropdown-caret {
+            font-size: 10px;
+        }
+    }
+    
+    &.expanded {
+        .dropdown-title {
+            border-bottom: none;
+            box-shadow: none;    
+        }
+        li {
+            display: block;    
+        }           
+    }
+    
+    &.collapsed {
+        li {
+            display: none;
+        }    
+    }
+            
+    li {
+        background-color: $light-grey;
+        padding: 2px;
+    }
+
+}
+
+.filter-slider{
     position: relative;
     width: $filter-slide-width;
     height: $filter-slide-height;
     font-size: 12px;
     display: block;
-    margin: 0 0 28px 0;
+    margin: 10px 0 30px 0;
     
     .filter-slide-title{
         position: absolute;
@@ -52,6 +152,7 @@ html, body {
         width: $filter-slide-width;
         pointer-events: none;       
         height: $filter-slide-height;
+        outline: none;
     }    
 
     //the grabby bit
@@ -110,10 +211,14 @@ html, body {
 }
 
 .phys-slider-container {
-    $phys-slide-width: 200px;
-    $phys-slide-height: 4px;
-    $grabby-radius: 4px;
+    font-size: 12px;
     
+    margin: 10px 0 10px 0;
+    
+    .icon {
+        width: $phys-slide-height;
+        height: $phys-slide-height;
+    }
     
     .phys-slider-title {
         display: block;
@@ -126,9 +231,11 @@ html, body {
         border-radius: 0px;
         position: relative;
         overflow-x: hidden;
-        overflow-y: visible;
+        overflow-y: hidden;
         width: $phys-slide-width;
+        height: $phys-slide-height;
         background: transparent;
+        outline: none;
     }
     
     .phys-slider::-webkit-slider-thumb {
@@ -141,9 +248,8 @@ html, body {
     
     .phys-slider::-webkit-slider-runnable-track {
         background: #757575; 
-        height: 6px;
+        height: 5px;
         margin: 10px 0;
-        //border-radius: 4px;
     }
     
     .phys-slider::-webkit-slider-thumb:before {
@@ -168,4 +274,6 @@ html, body {
         border-radius: 50%;
     }
 
+}
+    
 }

@@ -38,11 +38,48 @@ function createGraph(yData){
     }
     return container;
 }
+
+
+/**
+ * Component for controlling attract/repulse for one physics dimension
+ */
+UI.PhysicSliders = function(container, title, bindTo, onchange){
+    container.className = 'phys-slider-container';
+
+    //PRIVATE
+    var titleDisp = createElem('span', {className: 'phys-slider-title', innerHTML: title});
+    var attractIcon = createElem('img', {className: 'icon', src: 'img/AttractIcon.svg', title: 'Attract Force'});
+    var repulseIcon = createElem('img', {className: 'icon', src: 'img/RepulseIcon.svg', title: 'Repulse Force'});
+    var attractSlider = createElem('input', {className: 'phys-slider', type: 'range', value: 5, min: 0, max: 10, step: '1'});
+    var repulseSlider = createElem('input', {className: 'phys-slider', type: 'range', value: 5, min: 0, max: 10, step: '1'});
+    var attractMeter = createElem('div', {});
+    var repulseMeter = createElem('div', {});
+    
+    //PUBLIC
+    this.elem = container;
+    this.attractVal = 5;
+    this.repulseVal = 5;
+    
+    //update values
+    attractSlider.oninput = function(){
+        this.attractVal = parseInt(attractSlider.value);
+        bindTo.attract = this.attractVal;
+		onchange();
+    }.bind(this);
+    
+    repulseSlider.oninput = function(){
+        this.repulseVal = parseInt(repulseSlider.value);
+		bindTo.repulse = this.repulseVal;
+		onchange();
+    }.bind(this); 
+
+    addChildren(this.elem, [titleDisp, attractIcon, attractSlider, createElem('br'), repulseIcon, repulseSlider]);
+};
     
 /** 
  * Double-ended filter slider 
  */
-UI.FilterSlider = function(container, title, xVals, yVals){
+UI.FilterSlider = function(container, title, xVals, yVals, onchange){
     container.className = 'filter-slider';
 
     //PRIVATE     
@@ -96,9 +133,10 @@ UI.FilterSlider = function(container, title, xVals, yVals){
             lSlide.value = rIndex - 1;
             lIndex = rIndex - 1;
         }
-        lScreen.style.width = stepSize * lIndex + 'px';
+        lScreen.style.width = stepSize * lIndex + 'px'; //FIXME
         this.lVal = this.xData[lIndex];
         lValDisp.innerHTML = this.lVal;
+		onchange();		
     }
     
     function onRSlideMove(){
@@ -107,50 +145,58 @@ UI.FilterSlider = function(container, title, xVals, yVals){
             rSlide.value = lIndex + 1;
             rIndex = lIndex + 1;
         }   
-        rScreen.style.width = stepSize * (max - rIndex) + 'px';
+        rScreen.style.width = stepSize * (max - rIndex) + 'px'; //FIXME
         this.rVal = this.xData[rIndex - 1];
         rValDisp.innerHTML = this.rVal;
+		onchange();		
     }
 
 };
 
 /**
- * Component for controlling attract/repulse for one physics dimension
+ * Multi-select dropdown
  */
-UI.PhysicSliders = function(container, title){
-    container.className = 'phys-slider-container';
-
+UI.FilterDropdown = function(container, title, list, onchange){
+    container.className = 'filter-dropdown collapsed';
+    
     //PRIVATE
-    var titleDisp = createElem('span', {className: 'phys-slider-title', innerHTML: title});
-    var attractIcon;
-    var repulseIcon;
-    var attractSlider = createElem('input', {className: 'phys-slider', type: 'range', value: 5, min: 0, max: 10, step: '1'});
-    var repulseSlider = createElem('input', {className: 'phys-slider', type: 'range', value: 5, min: 0, max: 10, step: '1'});
-    var attractMeter = createElem('div', {});
-    var repulseMeter = createElem('div', {});
+    var titleSpan = createElem('span', {className: 'dropdown-title', innerHTML: title + ' <span class="dropdown-caret">&#9660;</span>'});
     
     //PUBLIC
     this.elem = container;
-    this.attractVal = 5;
-    this.repulseVal = 5;
+    this.options = [];
+
     
-    //update values
-    attractSlider.oninput = function(){
-        this.attractVal = parseInt(attractSlider.value);
-        
+    this.elem.appendChild(titleSpan);
+    for (var i = 0; i < list.length; i++){
+        this.options.push({value: list[i], selected: true});
+        var opt = createElem('li', {innerHTML: '<input type="checkbox"> ' + list[i]});
+        opt.onclick = filterSelect.bind(this);
+        this.elem.appendChild(opt);
+    }
+    
+    //toggle class on click
+    titleSpan.onclick = function (){
+        var list = this.elem.classList;
+        if (this.elem.classList.contains('collapsed')){
+            list.remove('collapsed');
+            list.add('expanded');
+        }
+        else {
+            list.remove('expanded');
+            list.add('collapsed');
+        }        
     }.bind(this);
     
-    repulseSlider.oninput = function(){
-        this.repulseVal = parseInt(repulseSlider.value);
-    }.bind(this); 
-
-    //TODO icons
-    //TODO have left part highlight
+    //not the most efficient but probably not an issue
+    function filterSelect(){
+        var list = this.elem.getElementsByTagName('input');
+        for (var i = 0; i < list.length; i++){
+            this.options[i].selected = list[i].checked;
+        }
+		onchange();
+    }
     
-    
-    addChildren(this.elem, [titleDisp, attractSlider, repulseSlider]);
-};
-    
-//TODO filters    
+};    
     
 })();
