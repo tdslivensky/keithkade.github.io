@@ -1,4 +1,4 @@
-/* global doc, console */
+/* global doc, console, Util */
 
 var UI = {};
 
@@ -20,6 +20,10 @@ function createElem(type, opts){
     for (var key in opts){
         elem[key] = opts[key];
     }
+	//order of adding attributes matters for value
+	if (opts && 'value' in opts){
+		elem.value = opts.value;
+	}
     return elem;
 }
 
@@ -77,12 +81,16 @@ UI.PhysicSliders = function(container, title, bindTo, onchange){
 };
     
 /** 
- * Double-ended filter slider 
+ * Double-ended filter slider . TODO right side not starting and dark part not working
  */
-UI.FilterSlider = function(container, title, xVals, yVals, onchange){
+UI.FilterSlider = function(container, title, graphData, attr, onchange){
     container.className = 'filter-slider';
 
     //PRIVATE     
+    var vals = Util.getXYValsFromGraph(graphData, attr);
+    var xVals = vals.x;
+    var yVals = vals.y;
+    
     var min = 0;
     var max = xVals.length;
     var stepSize = FILTER_SLIDER_WIDTH / max;

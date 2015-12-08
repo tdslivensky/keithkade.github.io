@@ -1,18 +1,18 @@
-/* line 20, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+/* line 20, C:/Users/Kade/git/CitationViz/app/css/style.scss */
 * {
   margin: 0;
   padding: 0; }
 
-/* line 25, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+/* line 25, C:/Users/Kade/git/CitationViz/app/css/style.scss */
 html, body {
   width: 100%;
   height: 100%;
   font-family: sans-serif; }
 
-/* line 32, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+/* line 32, C:/Users/Kade/git/CitationViz/app/css/style.scss */
 html {
   /* UI components */ }
-  /* line 34, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+  /* line 34, C:/Users/Kade/git/CitationViz/app/css/style.scss */
   html .settings-panel {
     width: 400px;
     height: 80%;
@@ -27,12 +27,12 @@ html {
     opacity: 0.85;
     border-radius: 5px;
     display: none; }
-  /* line 50, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+  /* line 50, C:/Users/Kade/git/CitationViz/app/css/style.scss */
   html h4 {
     font-weight: 400;
     padding: 10px 0 0 0;
     margin: 0; }
-  /* line 56, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+  /* line 56, C:/Users/Kade/git/CitationViz/app/css/style.scss */
   html #explore-graph {
     position: absolute;
     overflow: hidden;
@@ -41,7 +41,7 @@ html {
     left: 0;
     right: 540px;
     border-right: 2px solid #333339; }
-  /* line 66, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+  /* line 66, C:/Users/Kade/git/CitationViz/app/css/style.scss */
   html #personal-graph {
     position: absolute;
     overflow: hidden;
@@ -49,7 +49,7 @@ html {
     right: 0;
     bottom: 280px;
     width: 540px; }
-  /* line 75, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+  /* line 75, C:/Users/Kade/git/CitationViz/app/css/style.scss */
   html #mice {
     position: absolute;
     bottom: 0;
@@ -57,14 +57,14 @@ html {
     height: 280px;
     width: 540px;
     background-color: white; }
-    /* line 83, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 83, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html #mice .ecologylab-metadataContainer {
       min-width: 540px; }
-  /* line 90, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+  /* line 90, C:/Users/Kade/git/CitationViz/app/css/style.scss */
   html .filter-dropdown {
     font-size: 14px;
     margin: 10px 0 10px 0; }
-    /* line 94, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 94, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .filter-dropdown .dropdown-title {
       background-color: #555558;
       padding: 2px;
@@ -74,24 +74,24 @@ html {
       top: -2px;
       left: -1px;
       cursor: pointer; }
-      /* line 104, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+      /* line 104, C:/Users/Kade/git/CitationViz/app/css/style.scss */
       html .filter-dropdown .dropdown-title .dropdown-caret {
         font-size: 10px; }
-    /* line 110, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 110, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .filter-dropdown.expanded .dropdown-title {
       border-bottom: none;
       box-shadow: none; }
-    /* line 114, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 114, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .filter-dropdown.expanded li {
       display: block; }
-    /* line 120, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 120, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .filter-dropdown.collapsed li {
       display: none; }
-    /* line 125, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 125, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .filter-dropdown li {
       background-color: #555558;
       padding: 2px; }
-  /* line 132, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+  /* line 132, C:/Users/Kade/git/CitationViz/app/css/style.scss */
   html .filter-slider {
     position: relative;
     width: 250px;
@@ -99,12 +99,12 @@ html {
     font-size: 12px;
     display: block;
     margin: 10px 0 30px 0; }
-    /* line 140, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 140, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .filter-slider .filter-slide-title {
       position: absolute;
       left: 264px;
       font-size: 14px; }
-    /* line 147, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 147, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .filter-slider .filter-slide-end {
       -webkit-appearance: none;
       position: absolute;
@@ -114,7 +114,7 @@ html {
       pointer-events: none;
       height: 20px;
       outline: none; }
-    /* line 159, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 159, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .filter-slider .filter-slide-end::-webkit-slider-thumb {
       -webkit-appearance: none;
       cursor: pointer;
@@ -125,49 +125,49 @@ html {
       z-index: 1;
       height: 26px;
       box-shadow: 0px 1px 2px 0px black; }
-    /* line 171, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 171, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .filter-slider .l-slide::-webkit-slider-thumb {
       border-top-left-radius: 5.33333px;
       border-bottom-left-radius: 5.33333px; }
-    /* line 176, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 176, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .filter-slider .r-slide::-webkit-slider-thumb {
       border-top-right-radius: 5.33333px;
       border-bottom-right-radius: 5.33333px; }
-    /* line 182, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 182, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .filter-slider .filter-curtain {
       position: absolute;
       background-color: #555558;
       opacity: .5;
       height: 20px;
       top: 0; }
-    /* line 191, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 191, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .filter-slider .filter-val-disp {
       position: absolute;
       top: 24px; }
-    /* line 197, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 197, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .filter-slider .slide-graph {
       width: 100%;
       height: 20px;
       display: inline-block;
       position: absolute;
       left: 8px; }
-      /* line 204, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+      /* line 204, C:/Users/Kade/git/CitationViz/app/css/style.scss */
       html .filter-slider .slide-graph .bar {
         background-color: #e600c8;
         opacity: .3;
         display: inline-block; }
-  /* line 213, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+  /* line 213, C:/Users/Kade/git/CitationViz/app/css/style.scss */
   html .phys-slider-container {
     font-size: 12px;
     margin: 10px 0 10px 0; }
-    /* line 218, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 218, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .phys-slider-container .icon {
       width: 22px;
       height: 22px; }
-    /* line 223, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 223, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .phys-slider-container .phys-slider-title {
       display: block; }
-    /* line 229, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 229, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .phys-slider-container .phys-slider {
       -webkit-appearance: none;
       border-radius: 0px;
@@ -178,19 +178,19 @@ html {
       height: 22px;
       background: transparent;
       outline: none; }
-    /* line 241, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 241, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .phys-slider-container .phys-slider::-webkit-slider-thumb {
       -webkit-appearance: none !important;
       position: relative;
       cursor: pointer;
       width: 6px;
       height: 100%; }
-    /* line 249, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 249, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .phys-slider-container .phys-slider::-webkit-slider-runnable-track {
       background: #757575;
       height: 5px;
       margin: 10px 0; }
-    /* line 255, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 255, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .phys-slider-container .phys-slider::-webkit-slider-thumb:before {
       content: "-";
       position: absolute;
@@ -200,7 +200,7 @@ html {
       bottom: 0;
       background: #e600c8;
       opacity: .4; }
-    /* line 266, /Users/kadekeith/Desktop/CitationViz/app/css/style.scss */
+    /* line 266, C:/Users/Kade/git/CitationViz/app/css/style.scss */
     html .phys-slider-container .phys-slider::-webkit-slider-thumb:after {
       content: "";
       position: absolute;

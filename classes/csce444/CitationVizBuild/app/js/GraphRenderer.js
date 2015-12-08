@@ -1,3 +1,5 @@
+/* global document, THREE, RenderUtil, event */
+
 function GraphRenderer( graphNodeMap , keyArray, simulator , canvasName ) {
     var container = document.getElementById(canvasName);
     var canvas;
@@ -73,7 +75,7 @@ GraphRenderer.prototype.render = function() {
     this.updateObjectPositions();
     this.renderer.render(this.scene, this.camera);
     //var delta = this.clock.getDelta(); // Time since last call in seconds
-    this.cameraControls.update(.1);
+    this.cameraControls.update(0.1);
 };
 
 
@@ -85,7 +87,7 @@ GraphRenderer.prototype.updateObjectPositions = function() {
         var camPos = this.camera.position.clone();
         var vector = camPos.sub(this.objects[i].position).normalize();
         // TODO this could be played with some
-        this.objects[i].titleObj.position.copy(newPos.clone().add(vector.multiplyScalar(1.2).sub(this.camera.up.clone().multiplyScalar(.5))));
+        this.objects[i].titleObj.position.copy(newPos.clone().add(vector.multiplyScalar(1.2).sub(this.camera.up.clone().multiplyScalar(0.5))));
 
         if ( this.objects[i].node.inFilter ) {
             this.objects[i].visible = true;

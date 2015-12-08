@@ -19,7 +19,6 @@ Array.prototype.clone = function() {
     return newArr; 
 };
 
-//for array of vector 3
 Array.prototype.copy = function(arr) { 
     for (var i = 0; i < this.length; i++){
         this[i].copy(arr[i]);
@@ -39,6 +38,7 @@ Array.prototype.multiply = function(x) {
         this[i].multiplyScalar(x);
     }
 };
+//
 
 var Util = {};
 
@@ -46,7 +46,6 @@ var Util = {};
 Util.getRandom = function (min, max) {
   return Math.random() * (max - min) + min;
 };
-
 
 Util.arrayToSet = function (graph) {
     for (var key1 in graph){
@@ -63,4 +62,43 @@ Util.arrayToSet = function (graph) {
             }
         }
     }
+};
+
+Util.keyArray = function(map) {
+    var array = [];
+    for( var key in map) {
+        array.push(key);
+    }
+    return array;
+};
+
+Util.getXYValsFromGraph = function(graph, attr){
+    var x = [];
+    var y = [];
+    var counts = {};
+    for (var id in graph){
+        var node = graph[id];
+        var val = node[attr];
+        
+        //currently excludes if value is null
+        if (!val) continue;
+        
+        if (val in counts){
+            counts[val] += 1;
+        }
+        else {
+            counts[val] = 1;
+        }
+    }
+    
+    for (var value in counts){
+        x.push(value);
+    }
+    x.sort(function(a, b){return a-b;});
+    
+    for (var i = 0; i < x.length; i++){
+        y.push(counts[x[i]]);
+    }
+    
+    return {x:x, y:y};
 };
