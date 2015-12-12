@@ -43,19 +43,9 @@
     <!-- Required renderer files -->
     <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/interfaceStyle.js"></script>
     <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/TweetBubbleRenderingTask.js"></script>
-    
-    <!--
-    <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/TweetBubbleRenderer.js"></script>
-    -->
-
     <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/RendererBase.js"></script>
     <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/RenderingTask.js"></script>
     <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/twitterICE.js"></script>
-    
-    <!--
-    <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/ICE.js"></script>
-    -->
-    
     <script type="text/javascript" src="../BigSemanticsJavaScript/renderers/VanillaMICE.js"></script>
 
     <!-- Just the simpl things -->
@@ -67,7 +57,6 @@
     <div class="settings-panel" id='settings-panel'>
         <h4>Physics Settings</h4>
         <div id="shared-keyword-sliders"></div>
-        <div id="shared-classification-sliders"></div>
         <div id="shared-author-sliders"></div>
         <div id="cited-sliders"></div>
         
@@ -76,23 +65,25 @@
         <div id="citation-count-filter"></div>        
     
         <ul id="keyword-filter"></ul>
-        
     </div>
 
     <div id="explore-graph"></div>
-    <div id="personal-graph">
-        App takes a second to load because it is initializing the Meta-Metadata repo. <br/>
-        Left click + drag to rotate the graph. <br/>
-        Right click + drag to pan. <br/>
-        Clicking on a node will bring up a MICE preview. <br/>
-        Holding down shift brings up physics and filtering options. <br/>
-        Filter by year and citation count works. Filter by keyword does not yet. <br/>
-        This area will eventually be the local graph. <br/>
-        <button onclick='start()'>Apply Physics</button>
-        <a href='../index.html'>About</a>
+
+	<div id="selected-nodes">
+        <h3>Bookmarks</h3>
     </div>
-    <div id="mice">MICE Preview area. Click on a node for a preview.</div>
-    
+    <div id="mice">Click on a node for a MICE preview.</div>
+    <div id="how-to">
+		<h3>Controls</h3>
+		<p>
+			Hold down z for physics and filtering options. <br/>
+			Left click + drag to rotate the graph. <br/>
+			Right click + drag to pan. <br/>
+			Clicking on a node will bring up a MICE preview. <br/>
+			Shift + click a node will add it to your bookmarked list
+		</p>
+		<a href='../index.html'>About</a>
+    </div>
 </body>
     
     <script src="js/Main.js"></script>    

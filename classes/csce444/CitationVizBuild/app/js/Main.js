@@ -1,19 +1,8 @@
-/* global doc, UI, Simulator, GraphRenderer, requestAnimationFrame, Util, console, BSAutoSwitch, document, MICE, nodeData, RendererBase, metadataCache, window, RepoMan, Filter, XMLHttpRequest, simpl */
-
-//Load up the mmd of acm portal
-var mmd;
-function instantiate() {
-    var request = new XMLHttpRequest();
-    request.onload = function(e){
-        mmd = JSON.parse(request.response);
-        simpl.graphExpand(mmd);
-    };
-    request.open('GET', 'http://ecology-service.cs.tamu.edu/BigSemanticsService/mmd.json?name=acm_portal');
-    request.send();
-}
-instantiate();
+/* global doc, UI, Simulator, GraphRenderer, requestAnimationFrame, Util, console, BSAutoSwitch, document, MICE, nodeData, RendererBase, metadataCache, window, RepoMan, Filter, XMLHttpRequest, simpl, Set */
 
 var App = {};
+var mmd;
+var bookmarkDiv = doc.getElementById('selected-nodes');
 
 //Bound to UI sliders
 App.physicsVars = {
@@ -27,31 +16,24 @@ App.physicsVars = {
 var metadataMap = getMetaDataMap();
 var globalGraphNodeMap = getGlobalGraphNodeMap();
 var globalGraphNodeKeyArray = Util.keyArray(globalGraphNodeMap);
-var localGraphNodeMap      = {};
-var localGraphNodeKeyArray  = [];
 
 var globalSimulator = new Simulator(globalGraphNodeMap , globalGraphNodeKeyArray);
 var globalGraphRenderer = new GraphRenderer(globalGraphNodeMap , globalGraphNodeKeyArray, globalSimulator , 'explore-graph');
 
-var localSimulator  = new Simulator(localGraphNodeMap , localGraphNodeKeyArray);
-var localGraphRenderer = new GraphRenderer(localGraphNodeMap , localGraphNodeKeyArray, localSimulator ,'personal-graph');
-
-var sharedKeywordSliders = new UI.PhysicSliders(doc.getElementById('shared-keyword-sliders'), 'Shared Keyword', App.physicsVars.sharedKeyword, onUserInput);
-//var sharedClassificationSliders = new UI.PhysicSliders(doc.getElementById('shared-classification-sliders'), 'Shared Classification', App.physicsVars.sharedClassification, onUserInput);
-var sharedAuthorSliders = new UI.PhysicSliders(doc.getElementById('shared-author-sliders'), 'Shared Author', App.physicsVars.sharedAuthor, onUserInput);
-var citedBySliders = new UI.PhysicSliders(doc.getElementById('cited-sliders'), 'Cited by / Referenced', App.physicsVars.citedByOrReferenced, onUserInput);
+var sharedKeywordSliders = new UI.PhysicSliders(doc.getElementById('shared-keyword-sliders'), 'Shared Keyword', App.physicsVars.sharedKeyword, onUserInput, globalGraphRenderer.toggleKeyWordEdges.bind(globalGraphRenderer));
+var sharedAuthorSliders = new UI.PhysicSliders(doc.getElementById('shared-author-sliders'), 'Shared Author', App.physicsVars.sharedAuthor, onUserInput, globalGraphRenderer.toggleAuthorEdges.bind(globalGraphRenderer));
+var citedBySliders = new UI.PhysicSliders(doc.getElementById('cited-sliders'), 'Cited by / Referenced', App.physicsVars.citedByOrReferenced, onUserInput, globalGraphRenderer.toggleCitationEdges.bind(globalGraphRenderer));
 
 var yearFilterSlider = new UI.FilterSlider(doc.getElementById('year-filter'), 'Year', globalGraphNodeMap, 'year', onUserInput);
-
 var countFilterSlider = new UI.FilterSlider(doc.getElementById('citation-count-filter'), 'Citation Count', globalGraphNodeMap, 'citation_count', onUserInput);
 
-var keywordFilter = new UI.FilterDropdown(doc.getElementById('keyword-filter'), 'Filter Keyword', ['one', 'two', 'three'], onUserInput);
+var keywordFilter = new UI.FilterDropdown(doc.getElementById('keyword-filter'), 'Keywords', globalGraphNodeMap, 'sharedKeyWordPeeps', onUserInput);
 
-
-// Start request animation frame that tells both simulators to sim and both graphRenderers to render
-initAnimationLoop();
-initMouseClickEvents();
 applyFilter();
+requestAnimationFrame(renderLoop); // Start request animation frame that tells simulator to sim and graphRenderer to render
+globalSimulator.start();
+initUserInputEvents();
+instantiateMmd();
 
 function onUserInput(){
     globalSimulator.bump();
@@ -69,8 +51,8 @@ function applyFilter(){
 
     var filters = [];
     // Year filter
-    var min = yearFilterSlider.lVal;
-    var max = yearFilterSlider.rVal;
+    var min = parseFloat(yearFilterSlider.lVal);
+    var max = parseFloat(yearFilterSlider.rVal);
     var yearFilter = {
         field: 'year',
         values: rangeList(min,  max)
@@ -78,8 +60,8 @@ function applyFilter(){
     filters.push(yearFilter);
 
     // Citation filter
-    min = countFilterSlider.lVal;
-    max = countFilterSlider.rVal;
+    min = parseFloat(countFilterSlider.lVal);
+    max = parseFloat(countFilterSlider.rVal);
     var citationFilter = {
         field: 'citation_count',
         values: rangeList(min , max)
@@ -96,105 +78,106 @@ function applyFilter(){
     }
     var keyWordsFilter = {
         field: 'keywords',
-        fieldType: 'set',
+        fieldType: 'object',
         values: keywords
     };
+	filters.push(keyWordsFilter);
 
     Filter(globalGraphNodeMap , filters);    
 }
 
 function getMetaDataMap() {
-    try {
-        if (metadataCache) {
-            return metadataCache;
-        } else {
-            throw "No metadataCache";
-        }
-    }
-    finally {
-
-    }
+	if (metadataCache) {
+		return metadataCache;
+	} else {
+		console.log("No metadataCache");
+	}
 }
 
 function getGlobalGraphNodeMap() {
-    try {
-        if (nodeData) {
-            Util.arrayToSet(nodeData);
-			return nodeData;
-        } else {
-            throw "No globalGraphNodeMap";
-        }
-    }
-    finally {
-
-    }
-}
-
-function start() {
-    //localSimulator.start();    
-    globalSimulator.start();
-}
-start();
-
-function initAnimationLoop() {
-    requestAnimationFrame(renderLoop);
+	if (nodeData) {
+		Util.arrayToSet(nodeData);
+		return nodeData;
+	} else {
+		console.log("No globalGraphNodeMap");
+	}
 }
 
 function renderLoop() {
     requestAnimationFrame(renderLoop);
-    localGraphRenderer.render();
     globalGraphRenderer.render();
 }
 
+// ==================================================================== Load up the mmd of acm portal
+function instantiateMmd() {
+    var request = new XMLHttpRequest();
+    request.onload = function(e){
+        mmd = JSON.parse(request.response);
+        simpl.graphExpand(mmd);
+    };
+    request.open('GET', 'http://ecology-service.cs.tamu.edu/BigSemanticsService/mmd.json?name=acm_portal');
+    request.send();
+}
+
 // ==================================================================== User Input Handlers
-function keydown(event){
-    if (event.keyCode == 16){
-        doc.getElementById('settings-panel').style.display = 'block';
-    }  
-}
-function keyup(event){
-    if (event.keyCode == 16){
-        doc.getElementById('settings-panel').style.display = 'none';
-    }      
-}
-window.addEventListener("keydown", keydown, false);
-window.addEventListener("keyup", keyup, false);
-
-function initMouseClickEvents() {
+function initUserInputEvents() {
+	
+	function keydown(event){
+    	//if (event.keyCode == 17 || event.keyCode == 91 || event.keyCode == 93){
+		if (event.keyCode == 90){
+			doc.getElementById('settings-panel').style.display = 'block';
+    	}  
+	}
+	function keyup(event){
+		if (event.keyCode == 90){
+			doc.getElementById('settings-panel').style.display = 'none';
+		}      
+	}
+	window.addEventListener("keydown", keydown, false);
+	window.addEventListener("keyup", keyup, false);
+	
     // Add mouse click handlers for both canvas
-    var localHandler = function(x , y ) {
-        var objects = localGraphRenderer.getClickedObjects(x,y);
-        if ( objects ) {
-           //dealWithLocalNodeClicked;
-        }
-    };
-
-    var globalHandler = function(x , y ) {
-        var objects = globalGraphRenderer.getClickedObjects(x,y);
-        if ( objects ) {
-            //dealWithGlobalNodeClicked;
-        }
-    };
-
-    localGraphRenderer.renderer.domElement.addEventListener( 'mousedown' , function(event)  {
-        var objects = localGraphRenderer.getClickedObjects(event);
-        if ( objects ) {
-            console.log(objects);
-        }
-    });
-
     globalGraphRenderer.renderer.domElement.addEventListener( 'mousedown' , function(event)  {
         var objects = globalGraphRenderer.getClickedObjects(event);
+
         if ( objects && objects.length > 0 ) {
-            console.log(objects);
             var node = objects[0];
-            var url = 'http://dl.acm.org/citation.cfm?preflayout=flat&id=' + node.id;
-            var content = document.getElementById("mice");
-            var options = {};
-            var clipping = {};
-            clipping.metadata = metadataMap[url];
-            clipping.mmd = mmd;
-            RendererBase.addMetadataDisplay(content , url , clipping , MICE.render, options);
+            if (event.shiftKey){
+                addBookmark(node);
+            }
+            focusOnNode(node);
         }
     });
 }
+
+function focusOnNode(node){
+    var clipping = {
+        metadata : metadataMap[node.id],
+        mmd : mmd
+    };
+    RendererBase.addMetadataDisplay(document.getElementById("mice"), '', clipping , MICE.render, {});
+    globalGraphRenderer.markAsMice(node);    
+}
+    
+
+//Bookmarks
+var bookmarks = new Set();
+function addBookmark(node){
+    if (bookmarks.has(node.id)){
+        return;
+    }
+    else {
+        bookmarks.add(node.id);
+        var elem = new UI.Bookmark(node);
+        bookmarkDiv.appendChild(elem);
+        elem.onclick = function(){
+            var i = globalGraphNodeKeyArray.indexOf(node.id);
+            var nodePos = globalSimulator.getState()[i];
+            //TODO maybe animate this smoothly
+            //also has problems if camera is too far in z
+            globalGraphRenderer.cameraControls.target = nodePos;
+            focusOnNode(node);
+        };
+    }
+}
+                                                             

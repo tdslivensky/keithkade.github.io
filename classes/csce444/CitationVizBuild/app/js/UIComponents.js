@@ -5,7 +5,7 @@ var UI = {};
 //namespace
 (function(){
 
-var FILTER_SLIDER_WIDTH = 200;
+var FILTER_SLIDER_WIDTH = 350;
 var FILTER_SLIDER_HEIGHT = 20;    
 var FILTER_KNOB_WIDTH = 8;
 
@@ -47,7 +47,7 @@ function createGraph(yData){
 /**
  * Component for controlling attract/repulse for one physics dimension
  */
-UI.PhysicSliders = function(container, title, bindTo, onchange){
+UI.PhysicSliders = function(container, title, bindTo, onchange, ontoggle){
     container.className = 'phys-slider-container';
 
     //PRIVATE
@@ -58,6 +58,7 @@ UI.PhysicSliders = function(container, title, bindTo, onchange){
     var repulseSlider = createElem('input', {className: 'phys-slider', type: 'range', value: 5, min: 0, max: 10, step: '1'});
     var attractMeter = createElem('div', {});
     var repulseMeter = createElem('div', {});
+    var toggleButton = createElem('button', {innerHTML: 'Toggle edges'});
     
     //PUBLIC
     this.elem = container;
@@ -76,8 +77,10 @@ UI.PhysicSliders = function(container, title, bindTo, onchange){
 		bindTo.repulse = this.repulseVal;
 		onchange();
     }.bind(this); 
+    
+    toggleButton.onclick = ontoggle;
 
-    addChildren(this.elem, [titleDisp, attractIcon, attractSlider, createElem('br'), repulseIcon, repulseSlider]);
+    addChildren(this.elem, [titleDisp, toggleButton, attractIcon, attractSlider, createElem('br'), repulseIcon, repulseSlider]);
 };
     
 /** 
@@ -141,7 +144,7 @@ UI.FilterSlider = function(container, title, graphData, attr, onchange){
             lSlide.value = rIndex - 1;
             lIndex = rIndex - 1;
         }
-        lScreen.style.width = stepSize * lIndex + 'px'; //FIXME
+        lScreen.style.width = stepSize * lIndex + 'px';
         this.lVal = this.xData[lIndex];
         lValDisp.innerHTML = this.lVal;
 		onchange();		
@@ -153,7 +156,7 @@ UI.FilterSlider = function(container, title, graphData, attr, onchange){
             rSlide.value = lIndex + 1;
             rIndex = lIndex + 1;
         }   
-        rScreen.style.width = stepSize * (max - rIndex) + 'px'; //FIXME
+        rScreen.style.width = stepSize * (max - rIndex) + 'px';
         this.rVal = this.xData[rIndex - 1];
         rValDisp.innerHTML = this.rVal;
 		onchange();		
@@ -164,38 +167,65 @@ UI.FilterSlider = function(container, title, graphData, attr, onchange){
 /**
  * Multi-select dropdown
  */
-UI.FilterDropdown = function(container, title, list, onchange){
+UI.FilterDropdown = function(container, title, graphData, attr, onchange){
     container.className = 'filter-dropdown collapsed';
     
     //PRIVATE
-    var titleSpan = createElem('span', {className: 'dropdown-title', innerHTML: title + ' <span class="dropdown-caret">&#9660;</span>'});
-    
+    var list = Util.getFilterableList(graphData, attr);
+	var clearAll = createElem('button', {className: 'filter-clear', innerHTML: 'Clear All'});
+	var selectAll = createElem('button', {className: 'filter-clear', innerHTML: 'Select All'});
+	
     //PUBLIC
     this.elem = container;
+	this.titleSpan = createElem('span', {className: 'dropdown-title', innerHTML: title + ' <span class="dropdown-caret">&#9660;</span>'});
     this.options = [];
 
-    
-    this.elem.appendChild(titleSpan);
+    this.elem.parentElement.insertBefore(this.titleSpan, this.elem);
+	this.elem.parentElement.insertBefore(clearAll, this.elem);
+	this.elem.parentElement.insertBefore(selectAll, this.elem);
+
     for (var i = 0; i < list.length; i++){
         this.options.push({value: list[i], selected: true});
-        var opt = createElem('li', {innerHTML: '<input type="checkbox"> ' + list[i]});
+        var opt = createElem('li', {innerHTML: '<input type="checkbox" checked> ' + list[i]});
         opt.onclick = filterSelect.bind(this);
         this.elem.appendChild(opt);
     }
-    
+
     //toggle class on click
-    titleSpan.onclick = function (){
-        var list = this.elem.classList;
+    this.titleSpan.onclick = function (){
         if (this.elem.classList.contains('collapsed')){
-            list.remove('collapsed');
-            list.add('expanded');
+            this.elem.classList.remove('collapsed');
+            this.elem.classList.add('expanded');
+            this.titleSpan.classList.remove('collapsed');
+            this.titleSpan.classList.add('expanded');			
         }
         else {
-            list.remove('expanded');
-            list.add('collapsed');
+            this.elem.classList.remove('expanded');
+            this.elem.classList.add('collapsed');
+            this.titleSpan.classList.remove('expanded');
+            this.titleSpan.classList.add('collapsed');			
         }        
     }.bind(this);
     
+	    
+	clearAll.onclick = function(){
+        var list = this.elem.getElementsByTagName('input');
+        for (var i = 0; i < list.length; i++){
+            this.options[i].selected = false;
+			list[i].checked = false;
+        }
+		onchange();
+	}.bind(this);
+	
+	selectAll.onclick = function(){
+        var list = this.elem.getElementsByTagName('input');
+        for (var i = 0; i < list.length; i++){
+            this.options[i].selected = true;
+			list[i].checked = true;
+        }
+		onchange();
+	}.bind(this);
+	
     //not the most efficient but probably not an issue
     function filterSelect(){
         var list = this.elem.getElementsByTagName('input');
@@ -206,5 +236,10 @@ UI.FilterDropdown = function(container, title, list, onchange){
     }
     
 };    
+   
+UI.Bookmark = function(node){
+    var div = createElem('div', {innerHTML: node.title, className: 'bookmark'});
+    return div;
+};
     
 })();

@@ -13,9 +13,9 @@ function Filter(nodeGraph , filters) {
             var field = filter.field;
             var nodeInPartialFilter = false;
             switch (filter.fieldType ) {
-                case 'set': {
+                case 'object': {
                     for ( var v = 0; v  < filter.values.length; v++) {
-                        if ( node[field].has( filter.values[v] )) {
+                        if ( filter.values[v] in node[field] ) {
                             nodeInPartialFilter = true;
                             break;
                         }
@@ -23,6 +23,7 @@ function Filter(nodeGraph , filters) {
                     break;
                 }
                 case 'scalar':
+					break;
                 default: {
                     // Check to see if the node's value for this field is any of the ones in the filter values
                     for ( var v in filter.values) {

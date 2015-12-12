@@ -57,7 +57,8 @@ Util.arrayToSet = function (graph) {
             else if (typeof node[key2] === 'object'){
                 var obj = node[key2];
                 for (var key3 in obj){
-                    obj[key3] = new Set(obj[key3]);
+                    if ( Array.isArray(obj[key3]))
+                        obj[key3] = new Set(obj[key3]);
                 }
             }
         }
@@ -101,4 +102,59 @@ Util.getXYValsFromGraph = function(graph, attr){
     }
     
     return {x:x, y:y};
+};
+
+Util.getFilterableList = function(graphData, attr){
+	var filterables = new Set();
+	for (var id in graphData){
+		
+		var node = graphData[id];
+		var x = 10;
+		for (var key in node[attr]){
+			filterables.add(key);
+		}
+		
+	}
+	return Array.from(filterables).sort();
+};
+
+Util.removeDuplicates = function(edgelist){
+	edgelist.citedByOrReferenced = edgelist.citedByOrReferenced.reduce(function(accum, current) {
+		var index = accum.indexOfTuple(current);
+		if (index < 0) {
+			accum.push(current);
+		}
+		return accum;
+	}, []);
+	edgelist.sharedAuthor = edgelist.sharedAuthor.reduce(function(accum, current) {
+		var index = accum.indexOfTuple(current);
+		if (index < 0) {
+			accum.push(current);
+		}
+		return accum;
+	}, []);
+	edgelist.sharedKeyword = edgelist.sharedKeyword.reduce(function(accum, current) {
+		var index = accum.indexOfTuple(current);
+		if (index < 0) {
+			accum.push(current);
+		}
+		return accum;
+	}, []);	
+};
+
+Array.prototype.indexOfTuple = function(tuple){
+    for(var i = 0; i < this.length; i++) {
+        if (this[i].equalsTupleArr(tuple)) return i;
+    }
+    return -1;
+};
+
+Array.prototype.equalsTupleArr = function(arr){
+    if (this.length !== arr.length)
+        return false;
+    for(var i = 0; i < this.length; i++) {
+        if (this[i] !== arr[i]) 
+            return false;
+    }
+    return true;
 };
