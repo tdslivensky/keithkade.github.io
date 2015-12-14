@@ -1,4 +1,4 @@
-/* global document, Set */
+/* global document, Set, setTimeout */
 
 var doc = document; //shorthand
 
@@ -140,6 +140,24 @@ Util.removeDuplicates = function(edgelist){
 		}
 		return accum;
 	}, []);	
+};
+
+Util.setOverTime = function(target, newTarget, time, steps){
+    var dx = (newTarget.x - target.x) / steps;
+    var dy = (newTarget.y - target.y) / steps;
+    var dz = (newTarget.z - target.z) / steps;
+    var wait = time / steps;
+    
+    var i = 0;
+    function step(){
+        i++;
+        target.set(target.x + dx, target.y + dy, target.z + dz);
+        if (i <= steps){
+            setTimeout(step, wait);
+        }
+    }
+
+    step();
 };
 
 Array.prototype.indexOfTuple = function(tuple){

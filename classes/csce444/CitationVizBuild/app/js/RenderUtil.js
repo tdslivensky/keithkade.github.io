@@ -17,7 +17,10 @@ RenderUtil.makeTextSprite = function(message , parameters) {
     // get size data (height depends only on font size)
     var metrics = context.measureText( message );
     var textWidth = metrics.width;
-    
+
+    var l = message.length / 100 * canvas.width;
+    RenderUtil.roundRect(context , canvas.width / 2 - (l /2 ) , 0 , l , 50 , 25);
+
     // text color
     context.fillStyle = "rgba(255, 255, 255, 1.0)";
     context.textAlign = "center";
@@ -30,7 +33,6 @@ RenderUtil.makeTextSprite = function(message , parameters) {
 
     var spriteMaterial = new THREE.SpriteMaterial( { map: texture} );
     var sprite = new THREE.Sprite(spriteMaterial);
-    //sprite.scale.set(textWidth / fontsize, 1, 1);
     sprite.scale.set(10, 1, 1);
     return sprite;
 };

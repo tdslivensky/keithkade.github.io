@@ -6,7 +6,7 @@ function GraphRenderer( graphNodeMap , keyArray, simulator , canvasName ) {
     var renderer = new THREE.WebGLRenderer({antialias: true, canvas: canvas});
     renderer.setSize(container.offsetWidth, container.offsetHeight);
     container.appendChild(renderer.domElement);
-    renderer.setClearColor(0x222228, 1);
+    renderer.setClearColor(0x222222, 1);
     
     // Create a new Three.js scene
     var scene = new THREE.Scene();
@@ -17,7 +17,9 @@ function GraphRenderer( graphNodeMap , keyArray, simulator , canvasName ) {
     camera.position.set(0, 0, 100); // TODO pick your favoirte starting position!!!!
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     scene.add(camera);
-    this.cameraControls = new THREE.TrackballControls( camera, renderer.domElement );
+    //this.cameraControls = new THREE.TrackballControls( camera, renderer.domElement );
+    this.cameraControls = new THREE.OrbitControls( camera, renderer.domElement );
+    
     //this.cameraControls.target.set(0,0,0);
     var directionalLight = new THREE.DirectionalLight( 0xcccccc,.6 );
     directionalLight.position.set( 0, 1, 0 );
@@ -74,7 +76,7 @@ GraphRenderer.prototype.makeAuthorRelationLines = function(graphNodeMap) {
             if (otherNode && !lineMap[key]) {
                 var otherObject = otherNode.renderObject;
                 var material = new THREE.LineBasicMaterial({ color: 0xc8e600 ,transparent:true });
-                material.opacity=0.1;
+                material.opacity = 0.2;
                 var geometry = new THREE.Geometry();
                 geometry.vertices.push(new THREE.Vector3(0,0,0), new THREE.Vector3(0,0,0));
                 var line = new THREE.Line( geometry, material );
@@ -106,7 +108,7 @@ GraphRenderer.prototype.makeCitationRelationLines = function(graphNodeMap) {
                 var otherObject = otherNode.renderObject;
 
                 var material = new THREE.LineBasicMaterial({ color: 0x00c8e6 ,transparent:true });
-                material.opacity=0.1;
+                material.opacity = 0.2;
                 var geometry = new THREE.Geometry();
                 geometry.vertices.push( new THREE.Vector3(0,0,0),  new THREE.Vector3(0,0,0) );
                 var line = new THREE.Line( geometry, material );
@@ -141,7 +143,7 @@ GraphRenderer.prototype.makeKeyWordRelationLines = function(graphNodeMap) {
                     if (otherNode && !lineMap[key]) {
                         var otherObject = otherNode.renderObject;
                         var material = new THREE.LineBasicMaterial({color: 0xFF00FF ,transparent:true });
-                        material.opacity = 0.3;
+                        material.opacity = 0.2;
                         var geometry = new THREE.Geometry();
                         geometry.vertices.push(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
                         var line = new THREE.Line(geometry, material);
@@ -181,7 +183,12 @@ GraphRenderer.prototype.createSphereObject= function(node) {
 };
 
 GraphRenderer.prototype.createTitleObject = function(node) {
-    var spritey = RenderUtil.makeTextSprite( node.title, { fontsize: 40, fontface: "Helvetica" } );
+    var maxLength = 100;
+    var titleString = node.title;
+    if ( node.title.length > maxLength ) {
+        titleString = titleString.substr(0 , maxLength) + "...";
+    }
+    var spritey = RenderUtil.makeTextSprite( titleString, { fontsize: 40, fontface: "Helvetica" } );
     return spritey;
 };
 
@@ -259,7 +266,7 @@ GraphRenderer.prototype.markAsMice = function(node) {
     if ( this.MiceNode) {
         this.MiceNode.material = this.MiceNode.normalMaterial;
         for ( var i =0; i < this.MiceNode.edges.length; i++) {
-            this.MiceNode.edges[i].material.opacity = .1;
+            this.MiceNode.edges[i].material.opacity = 0.2;
         }
     }
     var renderObject = node.renderObject;
@@ -285,7 +292,7 @@ GraphRenderer.prototype.toggleKeyWordEdges = function() {
 };
 
 GraphRenderer.prototype.toggleCitationEdges = function() {
-    this.showCitationLines = !this.showcitationLines;
+    this.showCitationLines = !this.showCitationLines;
     for ( var i =0; i < this.citationLines.length; i++) {
         this.citationLines[i].visible =  false;
     }

@@ -173,9 +173,10 @@ function addBookmark(node){
         elem.onclick = function(){
             var i = globalGraphNodeKeyArray.indexOf(node.id);
             var nodePos = globalSimulator.getState()[i];
-            //TODO maybe animate this smoothly
-            //also has problems if camera is too far in z
-            globalGraphRenderer.cameraControls.target = nodePos;
+            // TODO maybe animate this smoothly
+            // also has problems if camera is too far in z
+            //globalGraphRenderer.cameraControls.target.copy(nodePos);
+            Util.setOverTime(globalGraphRenderer.cameraControls.target, nodePos, 500, 50);
             focusOnNode(node);
         };
     }

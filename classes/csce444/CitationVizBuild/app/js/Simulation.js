@@ -1,9 +1,9 @@
 /* jshint -W004 */
 /* global doc, THREE, window, console, setTimeout, THREE, Util, App, clearTimeout */
 
-var ATTRACT_FACTOR = 0.0000001;
-var REPULSE_FACTOR = 0.0001;
-var ATTRACT_TOUCH_DISTANCE = 1;
+var ATTRACT_FACTOR = 0.000001;
+var REPULSE_FACTOR = 0.001;
+var SPRING_LENGTH = 2;
 var REPULSE_TOUCH_DISTANCE = 40;
 
 /**
@@ -23,7 +23,6 @@ function getRepulseConstant(node1, node2) {
             constant += App.physicsVars.sharedKeyword.repulse;
         }
     }
-	//return 0;
     return REPULSE_FACTOR * constant;
 }
 
@@ -59,7 +58,6 @@ function makeEdgeLists(graph, keyArray){
 	return { list: edges, notList: notEdges};
 }
 
-//TODO precompute
 function inverseEdgeList(edges, keyArray){
 	var inverse = {};
 	for (var key in edges){
@@ -74,11 +72,12 @@ function inverseEdgeList(edges, keyArray){
 			}			
 		}
 	}
+    //TODO too many edges
 	return inverse;
 }
 
 function Simulator(nodeMap, keyArray){
-    var SPREAD = 20;
+    var SPREAD = 100;
 	var slowdownAmount = 0.99;
     var bumpAmount = 1;
     
@@ -171,7 +170,7 @@ function Simulator(nodeMap, keyArray){
                 var dist = state[i].distanceTo(state[j]);
 
                 if(isFinite(dist)){
-					var rlength = ATTRACT_TOUCH_DISTANCE;
+					var rlength = SPRING_LENGTH;
 					var k = ATTRACT_FACTOR * App.physicsVars[key].attract;
 					
 					if (k === 0) continue; //the nodes aren't connected
@@ -203,9 +202,9 @@ function Simulator(nodeMap, keyArray){
 		}
 		
 		for (var key in notEdgelist){
-			for (var l = 0; l < edgelist[key].length; l++){
-				var i = edgelist[key][l][0];
-				var j = edgelist[key][l][1];
+			for (var l = 0; l < notEdgelist[key].length; l++){
+				var i = notEdgelist[key][l][0];
+				var j = notEdgelist[key][l][1];
 				var node = nodeMap[keyArray[i]];
 				var other = nodeMap[keyArray[j]];
 				
@@ -216,7 +215,7 @@ function Simulator(nodeMap, keyArray){
                 //TODO handle when they are right on top of each other?
                 if(dist > 0 && dist < REPULSE_TOUCH_DISTANCE){
                     var normal = state[i].clone().sub(state[j]).normalize(); //push away from other
-                    var force = (REPULSE_FACTOR * App.physicsVars[key].repulse) / (dist*dist); //mass of 1
+                    var force = (REPULSE_FACTOR * App.physicsVars[key].repulse) / (dist*dist*dist); //mass of 1
                     accels[i].add(normal.multiplyScalar(force)); 
                     accels[j].add(normal.multiplyScalar(-1)); 
                 }			
