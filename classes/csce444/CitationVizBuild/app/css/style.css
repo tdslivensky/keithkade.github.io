@@ -65,7 +65,7 @@ h3 {
 /* line 105, C:/Users/Kade/git/CitationViz/app/css/style.scss */
 #selected-nodes {
   position: absolute;
-  bottom: 495px;
+  bottom: 515px;
   top: 0;
   right: 0;
   background-color: #555558;
@@ -85,7 +85,7 @@ h3 {
 /* line 129, C:/Users/Kade/git/CitationViz/app/css/style.scss */
 #mice {
   position: absolute;
-  bottom: 140px;
+  bottom: 160px;
   right: 0;
   height: 350px;
   width: 560px;
@@ -102,7 +102,7 @@ h3 {
   position: absolute;
   bottom: 0;
   right: 0;
-  height: 140px;
+  height: 160px;
   width: 560px;
   background-color: white;
   border-top: 5px solid #555558;

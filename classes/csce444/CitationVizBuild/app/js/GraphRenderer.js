@@ -15,12 +15,13 @@ function GraphRenderer( graphNodeMap , keyArray, simulator , canvasName ) {
     scene.data = this;
     // Put in a camera at a good default location
     var camera = new THREE.PerspectiveCamera(45, container.offsetWidth / container.offsetHeight, 1, 10000);
-    camera.position.set(0, 0, 100); // TODO pick your favoirte starting position!!!!
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
+    camera.position.set(40, 40, 100);
+    camera.lookAt(new THREE.Vector3(0,0,0));
     scene.add(camera);
     //this.cameraControls = new THREE.TrackballControls( camera, renderer.domElement );
     this.cameraControls = new THREE.OrbitControls( camera, renderer.domElement );
-    
+    this.cameraControls.target.set(26, 25, 25); // the center of the graph
+	
     //this.cameraControls.target.set(0,0,0);
     var directionalLight = new THREE.DirectionalLight( 0xcccccc, 0.6 );
     directionalLight.position.set( 0, 1, 0 );
@@ -207,16 +208,20 @@ GraphRenderer.prototype.updateObjectPositions = function() {
         this.objects[i].position.copy(newPos);
         var camPos = this.camera.position.clone();
         var vector = camPos.sub(this.objects[i].position).normalize();
-        // TODO this could be played with some
         this.objects[i].titleObj.position.copy(newPos.clone().add(vector.multiplyScalar(1.4).sub(this.camera.up.clone().multiplyScalar(0.5))));
 
-        if ( this.objects[i].node.inFilter ) {
+        if ( this.objects[i].node.inFilter ){
             this.objects[i].visible = true;
-            this.objects[i].titleObj.visible = true;
         } else {
             this.objects[i].visible = false;
-            this.objects[i].titleObj.visible = false;
         }
+		
+		if (this.objects[i].visible && this.objects[i].inFrustum) {
+            this.objects[i].titleObj.visible = true;
+		}
+		else {
+			this.objects[i].titleObj.visible = false;
+		}
     }
 
     // Update lines

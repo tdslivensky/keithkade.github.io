@@ -136,6 +136,25 @@ function initUserInputEvents() {
 	window.addEventListener("keydown", keydown, false);
 	window.addEventListener("keyup", keyup, false);
 	
+	globalGraphRenderer.renderer.domElement.addEventListener("dblclick", function(event)  {
+        var objects = globalGraphRenderer.getClickedObjects(event);
+
+        if ( objects && objects.length > 0 ) {
+            var node = objects[0];
+            if (event.shiftKey){
+                addBookmark(node);
+            }
+            focusOnNode(node);
+			var i = globalGraphNodeKeyArray.indexOf(node.id);
+            var nodePos = globalSimulator.getState()[i];
+			var avg = globalGraphRenderer.camera.position.clone().multiplyScalar(2);
+			avg.add(nodePos);
+			avg.multiplyScalar(0.333);
+            Util.setOverTime(globalGraphRenderer.cameraControls.target, nodePos, 500, 50);
+            Util.setOverTime(globalGraphRenderer.camera.position, avg, 500, 50);
+        }
+    });
+	
     // Add mouse click handlers for both canvas
     globalGraphRenderer.renderer.domElement.addEventListener( 'mousedown' , function(event)  {
         var objects = globalGraphRenderer.getClickedObjects(event);
@@ -160,7 +179,7 @@ function focusOnNode(node){
 }
     
 
-//Bookmarks
+// ==================================================================== Bookmarks
 var bookmarks = new Set();
 function addBookmark(node){
     if (bookmarks.has(node.id)){
@@ -173,9 +192,6 @@ function addBookmark(node){
         elem.onclick = function(){
             var i = globalGraphNodeKeyArray.indexOf(node.id);
             var nodePos = globalSimulator.getState()[i];
-            // TODO maybe animate this smoothly
-            // also has problems if camera is too far in z
-            //globalGraphRenderer.cameraControls.target.copy(nodePos);
             Util.setOverTime(globalGraphRenderer.cameraControls.target, nodePos, 500, 50);
             focusOnNode(node);
         };
