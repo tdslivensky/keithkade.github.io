@@ -1,4 +1,5 @@
-/* global document, THREE, RenderUtil, event */
+/* jshint -W004 */
+/* global document, THREE, RenderUtil, event, nodeData */
 
 function GraphRenderer( graphNodeMap , keyArray, simulator , canvasName ) {
     var container = document.getElementById(canvasName);
@@ -21,7 +22,7 @@ function GraphRenderer( graphNodeMap , keyArray, simulator , canvasName ) {
     this.cameraControls = new THREE.OrbitControls( camera, renderer.domElement );
     
     //this.cameraControls.target.set(0,0,0);
-    var directionalLight = new THREE.DirectionalLight( 0xcccccc,.6 );
+    var directionalLight = new THREE.DirectionalLight( 0xcccccc, 0.6 );
     directionalLight.position.set( 0, 1, 0 );
     scene.add( directionalLight );
 
@@ -220,8 +221,8 @@ GraphRenderer.prototype.updateObjectPositions = function() {
 
     // Update lines
     this.updateLines( this.authorLines , new THREE.Vector3(0,0,0) , this.showAuthorLines);
-    this.updateLines( this.citationLines , new THREE.Vector3(0,.1,0) , this.showCitationLines);
-    this.updateLines( this.keywordLines , new THREE.Vector3(0, -.1,0) , this.showKeyWordLines);
+    this.updateLines( this.citationLines , new THREE.Vector3(0,0.1,0) , this.showCitationLines);
+    this.updateLines( this.keywordLines , new THREE.Vector3(0,-0.1,0) , this.showKeyWordLines);
 };
 
 GraphRenderer.prototype.updateLines = function( lines , offsetVector , show) {
@@ -265,13 +266,13 @@ GraphRenderer.prototype.getClickedObjects = function(mouseEvent) {
 GraphRenderer.prototype.markAsMice = function(node) {
     if ( this.MiceNode) {
         this.MiceNode.material = this.MiceNode.normalMaterial;
-        for ( var i =0; i < this.MiceNode.edges.length; i++) {
+        for ( var i=0; i < this.MiceNode.edges.length; i++) {
             this.MiceNode.edges[i].material.opacity = 0.2;
         }
     }
     var renderObject = node.renderObject;
     renderObject.material = new THREE.MeshPhongMaterial( { color: 0x75da0b});
-    for ( var  i=0; i < renderObject.edges.length; i++) {
+    for (var i=0; i < renderObject.edges.length; i++) {
         renderObject.edges[i].material.opacity = 1;
     }
     this.MiceNode = renderObject;

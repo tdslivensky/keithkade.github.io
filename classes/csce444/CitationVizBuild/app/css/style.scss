@@ -18,10 +18,42 @@ $personal-graph-width: 560px;
 $mice-height: 350px;
 $how-to-height: 140px;
 
+/// Mixin to customize scrollbars
+/// Beware, this does not work in all browsers
+/// @author Hugo Giraudel
+/// @param {Length} $size - Horizontal scrollbar's height and vertical scrollbar's width
+/// @param {Color} $foreground-color - Scrollbar's color
+/// @param {Color} $background-color [mix($foreground-color, white, 50%)] - Scrollbar's color
+/// @example scss - Scrollbar styling
+///   @include scrollbars(.5em, slategray);
+@mixin scrollbars($size, $foreground-color, $background-color: mix($foreground-color, white,  50%)) {
+  // For Google Chrome
+  ::-webkit-scrollbar {
+      width:  $size;
+      height: $size;
+  }
+
+  ::-webkit-scrollbar-thumb {
+      background: $foreground-color;
+  }
+
+  ::-webkit-scrollbar-track {
+      background: $background-color;
+  }
+
+  // For Internet Explorer
+  body {
+    scrollbar-face-color: $foreground-color;
+    scrollbar-track-color: $background-color;
+  }
+}
+
+
 
 * {
     margin: 0;
     padding: 0;
+	@include scrollbars(12px, darken(#555558, 10%));
 }
 
 html, body {
@@ -72,12 +104,12 @@ h3 {
 
 #selected-nodes {
  	position: absolute;
-    bottom: $how-to-height + $mice-height;
+    bottom: $how-to-height + $mice-height + 5;
 	top: 0;
     right: 0;
 	background-color: $light-grey;
 	width: $personal-graph-width;
-    overflow: scroll;
+    overflow: auto;
     
     padding-bottom: 20px;
     .bookmark {
@@ -106,7 +138,7 @@ h3 {
     .ecologylab-metadataContainer {
         min-width: $personal-graph-width;
 		height: $mice-height;
-		overflow-y: scroll;
+		overflow-y: auto;
     }
 }
 

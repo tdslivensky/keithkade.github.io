@@ -8,7 +8,8 @@ RenderUtil.makeTextSprite = function(message , parameters) {
 
     var fontface = parameters.hasOwnProperty("fontface") ? parameters.fontface : "Arial";
     var fontsize = parameters.hasOwnProperty("fontsize") ? parameters.fontsize : 8;
-
+	var backgroundColor = parameters.hasOwnProperty("backgroundColor") ? parameters.backgroundColor : { r:50, g:50, b:50, a:0.9 };
+	
     var canvas = document.createElement('canvas');
     canvas.width = 2000;
     var context = canvas.getContext('2d');
@@ -19,10 +20,11 @@ RenderUtil.makeTextSprite = function(message , parameters) {
     var textWidth = metrics.width;
 
     var l = message.length / 100 * canvas.width;
+	context.fillStyle   = "rgba(" + backgroundColor.r + "," + backgroundColor.g + "," + backgroundColor.b + "," + backgroundColor.a + ")";
     RenderUtil.roundRect(context , canvas.width / 2 - (l /2 ) , 0 , l , 50 , 25);
 
     // text color
-    context.fillStyle = "rgba(255, 255, 255, 1.0)";
+    context.fillStyle = "rgba(225, 225, 225, 1)";
     context.textAlign = "center";
     context.fillText(message, canvas.width / 2, fontsize);
 
