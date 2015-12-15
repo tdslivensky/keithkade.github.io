@@ -54,8 +54,8 @@ UI.PhysicSliders = function(container, title, bindTo, onchange, ontoggle){
     var titleDisp = createElem('span', {className: 'phys-slider-title', innerHTML: title});
     var attractIcon = createElem('img', {className: 'icon', src: 'img/AttractIcon.svg', title: 'Attract Force'});
     var repulseIcon = createElem('img', {className: 'icon', src: 'img/RepulseIcon.svg', title: 'Repulse Force'});
-    var attractSlider = createElem('input', {className: 'phys-slider', type: 'range', value: 5, min: 0, max: 10, step: '1'});
-    var repulseSlider = createElem('input', {className: 'phys-slider', type: 'range', value: 5, min: 0, max: 10, step: '1'});
+    var attractSlider = createElem('input', {className: 'phys-slider', type: 'range', value: 1, min: 0, max: 10, step: '1'});
+    var repulseSlider = createElem('input', {className: 'phys-slider', type: 'range', value: 1, min: 0, max: 10, step: '1'});
     var attractMeter = createElem('div', {});
     var repulseMeter = createElem('div', {});
     var toggleButton = createElem('button', {innerHTML: 'Toggle edges'});
@@ -64,8 +64,8 @@ UI.PhysicSliders = function(container, title, bindTo, onchange, ontoggle){
     this.elem = container;
     this.attractVal = 5;
     this.repulseVal = 5;
-    
-    //update values
+
+	//update values
     attractSlider.oninput = function(){
         this.attractVal = parseInt(attractSlider.value);
         bindTo.attract = this.attractVal;

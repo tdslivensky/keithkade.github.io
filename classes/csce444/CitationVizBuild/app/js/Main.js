@@ -6,10 +6,10 @@ var bookmarkDiv = doc.getElementById('selected-nodes');
 
 //Bound to UI sliders
 App.physicsVars = {
-	sharedKeyword : {attract : 5, repulse: 5},
-	sharedClassification : {attract : 5, repulse: 5},
-	sharedAuthor : {attract : 5, repulse: 5},
-	citedByOrReferenced : {attract : 5, repulse: 5}
+	sharedKeyword : {attract : 1, repulse: 1},
+	sharedClassification : {attract : 1, repulse: 1},
+	sharedAuthor : {attract : 1, repulse: 1},
+	citedByOrReferenced : {attract : 1, repulse: 1}
 };
 
 // GraphNode Maps and metadata Maps

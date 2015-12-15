@@ -207,7 +207,7 @@ GraphRenderer.prototype.updateObjectPositions = function() {
         var camPos = this.camera.position.clone();
         var vector = camPos.sub(this.objects[i].position).normalize();
         // TODO this could be played with some
-        this.objects[i].titleObj.position.copy(newPos.clone().add(vector.multiplyScalar(1.2).sub(this.camera.up.clone().multiplyScalar(0.5))));
+        this.objects[i].titleObj.position.copy(newPos.clone().add(vector.multiplyScalar(1.4).sub(this.camera.up.clone().multiplyScalar(0.5))));
 
         if ( this.objects[i].node.inFilter ) {
             this.objects[i].visible = true;
