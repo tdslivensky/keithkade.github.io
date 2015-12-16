@@ -4,9 +4,6 @@
  *  Rigid body class.
  */
 
-var START_X = new THREE.Vector3(0,0,0);
-var START_V = new THREE.Vector3(0,0,0);
-
 function RigidBody(scene, callback, fish){ 
     
     if (fish){
@@ -15,16 +12,15 @@ function RigidBody(scene, callback, fish){
             this.mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial( /*{ wireframe: true }*/ ) );
             this.mesh.scale.set(1, 1, 1);
 
-            this.mass = 2;
+            this.mass = 100;
 
-
-            //TODO find for fish
             this.I_0 = new THREE.Matrix4().set(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1);
 
             var len = this.mesh.geometry.vertices.length;
             var pMass = this.mass / len;            
 
-            //point-mass method. each has a mass of one
+            /* 
+            //point-mass method. each has a mass of one. didn't really work 
             for (var j = 0; j<this.mesh.geometry.vertices.length; j++){
                 var v = this.mesh.geometry.vertices[j];
 
@@ -38,14 +34,30 @@ function RigidBody(scene, callback, fish){
                     )
                 );
             }
-        
             
+            */
+
+            /* Just model as a box*/
+            var h = 10, d = 20, w = 5;
+            this.I_0 = new THREE.Matrix4().set(
+                this.mass * (h*h + d*d) / 12,0,0,0, 
+                0,this.mass * (w*w + d*d) / 12,0,0,  
+                0,0,this.mass * (d*d + h*h) / 12,0, 
+                0,0,0,1
+            );
             
             this.I_0_inv = new THREE.Matrix4().getInverse(this.I_0);
 
             this.I = this.I_0.clone();
 
             this.STATE = new State();
+            //this.STATE.q = new THREE.Quaternion(1,0,1,1);  
+            this.STATE.x.set(12, 0, -20);
+
+            this.STATE.q.normalize();     
+            
+            this.mesh.setRotationFromQuaternion(this.STATE.q);
+            this.mesh.position.copy(this.STATE.x);
             this.mesh.geometry.verticesNeedUpdate = true;
 
             for (var i = 0; i < this.mesh.geometry.vertices.length; i++) {
@@ -66,12 +78,12 @@ function RigidBody(scene, callback, fish){
         this.mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial( /*{ wireframe: true }*/ ) );
         this.mesh.scale.set(1, 1, 1);
 
-        this.mass = 12;
+        this.mass = 10;
         
         this.I_0 = new THREE.Matrix4().set(
-            this.mass * 2 / 12,0,0,0,
-            0,this.mass * 2 / 12,0,0,
-            0,0,this.mass * 2 / 12,0,
+            this.mass * 200 / 12,0,0,0,
+            0,this.mass * 200 / 12,0,0,
+            0,0,this.mass * 200 / 12,0,
             0,0,0,1);
         
         this.I_0_inv = new THREE.Matrix4().getInverse(this.I_0);
@@ -79,6 +91,8 @@ function RigidBody(scene, callback, fish){
         this.I = this.I_0.clone();
         
         this.STATE = new State();
+        this.STATE.q.normalize();
+        this.mesh.setRotationFromQuaternion(this.STATE.q);
         this.mesh.geometry.verticesNeedUpdate = true;
         
         for (var i = 0; i < this.mesh.geometry.vertices.length; i++) {

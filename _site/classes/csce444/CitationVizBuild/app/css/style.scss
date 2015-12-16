@@ -1,41 +1,245 @@
-$dark-grey:     #333333;
-$light-grey:    #666666;
+$dark-grey:     #333339;
+$dark-grey-translucent: rgba(51, 51, 51, 0.8);
+$light-grey:    #555558;
 $green:         #c8e600;
 $purple:        #e600c8;
-$teal:          #00c8e6;
+$cyan:          #00c8e6;
+
+$filter-knob-width: 8px;
+$filter-slide-height: 20px;
+$filter-slide-width: 350px;   
+
+$phys-slide-width: 350px;
+$phys-slide-height: 22px;
+$grabby-radius: 4px;
+
+$settings-width: 420px;
+$personal-graph-width: 560px;
+$mice-height: 350px;
+$how-to-height: 160px;
+
+/// Mixin to customize scrollbars
+/// Beware, this does not work in all browsers
+/// @author Hugo Giraudel
+/// @param {Length} $size - Horizontal scrollbar's height and vertical scrollbar's width
+/// @param {Color} $foreground-color - Scrollbar's color
+/// @param {Color} $background-color [mix($foreground-color, white, 50%)] - Scrollbar's color
+/// @example scss - Scrollbar styling
+///   @include scrollbars(.5em, slategray);
+@mixin scrollbars($size, $foreground-color, $background-color: mix($foreground-color, white,  50%)) {
+  // For Google Chrome
+  ::-webkit-scrollbar {
+      width:  $size;
+      height: $size;
+  }
+
+  ::-webkit-scrollbar-thumb {
+      background: $foreground-color;
+  }
+
+  ::-webkit-scrollbar-track {
+      background: $background-color;
+  }
+
+  // For Internet Explorer
+  body {
+    scrollbar-face-color: $foreground-color;
+    scrollbar-track-color: $background-color;
+  }
+}
+
+
 
 * {
     margin: 0;
     padding: 0;
+	@include scrollbars(12px, darken(#555558, 10%));
 }
 
 html, body {
     width: 100%;
     height: 100%;
     font-family: sans-serif;
-    color: white;
 }
 
 .settings-panel {
-    width: 300px;
-    height: 100%;
-    background-color: $dark-grey;
-    padding: 10px;
+    width: $settings-width;
+    height: 600px;
+    background-color: $dark-grey-translucent;
+    padding: 0 10px 0 10px;
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+	top: 20px;
+    z-index: 5;
+    opacity: 0.85;
+    border-radius: 5px;
+    display: none;
 }
+
+h4 {
+    font-weight: 400;  
+    padding: 10px 0 0 0;
+    margin: 0;
+}
+
+h3 {
+    margin: 6px 0 0 10px;
+    font-weight: bold;
+    color: white;
+    font-size: 18px;
+}
+
+
+#explore-graph {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: $personal-graph-width;
+    border-right: 2px solid $dark-grey;
+}
+
+#selected-nodes {
+ 	position: absolute;
+    bottom: $how-to-height + $mice-height + 5;
+	top: 0;
+    right: 0;
+	background-color: $light-grey;
+	width: $personal-graph-width;
+    overflow: auto;
+    
+    padding-bottom: 20px;
+    .bookmark {
+        color: white;
+        margin: 4px 0 0 10px;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+    
+    .bookmark:hover {
+        color: $cyan;
+;
+    }
+
+}
+
+#mice {
+    position: absolute;
+    bottom: $how-to-height;
+    right: 0;
+    height: $mice-height;
+    width: $personal-graph-width;
+    background-color: white;
+    border-top: 5px solid yellow;
+
+    .ecologylab-metadataContainer {
+        min-width: $personal-graph-width;
+		height: $mice-height;
+		overflow-y: auto;
+    }
+}
+
+#how-to {
+ 	position: absolute;
+    bottom: 0;
+    right: 0;
+    height: $how-to-height;
+    width: $personal-graph-width;
+    background-color: white;	
+	border-top: 5px solid $light-grey;
+	background-color: $light-grey;
+	color: white;
+	p {
+		margin: 6px 0 0 10px;
+        line-height: 130%;
+	}
+	a {
+		position: absolute;
+		right: 12px;
+		bottom: 8px;
+		color: $cyan;
+	}
+}
+
 
 /* UI components */
 
-.filter-slider{
-    $filter-knob-width: 8px;
-    $filter-slide-height: 20px;
-    $filter-slide-width: 200px;    
+.filter-dropdown {
+    font-size: 14px;
+	overflow-y: scroll;
+	max-height: 280px;
+	position: relative; 
+	top: -1px;
+        
+    &.expanded {
+        .dropdown-title {
+            border-bottom: none;
+            box-shadow: none;    
+        }
+        li {
+            display: block;    
+        }           
+    }
     
+    &.collapsed {
+        li {
+            display: none;
+        }    
+    }
+            
+    li {
+        background-color: $light-grey;
+        padding: 2px;
+    }
+
+}
+
+.dropdown-title {
+	background-color: $light-grey;
+	padding: 2px;
+	border: 1px solid black;
+	box-shadow: 0px 1px 2px 0px rgba(0,0,0,1);
+	position: relative;
+	top: -2px;
+	left: -1px;
+	cursor: pointer;
+
+	&.expanded {
+		border-bottom: none;
+		box-shadow: none;    
+	}
+}
+
+.dropdown-caret {
+	font-size: 10px;
+}
+
+//button
+.filter-clear {
+	margin: 2px;
+	padding: 2px;
+	position: relative;
+	top: -4px;
+	color: white;
+	border: 1px solid white;
+	background-color: $purple;
+	cursor: pointer;
+}
+	
+.filter-clear:hover {
+	background-color: darken($purple, 10%);
+}
+	
+.filter-slider{
     position: relative;
     width: $filter-slide-width;
     height: $filter-slide-height;
     font-size: 12px;
     display: block;
-    margin: 0 0 28px 0;
+    margin: 10px 0 30px 0;
     
     .filter-slide-title{
         position: absolute;
@@ -52,6 +256,7 @@ html, body {
         width: $filter-slide-width;
         pointer-events: none;       
         height: $filter-slide-height;
+        outline: none;
     }    
 
     //the grabby bit
@@ -110,13 +315,32 @@ html, body {
 }
 
 .phys-slider-container {
-    $phys-slide-width: 200px;
-    $phys-slide-height: 4px;
-    $grabby-radius: 4px;
+    font-size: 14px;
+    margin: 10px 0 10px 0;
     
+    .icon {
+        width: $phys-slide-height;
+        height: $phys-slide-height;
+        clear: both;
+        float: left;
+    }
     
     .phys-slider-title {
-        display: block;
+        display: inline-block;
+        float: left;
+    }
+    
+    button {
+        margin: 2px 50px 2px 2px;
+        padding: 2px;
+        position: relative;
+        top: -4px;
+        color: white;
+        border: 1px solid white;
+        background-color: $purple;
+        cursor: pointer;
+        display: inline;
+        float: right;
     }
     
     //src: http://jsfiddle.net/1xg1j3tw/
@@ -126,9 +350,11 @@ html, body {
         border-radius: 0px;
         position: relative;
         overflow-x: hidden;
-        overflow-y: visible;
+        overflow-y: hidden;
         width: $phys-slide-width;
+        height: $phys-slide-height;
         background: transparent;
+        outline: none;
     }
     
     .phys-slider::-webkit-slider-thumb {
@@ -141,9 +367,8 @@ html, body {
     
     .phys-slider::-webkit-slider-runnable-track {
         background: #757575; 
-        height: 6px;
+        height: 5px;
         margin: 10px 0;
-        //border-radius: 4px;
     }
     
     .phys-slider::-webkit-slider-thumb:before {
@@ -167,5 +392,25 @@ html, body {
         background: $purple;
         border-radius: 50%;
     }
-
 }
+   
+#shared-author-sliders {
+    .phys-slider::-webkit-slider-thumb:before {
+        background: $green;
+    }
+    
+    .phys-slider::-webkit-slider-thumb:after {
+        background: $green;
+    }
+}
+    
+#cited-sliders {
+    .phys-slider::-webkit-slider-thumb:before {
+        background: $cyan;
+    }
+    
+    .phys-slider::-webkit-slider-thumb:after {
+        background: $cyan;
+    }
+}
+    
