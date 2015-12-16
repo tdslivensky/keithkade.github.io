@@ -1,4 +1,5 @@
-/* global document, Set, setTimeout */
+/* jshint -W004, browser: true, devel: true */
+/* global Set */
 
 var doc = document; //shorthand
 

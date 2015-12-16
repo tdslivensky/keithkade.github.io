@@ -1,4 +1,5 @@
-/* global doc, UI, Simulator, GraphRenderer, requestAnimationFrame, Util, console, BSAutoSwitch, document, MICE, nodeData, RendererBase, metadataCache, window, RepoMan, Filter, XMLHttpRequest, simpl, Set */
+/* jshint -W004, browser: true, devel: true */
+/* global doc, UI, Simulator, GraphRenderer, Util, BSAutoSwitch, MICE, nodeData, RendererBase, metadataCache, RepoMan, Filter, simpl, Set */
 
 var App = {};
 var mmd;
