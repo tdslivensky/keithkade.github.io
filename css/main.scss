@@ -1,9 +1,12 @@
+$backGroundColor: #e1e1e1;
+$textColor: #141414;
+
 $slate: #212121;
-$green: #00ff6c;
+$green: #017c35;
 $purple: #81479f;
-$light-blue: #60c6f8;
-$medium-blue: #7a94ce;
-$light-grey: #484848;
+$light-blue: #3e86aa;
+$medium-blue: #425581;
+$light-grey: #f2f2f2;
 
 $nav-width: 580px;
 
@@ -18,13 +21,13 @@ span.tooltip:hover span{
     background: none;
 }
 
-/* old */
+/* general styles */
 
 body {
 	margin: 0; 
 	padding: 0;
-	background: $slate;
-    color: white;
+	background: $backGroundColor;
+    color: $textColor;
 	font-family: 'Lato', arial, sans-serif; 
 }
 
@@ -37,10 +40,10 @@ header {
     height: 130px;
     a:link {
         text-decoration: none;
-        color: white;
+        color: $textColor;
     }
     a:visited {
-        color: white;
+        color: $textColor;
     }
     img {
         display: inline;
@@ -89,6 +92,7 @@ nav ul {
 }
 nav li{
     display: inline;
+    color: $textColor;
 }
 
 /* Article Styles */
@@ -97,7 +101,7 @@ article {
     
     h2 {
         color: $green;
-        font-weight: 300;
+        font-weight: 400;
         margin-bottom: 5px;
     }
     
@@ -170,6 +174,9 @@ span.tooltip:hover span{
     #main-nav ul {
         display: none;
     }
+    #navPanel nav {
+        margin: 54px 0 0 0;
+    }
     #navPanel nav ul{
         width: 250px;
         background-color: transparent;
@@ -218,7 +225,7 @@ span.tooltip:hover span{
         left: 0px;
         top: 0px;
         bottom: 0px;
-        background: $slate;
+        background: $backGroundColor;
         z-index: 20;
         overflow: auto;
         transition: left 500ms;

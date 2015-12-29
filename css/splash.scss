@@ -1,5 +1,6 @@
-$backGroundColor: #d9d9d9;
+$backGroundColor: #e1e1e1;
 $textColor: #141414;
+
 $hoverColor: #81479f;
 $contentWidth: 690px;
 
@@ -65,14 +66,6 @@ body {
         border-top-right-radius: 400px;
         border-bottom-right-radius: 400px;
     }
-}
-
-#fll {
-    color: white;
-    position: fixed;
-    right: 10px;
-    bottom: 10px;
-    font-size: 20px;
 }
 
 @media (max-width: 700px) {
