@@ -1,63 +1,69 @@
+$backGroundColor: #d9d9d9;
+$textColor: #141414;
+$hoverColor: #81479f;
+$contentWidth: 690px;
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
 html {
     height: 100%;
 }
 
 body {
     font-family: 'Lato', sans-serif;
-    color: white;
-    
-    background: url(../img/compressed/backgroundEdit.png) no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+    background-color: $backGroundColor;
+    color: $textColor;
 }
 
 #content {
-    margin-left: 96px;
-
+    width: $contentWidth;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
     
-    h1 {
-        font-weight: 300;
-        font-size: 60px;
-        margin-top: 100px;
-        padding: 0;
-        margin-bottom: 0;
-        margin-left: -4px;
-    }
-
-    p {
-        font-size: 30px;
-        font-weight: 300;
-        margin-top:2px;
-    }
-
-    nav ul {
-        margin: 0;
-        padding: 0;
+    #text {
+        float: left;
+        text-align: right;
         
-        li {
-            list-style: none;
-            margin-top: 30px;
-            margin-left: -14px;
-            animation: fadein 1s;
+        h1 {
+            font-size: 60px;
+            font-weight: 300;    
         }
-        
-        a {
-            font-size: 18px;
-            padding: 16px;
-            color: white;
-            text-decoration: none;
+
+        p {
+            font-size: 30px;
+            font-weight: 300;   
+            margin: 0 0 20px 0;
         }
-        
-        a:hover {
-            color: dimgrey;
+
+        nav ul {
+
+            li {
+                list-style: none;
+                margin: 22px 0 22px 0;
+            }
+
+            a {
+                font-size: 18px;
+                font-weight: 400;
+                color: $textColor;
+                text-decoration: none;
+                padding: 10px 0 10px 20px;
+            }
+
+            a:hover {
+                color: $hoverColor;
+            }
         }
     }
-
-    @keyframes fadein {
-        from { opacity: 0; }
-        to { opacity:  1; }
+    
+    #face {
+        float: right;
+        border-top-right-radius: 400px;
+        border-bottom-right-radius: 400px;
     }
 }
 
@@ -69,16 +75,60 @@ body {
     font-size: 20px;
 }
 
-@media (max-width: 560px) {
-    #content {
-        margin-left: 16px;
-        
-        h1 {
-            margin-top: 40px;
-            font-size: 40px;
+@media (max-width: 700px) {
+    #content {  
+        width: $contentWidth - 140;
+        margin-top: 60px;
+        #text {    
+            h1 {
+                font-size: 40px;
+            }
+            p {
+                font-size: 20px;
+            }
         }
-        p {
-            font-size: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    #content {  
+        margin-top: 30px;        
+        width: $contentWidth - 220;
+        #text {    
+            h1 {
+                font-size: 36px;
+            }
+            p {
+                font-size: 18px;
+            }
+        }
+        #face {
+            width: 220px;
+        }
+    }
+}
+
+@media (max-width: 500px) {
+    #content {  
+        width: $contentWidth - 240;
+        margin-top: 10px;
+        #text {   
+            position: absolute;
+            right: 10px;
+            z-index: 2;
+            h1 {
+                font-size: 36px;
+            }
+            p {
+                font-size: 18px;
+            }
+        }
+        #face {
+            width: 200px;
+            position: absolute;
+            left: 0;
+            z-index: 1;
+            opacity: 0.4;
         }
     }
 }

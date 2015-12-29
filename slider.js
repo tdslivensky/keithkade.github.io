@@ -1,4 +1,4 @@
-/*global document */
+/*global document*/
 
 var toggleSlide = function() {
 	var main = document.getElementById('mainContent');
