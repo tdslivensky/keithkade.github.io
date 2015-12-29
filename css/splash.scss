@@ -78,13 +78,15 @@ body {
 @media (max-width: 700px) {
     #content {  
         width: $contentWidth - 140;
-        margin-top: 60px;
+        margin-top: 40px;
         #text {    
             h1 {
                 font-size: 40px;
+                font-weight: 400;                                
             }
             p {
                 font-size: 20px;
+                font-weight: 400;                                
             }
         }
     }
@@ -92,14 +94,16 @@ body {
 
 @media (max-width: 600px) {
     #content {  
-        margin-top: 30px;        
+        margin-top: 20px;        
         width: $contentWidth - 220;
         #text {    
             h1 {
                 font-size: 36px;
+                font-weight: 400;                
             }
             p {
                 font-size: 18px;
+                font-weight: 400;                
             }
         }
         #face {
@@ -114,13 +118,15 @@ body {
         margin-top: 10px;
         #text {   
             position: absolute;
-            right: 10px;
+            right: 14px;
             z-index: 2;
             h1 {
                 font-size: 36px;
+                font-weight: 400;
             }
             p {
                 font-size: 18px;
+                font-weight: 400;
             }
         }
         #face {
@@ -128,7 +134,7 @@ body {
             position: absolute;
             left: 0;
             z-index: 1;
-            opacity: 0.4;
+            opacity: 0.3;
         }
     }
 }

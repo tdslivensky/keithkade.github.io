@@ -64,51 +64,57 @@ body {
   /* line 79, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
   #content {
     width: 550px;
-    margin-top: 60px; }
+    margin-top: 40px; }
     /* line 83, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
     #content #text h1 {
-      font-size: 40px; }
-    /* line 86, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
+      font-size: 40px;
+      font-weight: 400; }
+    /* line 87, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
     #content #text p {
-      font-size: 20px; } }
+      font-size: 20px;
+      font-weight: 400; } }
 
 @media (max-width: 600px) {
-  /* line 94, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
+  /* line 96, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
   #content {
-    margin-top: 30px;
+    margin-top: 20px;
     width: 470px; }
-    /* line 98, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
+    /* line 100, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
     #content #text h1 {
-      font-size: 36px; }
-    /* line 101, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
+      font-size: 36px;
+      font-weight: 400; }
+    /* line 104, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
     #content #text p {
-      font-size: 18px; }
-    /* line 105, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
+      font-size: 18px;
+      font-weight: 400; }
+    /* line 109, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
     #content #face {
       width: 220px; } }
 
 @media (max-width: 500px) {
-  /* line 112, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
+  /* line 116, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
   #content {
     width: 450px;
     margin-top: 10px; }
-    /* line 115, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
+    /* line 119, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
     #content #text {
       position: absolute;
-      right: 10px;
+      right: 14px;
       z-index: 2; }
-      /* line 119, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
+      /* line 123, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
       #content #text h1 {
-        font-size: 36px; }
-      /* line 122, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
+        font-size: 36px;
+        font-weight: 400; }
+      /* line 127, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
       #content #text p {
-        font-size: 18px; }
-    /* line 126, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
+        font-size: 18px;
+        font-weight: 400; }
+    /* line 132, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
     #content #face {
       width: 200px;
       position: absolute;
       left: 0;
       z-index: 1;
-      opacity: 0.4; } }
+      opacity: 0.3; } }
 
 /*# sourceMappingURL=splash.css.map */
