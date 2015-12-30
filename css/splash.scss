@@ -2,7 +2,7 @@ $backGroundColor: #e1e1e1;
 $textColor: #141414;
 
 $hoverColor: #81479f;
-$contentWidth: 690px;
+$contentWidth: 680px;
 
 * {
     margin: 0;
@@ -70,7 +70,7 @@ body {
 
 @media (max-width: 700px) {
     #content {  
-        width: $contentWidth - 140;
+        width: $contentWidth - 120;
         margin-top: 40px;
         #text {    
             h1 {
@@ -88,7 +88,7 @@ body {
 @media (max-width: 600px) {
     #content {  
         margin-top: 20px;        
-        width: $contentWidth - 220;
+        width: $contentWidth - 200;
         #text {    
             h1 {
                 font-size: 36px;
@@ -107,7 +107,7 @@ body {
 
 @media (max-width: 500px) {
     #content {  
-        width: $contentWidth - 240;
+        width: $contentWidth - 220;
         margin-top: 10px;
         #text {   
             position: absolute;
