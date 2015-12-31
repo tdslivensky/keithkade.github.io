@@ -13,24 +13,24 @@ body {
   min-width: 300px; }
 
 /* line 28, /Users/kade/Desktop/kadekeith.me/css/main.scss */
-header {
+.face-header {
   height: 130px; }
   /* line 30, /Users/kade/Desktop/kadekeith.me/css/main.scss */
-  header a:link {
+  .face-header a:link {
     text-decoration: none;
     color: #141414; }
   /* line 34, /Users/kade/Desktop/kadekeith.me/css/main.scss */
-  header a:visited {
+  .face-header a:visited {
     color: #141414; }
   /* line 37, /Users/kade/Desktop/kadekeith.me/css/main.scss */
-  header img {
+  .face-header img {
     display: inline;
     height: 120px;
     float: left;
     border: 3px solid white;
     border-radius: 50%; }
   /* line 44, /Users/kade/Desktop/kadekeith.me/css/main.scss */
-  header h1 {
+  .face-header .header-name {
     font-size: 300%;
     font-weight: 300;
     padding-left: 140px;
@@ -144,16 +144,16 @@ span.tooltip:hover span {
   nav {
     z-index: 25; }
   /* line 152, /Users/kade/Desktop/kadekeith.me/css/main.scss */
-  header {
+  .face-header {
     height: 80px;
     text-align: right; }
-  /* line 156, /Users/kade/Desktop/kadekeith.me/css/main.scss */
-  header img {
-    display: none; }
-  /* line 159, /Users/kade/Desktop/kadekeith.me/css/main.scss */
-  header h1 {
-    font-size: 300%;
-    padding: 0; }
+    /* line 155, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+    .face-header img {
+      display: none; }
+    /* line 158, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+    .face-header h1 {
+      font-size: 300%;
+      padding: 0; }
   /* line 163, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   #main-nav ul {
     display: none; }

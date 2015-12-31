@@ -25,7 +25,7 @@ body {
     min-width: 300px;
 }
 
-header {
+.face-header {
     height: 130px;
     a:link {
         text-decoration: none;
@@ -41,7 +41,7 @@ header {
         border: 3px solid white;
         border-radius: 50%;
     }
-    h1 {
+    .header-name {
         font-size: 300%;
         font-weight: 300;
         padding-left: 140px;
@@ -149,16 +149,16 @@ span.tooltip:hover span{
     nav {
         z-index: 25;
     }
-    header {
+    .face-header {
         height: 80px;
         text-align: right;
-    }
-    header img {
-        display: none;
-    }
-    header h1 {
-        font-size: 300%;
-        padding: 0;
+        img {
+            display: none;
+        }
+        h1 {
+            font-size: 300%;
+            padding: 0;
+        }
     }
     #main-nav ul {
         display: none;

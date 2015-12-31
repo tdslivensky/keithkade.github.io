@@ -1,0 +1,40 @@
+$backGroundColor: #e1e1e1;
+$textColor: #141414;
+
+$slate: #212121;
+$green: #017c35;
+$purple: #81479f;
+$light-blue: #3e86aa;
+$medium-blue: #110ba3;
+$light-grey: #f2f2f2;
+
+header {
+    background-color: #e1e1e1;
+    border-bottom: 2px solid $purple;
+    height: auto;
+    overflow:auto;
+    
+    .post-title {
+        float: left;
+        width: calc(100% - 150px);
+        font-size: 32px;
+    }
+
+    .post-subtitle {
+        float: left;
+        width: calc(100% - 150px);
+        font-size: 22px;
+        font-weight: 300;
+    }
+    
+    .post-meta {
+        float: right;
+        text-align: right;
+        width: 150px;
+        margin: 30px 0 0 0;
+    }
+}
+
+.post-content {
+    clear: both;
+}

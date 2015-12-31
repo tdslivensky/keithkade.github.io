@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="I'm Kade Keith, a Computer Scientist specializing in front end development. I try to make complicated things simple.">
-    <title>Welcome to Jekyll!</title>
+    <title>Welcome to Jekyll! asdfkljas df asdf aslkdfj  saodifj qwf dafsldfk adfi weflwkd fasi </title>
     <link rel="icon" href="img/compressed/kFavicon.png">
     <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
 </head>
@@ -13,16 +13,31 @@
 
 <body>
 
-    <div id="mainContent">    
-        <div id="wrapper">
-            <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+<div id="mainContent">    
+    <div id="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-              <header class="post-header">
-                <h1 class="post-title" itemprop="name headline">Welcome to Jekyll!</h1>
-                <p class="post-meta"><time datetime="2015-12-29T19:35:57-06:00" itemprop="datePublished">Dec 29, 2015</time></p>
-              </header>
+            <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">
+                    Welcome to Jekyll! asdfkljas df asdf aslkdfj  saodifj qwf dafsldfk adfi weflwkd fasi 
+                    <br/>
+                    <span class="post-subtitle">cool subtitle you got there</span>                
+                </h1>
+                <p class="post-meta">
+                    <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+                        <span itemprop="name"><a href="/index.html">Kade Keith</a></span>
+                    </span>
+                    <br/>                    
+                    <time datetime="2015-12-29T00:00:00-06:00" itemprop="datePublished">
+                        Dec 29, 2015
+                    </time>
+                    <br/>
+                    <span id="read-time"></span>
+                    <br/>
+                </p>
+            </header>
 
-              <div class="post-content" itemprop="articleBody">
+            <div class="post-content" itemprop="articleBody" id="main-text">
                 <p>You’ll find this post in your <code class="highlighter-rouge">_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code class="highlighter-rouge">jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
 
 <p>To add new posts, simply add a file in the <code class="highlighter-rouge">_posts</code> directory that follows the convention <code class="highlighter-rouge">YYYY-MM-DD-name-of-post.ext</code> and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.</p>
@@ -38,15 +53,35 @@
 <p>Check out the <a href="http://jekyllrb.com/docs/home">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://talk.jekyllrb.com/">Jekyll Talk</a>.</p>
 
 
-              </div>
+            </div>
 
-            </article>
-        </div>
+            <a href="https://twitter.com/share" class="twitter-share-button"{count} data-via="kade_keith">Tweet</a>
+            <script>
+                !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+            </script>
+            
+            &nbsp;&nbsp;
+        
+            <script src="https://apis.google.com/js/platform.js" async defer></script>
+            <g:plusone></g:plusone>
+            
+        </article>
     </div>
+</div>
 
 </body>
 
 <link rel="stylesheet" href="/css/main.css">
-<script src="/slider.js"></script>    
+<link rel="stylesheet" href="/css/post.css">
+
+<script src="/slider.js"></script>
+<script>
+    var wpm = 200;
+    var elem = document.getElementById('main-text');
+    var text = elem.textContent.replace(/\s+/g, ' ').split(' ').filter(function(e) { return (e.length > 1); });
+    var minutes = Math.round(text.length / wpm);
+    document.getElementById('read-time').innerHTML = minutes + ' minute read';
+
+</script>
     
 </html>
