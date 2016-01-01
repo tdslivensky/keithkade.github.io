@@ -43,6 +43,13 @@
             <script src="https://apis.google.com/js/platform.js" async defer></script>
             <g:plusone></g:plusone>
             
+            <div
+              class="fb-like"
+              data-share="true"
+              data-width="450"
+              data-show-faces="true">
+            </div>
+            
         </article>
     </div>
 </div>
@@ -53,13 +60,33 @@
 <link rel="stylesheet" href="{{ "/css/post.css" | prepend: site.baseurl }}">
 
 <script src="/slider.js"></script>
+
+<!-- Time to read -->    
 <script>
     var wpm = 200;
     var elem = document.getElementById('main-text');
     var text = elem.textContent.replace(/\s+/g, ' ').split(' ').filter(function(e) { return (e.length > 1); });
     var minutes = Math.round(text.length / wpm);
     document.getElementById('read-time').innerHTML = minutes + ' minute read';
-
 </script>
+    
+<!-- Facebook sdk -->    
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '913154025441928',
+      xfbml      : true,
+      version    : 'v2.5'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>    
     
 </html>
