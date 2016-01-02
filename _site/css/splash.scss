@@ -1,4 +1,7 @@
 $backGroundColor: #e1e1e1;
+$purpleGrey: #ddd2de;
+$orangeGrey: #ded4b9;
+
 $textColor: #141414;
 
 $hoverColor: #81479f;
@@ -17,6 +20,8 @@ body {
     font-family: 'Lato', sans-serif;
     background-color: $backGroundColor;
     color: $textColor;
+    background: linear-gradient(to bottom right, #e0d7cf, #c2c2c9);
+
 }
 
 #content {
