@@ -10,21 +10,20 @@
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
             <header class="post-header">
+                <img src="{{page.header}}" class="post-banner"/>
                 <h1 class="post-title" itemprop="name headline">
                     {{ page.title }}
                     <br/>
                     <span class="post-subtitle">{{ page.subtitle }}</span>                
                 </h1>
                 <p class="post-meta">
-                    <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+                    <span itemprop="author" itemscope itemtype="http://schema.org/Person" class="metadata">
                         <span itemprop="name"><a href="/index.html">Kade Keith</a></span>
                     </span>
-                    <br/>                    
-                    <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+                    <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished" class="metadata">
                         {{ page.date | date: "%b %-d, %Y" }}
                     </time>
-                    <br/>
-                    <span id="read-time"></span>
+                    <span id="read-time" class="metadata"></span>
                     <br/>
                 </p>
             </header>
@@ -33,23 +32,27 @@
                 {{ content }}
             </div>
 
-            <a href="https://twitter.com/share" class="twitter-share-button"{count} data-via="kade_keith">Tweet</a>
-            <script>
-                !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
-            </script>
-            
-            &nbsp;&nbsp;
-        
-            <script src="https://apis.google.com/js/platform.js" async defer></script>
-            <g:plusone></g:plusone>
-            
-            <div
-              class="fb-like"
-              data-share="true"
-              data-width="450"
-              data-show-faces="true">
+            <div class="social-links">
+                <a href="https://twitter.com/share" class="twitter-share-button"{count} data-via="kade_keith">Tweet</a>
+                <script>
+                    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+                </script>
+
+                &nbsp;
+                
+                <div
+                  class="fb-like"
+                  data-share="true"
+                  data-layout="button"
+                  data-show-faces="true">
+                </div>
+                
+                &nbsp;
+                
+                <script src="https://apis.google.com/js/platform.js" async defer></script>
+                <g:plusone></g:plusone>
+
             </div>
-            
         </article>
     </div>
 </div>

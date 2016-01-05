@@ -10,9 +10,9 @@ module.exports = function(grunt) {
           files: [
             {
               expand: true,
-              cwd: 'img/digitalPainting/',
+              cwd: 'img/',
               src: ['*.jpg'],
-              dest: 'img/digitalPainting/compressed/',
+              dest: 'img/compressed/',
               ext: '.jpg'
             }
           ]
@@ -21,9 +21,9 @@ module.exports = function(grunt) {
             files: [
             {
               expand: true,
-              cwd: 'img/digitalPainting/',
+              cwd: 'img/',
               src: ['*.png'],
-              dest: 'img/digitalPainting/compressed/',
+              dest: 'img/compressed/',
               ext: '.png'
             }
           ]
