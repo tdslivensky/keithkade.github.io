@@ -21,7 +21,7 @@ body {
 }
 
 #wrapper {
-	margin: 2% 4% 2% 4%;	
+	margin: 30px 4% 2% 4%;	
     min-width: 300px;
 }
 
@@ -156,7 +156,7 @@ span.tooltip:hover span{
         img {
             display: none;
         }
-        h1 {
+        .header-name {
             font-size: 300%;
             padding: 0;
         }

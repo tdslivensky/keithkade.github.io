@@ -10,6 +10,37 @@ $light-grey: #f2f2f2;
 
 $meta-width: 140px;
 
+#home-link {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    height: 32px;
+    transition: top 0.5s;
+
+    a {
+        color: $purple;
+        font-size: 18px;
+        padding: 14px 10px 14px 10px;
+        position: relative;
+        top: -12px;
+        width: 150px;
+        margin: 0 auto 0 auto;
+        display: block;
+        
+        img {
+            height: 20px;
+            position: relative;
+            top: 3px;
+        }
+    }
+    
+    a:hover {
+        color: lighten($purple, 20%);
+    }
+}
+
 header {
     background-color: #e1e1e1;
     border-bottom: 2px solid $purple;
@@ -60,6 +91,10 @@ header {
     h3 {
         font-size: 20px;    
         text-decoration: underline;
+    }
+    
+    img {
+        width: 100%;
     }
 }
 

@@ -2,15 +2,17 @@
 <html>
 
 {% include head.html %}
-
+    
 <body>
 
 <div id="mainContent">    
+    <span id="home-link"><a href="/blog/index.html"><img src="/img/compressed/kFavicon.png"><img/> Blog Home</a></span>
     <div id="wrapper">
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">            
             <header class="post-header">
-                <img src="{{page.header}}" class="post-banner"/>
+                {% if page.header != "none" %}
+                    <img src="{{page.header}}" class="post-banner"/>
+                {% endif %}
                 <h1 class="post-title" itemprop="name headline">
                     {{ page.title }}
                     <br/>
@@ -27,7 +29,7 @@
                     <br/>
                 </p>
             </header>
-
+            
             <div class="post-content" itemprop="articleBody" id="main-text">
                 {{ content }}
             </div>
@@ -89,6 +91,34 @@
      js.src = "//connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
+</script>    
+
+<script> //Showing and hiding the nav bar
+    var scrolled = false;
+    window.onscroll = function(){
+        console.log('hodor');
+        scrolled = true;
+    }
+    
+    setInterval(function() {
+        if (scrolled){
+            onScroll();
+            scrolled = false;
+        }
+    }, 300);
+    
+    var oldTop = 0;
+    function onScroll(){
+        var newTop = document.body.scrollTop;
+        console.log(newTop);
+        if (oldTop - newTop <= 0 && newTop > 30){ //30ish is navbar height
+            document.getElementById('home-link').style.top = '-32px';
+        }
+        else {
+            document.getElementById('home-link').style.top = '0';
+        }
+        oldTop = newTop;
+    }
 </script>    
     
 </html>

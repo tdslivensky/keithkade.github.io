@@ -9,7 +9,7 @@ body {
 
 /* line 23, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 #wrapper {
-  margin: 2% 4% 2% 4%;
+  margin: 30px 4% 2% 4%;
   min-width: 300px; }
 
 /* line 28, /Users/kade/Desktop/kadekeith.me/css/main.scss */
@@ -152,7 +152,7 @@ span.tooltip:hover span {
     .face-header img {
       display: none; }
     /* line 159, /Users/kade/Desktop/kadekeith.me/css/main.scss */
-    .face-header h1 {
+    .face-header .header-name {
       font-size: 300%;
       padding: 0; }
   /* line 164, /Users/kade/Desktop/kadekeith.me/css/main.scss */

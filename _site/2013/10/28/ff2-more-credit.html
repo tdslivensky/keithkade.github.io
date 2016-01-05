@@ -8,15 +8,17 @@
     <title>Congressional Internship Pros and Cons</title>
     <link rel="icon" href="img/compressed/kFavicon.png">
 </head>
-
+    
 <body>
 
 <div id="mainContent">    
+    <span id="home-link"><a href="/blog/index.html"><img src="/img/compressed/kFavicon.png"><img/> Blog Home</a></span>
     <div id="wrapper">
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">            
             <header class="post-header">
-                <img src="/img/compressed/dcBanner.jpg" class="post-banner"/>
+                
+                    <img src="/img/compressed/dcBanner.jpg" class="post-banner"/>
+                
                 <h1 class="post-title" itemprop="name headline">
                     Congressional Internship Pros and Cons
                     <br/>
@@ -33,7 +35,7 @@
                     <br/>
                 </p>
             </header>
-
+            
             <div class="post-content" itemprop="articleBody" id="main-text">
                 <p>Each summer, thousands of interns flock to the nation’s capital to throw six to twelve weeks of their lives at the feet of their politician of choice. In the Summer of 2013 I joined the herd and worked for my congressman (who shall remain unnamed). Those who choose to embark on the endeavor get to experience the best and worst of the legislative process firsthand.</p>
 
@@ -160,6 +162,34 @@
      js.src = "//connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
+</script>    
+
+<script> //Showing and hiding the nav bar
+    var scrolled = false;
+    window.onscroll = function(){
+        console.log('hodor');
+        scrolled = true;
+    }
+    
+    setInterval(function() {
+        if (scrolled){
+            onScroll();
+            scrolled = false;
+        }
+    }, 300);
+    
+    var oldTop = 0;
+    function onScroll(){
+        var newTop = document.body.scrollTop;
+        console.log(newTop);
+        if (oldTop - newTop <= 0 && newTop > 30){ //30ish is navbar height
+            document.getElementById('home-link').style.top = '-32px';
+        }
+        else {
+            document.getElementById('home-link').style.top = '0';
+        }
+        oldTop = newTop;
+    }
 </script>    
     
 </html>
