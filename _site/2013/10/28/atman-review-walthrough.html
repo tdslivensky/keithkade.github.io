@@ -169,6 +169,9 @@
     document.getElementById('mainContent').addEventListener('scroll', function(){
         scrolled = true;
     }, true);
+    document.addEventListener('scroll', function(){
+        scrolled = true;        
+    }, true);
     
     setInterval(function() {
         if (scrolled){
@@ -179,7 +182,9 @@
     
     var oldTop = 0;
     function onScroll(){
-        var newTop = document.getElementById('mainContent').scrollTop;
+        //had to get weird for this to work on mobile
+        var newTop = document.getElementById('mainContent').scrollTop || document.body.scrollTop;
+        console.log(newTop);
         if (oldTop - newTop <= 0 && newTop > 30){ //30ish is navbar height
             document.getElementById('home-link').style.top = '-32px';
         }

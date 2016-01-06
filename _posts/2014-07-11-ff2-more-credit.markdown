@@ -1,60 +1,36 @@
 ---
 layout: post
-title:  "Congressional Internship Pros and Cons"
-subtitle:  "Should you spend a summer on The Hill?"
-date:   2013-10-28 -0600
+title:  "We Should Give Final Fantasy 2 More Credit"
+subtitle:  "Subtitle"
+date:   2014-07-11 -0600
 author: Kade Keith
-header: '/img/compressed/dcBanner.jpg'
+header: '/img/compressed/ff2Banner.jpg'
 ---
 
-Each summer, thousands of interns flock to the nation's capital to throw six to twelve weeks of their lives at the feet of their politician of choice. In the Summer of 2013 I joined the herd and worked for my congressman (who shall remain unnamed). Those who choose to embark on the endeavor get to experience the best and worst of the legislative process firsthand.
+The original Final Fantasy was titled so because Square believed it would be their last project prior to bankruptcy. Upon it's release though, the game was a massive hit that managed to single-handedly pull Square back onto it's feet. The game is often credited for popularizing the RPG genre. Even though many elements of FFI are archaic now, it was revolutionary for the time.
 
-My experience depended a lot on the office in which I worked, so know that these can depend on who you work for. I will say that I worked for an extremely conservative, polarizing representative (the kind of guy Colbert and Jon Stewart make a lot of money off of). I do not agree with him on many issues, but he is an extremely personable and sincere man.
+And along comes Final Fantasy II. Considering it didn't make it to the states for a while, this installment is oftentimes overlooked when the series is discussed. Understandable considering the game is a bit of a black sheep. The leveling and dialogue systems, two key pieces of any RPG, were completely overhauled from the first game. Additionally the game had number of game-altering bugs and glitches that taint the memories of many players.
 
-## The Job
+If you ask me though, FFII was a game ahead of it's time. I pose this question, if Bethesda, the creators of the modern rpg juggernaut series The Elder Scrolls, were to make a game for the NES, would it look more like FFI or FFII? I cast my vote with FFII. Where some might say FFII is wacky, I say it was revolutionary, albeit poorly executed.
 
-### Pros
-**The Badge!** Even though you are just an intern, you will have more power than the average joe. This means you can go to places most people can't, which is undeniably cool. You are moderately important, and if even if you don't belong somewhere, flash your badge and a smile and no one will think twice about your presence (this is especially useful when it comes to events with free food).
+Let's start with the elephant in the room, the leveling/class system.
 
-**The workplace.** Walking by the capitol building on your way to work never gets old, and it is hard to not feel pretty great when you are delivering papers to the house floor. Working on the hill left me speechless on multiple occasions.
+IMAGE
+source: arcadesushi.com
 
-**There are things of global importance happening around you at all times.** In my office I had the flexibility and go to just about any event I wanted to. I was standing outside the supreme court building when the Defense of Marriage Act was repealed. Additionally, there are congressional hearings to go to (some more interesting than others) that are great learning experiences.
+The heroes of FFII do not have levels or classes, they have skills, each of which is increased independently. Now on a logical level this makes a lot of sense. Killing something with a sword shouldn't make you better at magic. Perhaps more importantly though, this system gives the player greater control in how characters level up. In FFI my level 10 white mage had roughly the same stats as anyone else's white mage. FFII changed that though. The Firion that I defeated the emperor with could be very different than the Firion my friend defeated the emperor with. This really let the player feel like they were shaping the party into exactly what they wanted it to look like. The series would later flesh out the class system to allow for this kind of flexibility, but in regards to FFI, which locked each character into one of six basic classes from the beginning of the game, this system allowed for far more flexibility.
 
-**You will learn a lot.** There is no better way to understand the legislative process than to become part of it. People are more than willing to answer any questions you might have. Honestly many congressmen (the one I worked for included) hire interns for the interns sake, not because they need more employees.
+And while this system was flawed in that it sometimes rewarded players for unintuitive actions such as attacking one's own team, I think that just comes with the territory. I for one spent far too much time hopping everywhere I went in oblivion to increase my acrobatics skill. 
 
-**Sometimes you legitimately help people.** Constituents sometimes call with questions you can answer. Or it might be as simple as giving them the appropriate number to call. Nonetheless it can be really satisfying to get thank you's from grateful callers.
+Second is the dialogue system. Someone can correct me on my history here, but FFII is the first RPG in my memory that featured a dialogue system as interactive as this. The system of FFII can easily be seen as a predecessor to the branching dialogue trees of many modern RPGs. Instead of simply reading what the npcs said, players would remember and later ask about key words. They served as simple passwords in a sense, but asking a key character about different terms would prompt different responses.
 
-**Coworkers.** I really liked almost all of the interns and the full time staffers that I met on the hill. Everyone is very welcoming willing to answer any questions you might have. 
+IMAGE
+source: http://finalfantasy.wikia.com/wiki/Princess_Hilda
 
-### Cons
-**The pay.** Most congressional interns do not get paid at all. I got paid a little, but it was far less than minimum wage and not nearly enough to pay for my travel and living expenses. There are some scholarships available, but for the most part you have to be relatively well off to intern. How's that for social mobility.
+So the tree is simple, but it is a tree nonetheless. You are no longer just a passive part of conversation. Players at least feel like they are shaping the discussion. 
 
-**You might lie to people all day.** If you end up answering the phone like most interns, then your optimism will soon be wrung out like a dishrag. Maybe it won't be that dramatic, but it is still pretty rough to tell people over and over that their opinion matters when it actually doesn't. I say this because most of the time when people call to voice any sort of concern or opinion, the intern's ears are the only ears that hear it. If a caller is lucky there call might end up in a database, but that's about all. Every time I picked up the phone I wanted nothing more than to tell the caller they were wasting their time, but I instead gave them the false hope that their voice was being heard.
+And finally, closely related to the dialogue system, there is the story. Not just story, but storytelling as well. The story of FF2 was complex yet clear. Unlike with it's predecessor, players rarely found themselves aimlessly wandering in hopes of finding the next dungeon or combing through every single npc in hopes of finding the clue that would progress the story. The dialogue was less archaic and more helpful. Additionally, the characters were far more developed and nuanced than what was standard at the time. There were no nameless heroes and plain princesses. Instead, characters are rich and developed. When Josef, the loving father figure sacrifices himself to save the other characters, I was heartbroken. This is the first time in my knowledge that a playable character had died as a part of a video game story. Players fought with Josef. Players trained and equipped him. And then players watched him nobly die, leaving his young daughter behind to save the other three party members. 
 
-**The hours.** This will depend on the office, but I usually worked 8:30 - 6:00. Throw in a metro ride and those are some monstrous days. It was also the case that interns were required to work longer hours than the actual staffers... meh.
+In spite of this nuance though, the story maintains the grandiose scale the series is known for. Empires are overthrown and Lords of Hell are vanquished. Meteors are summoned and airships zoom past overhead. For the black sheep of the series, it contains and even introduces some of it's most well know elements, like Cid and chocobos. 
 
-**Job satisfaction.** On most days you won't really do anything of significance while on the job. Additionally, congress as a whole can be really deadlocked. So you are the lowest rung on a ladder in an organization that is infamous for getting nothing done. Thus, it's pretty hard to take any pride in your work.
-
-## The City
-
-### Pros
-**Touristy Stuff.** I spent 6 weeks in DC and still didn't get the chance to visit all of the museums and monuments that I would have liked to. They will be swarming with tourists, but still worth your time (pandas at the national zoo are a must). Soak in as much Americana as you can. As a plus, most of it is free!
-
-**Art.** The national gallery of art is obvious, but there are a multitude of other galleries worth visiting, whether you consider yourself an art aficionado or not. The Hirshhorn gallery is right on the mall and has almost no crowds in comparison to the national gallery. Additionally, you can use an event calendar such as the The Washington Post to see events being put on by smaller artists.
-
-**The city is swarming with other interns,** the vast majority of which are pretty interesting (to you at least). Keep in mind though that if you are under 21, you will be very restricted in how much socializing you can do. More on this later.
-
-**Transit.** I don't have much experience with public transit, but from what I can tell the DC metro/bus system isn't too bad. My roommate and I were only in want of a car once during our six weeks, and that was too attend an event out of town.
-
-### Cons
-**No one lives there.** It is difficult to describe, but I cannot say I liked the overall "feel" of DC. Of the people I met, very few would call DC home no matter how long they had lived there. It is a city where people go to visit and where people go to work, not where people go to live.
-
-**Crime.** DC can get pretty rough once you leave the touristy areas. I never felt unsafe, but depending on where you live this might be a problem. 
-
-**Cost of living.** You will pay a lot for housing and for food. If you drink you will pay a lot for booze. The free entertainment options make up for this somewhat, but it is still a costly city for someone on an intern's budget. 
-
-**A note about being under 21.** In DC you have to be 21 to get into most bars, and the social scene (at least for interns) revolves almost entirely around drinking. The majority of interns I met were either legal or had fake ID's, so my roommate and I had a significant damper on our ability to socialize just due to our age. This turns out to be a bigger deal than you might think. If I hadn't been good friends with my roommate coming in, the whole ordeal would have gotten pretty lonely.
-
-## Conclusion
-
-So should you intern in DC? If you have the means I would have to recommend it. There are definitely some asterisks next to that recommendation though. You can definitely make more money doing something else, and if you are under 21 socializing may be tough. In the end DC is an amazing city to spend a summer in, and a congressional internship can be a great addition to your resume. 
+So even if Final Fantasy II was broken in many ways, it still deserves far more credit than it receives. It blazed a trail many would follow, and explored what expressive storytelling could look like in a console rpg. And perhaps most surprisingly, it did this in spite of the fact that a winning formula already existed. Square could have taken the safer and more profitable route of rolling out a proper sequel to the original Final Fantasy. They didn't though, and instead we have the messy, yet undeniably ambitious Final Fantasy II. 
