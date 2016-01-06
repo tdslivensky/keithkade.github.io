@@ -95,7 +95,7 @@
 
 <script> //Showing and hiding the nav bar
     var scrolled = false;
-    window.addEventListener('scroll', function(){
+    document.getElementById('mainContent').addEventListener('scroll', function(){
         scrolled = true;
     }, true);
     
@@ -108,8 +108,7 @@
     
     var oldTop = 0;
     function onScroll(){
-        var newTop = document.body.scrollTop || window.pageYOffset;
-        console.log(newTop);
+        var newTop = document.getElementById('mainContent').scrollTop;
         if (oldTop - newTop <= 0 && newTop > 30){ //30ish is navbar height
             document.getElementById('home-link').style.top = '-32px';
         }
