@@ -95,10 +95,9 @@
 
 <script> //Showing and hiding the nav bar
     var scrolled = false;
-    window.onscroll = function(){
-        console.log('hodor');
+    window.addEventListener('scroll', function(){
         scrolled = true;
-    }
+    }, true);
     
     setInterval(function() {
         if (scrolled){
@@ -109,7 +108,7 @@
     
     var oldTop = 0;
     function onScroll(){
-        var newTop = document.body.scrollTop;
+        var newTop = document.body.scrollTop || window.pageYOffset;
         console.log(newTop);
         if (oldTop - newTop <= 0 && newTop > 30){ //30ish is navbar height
             document.getElementById('home-link').style.top = '-32px';

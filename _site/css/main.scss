@@ -18,6 +18,7 @@ body {
 	background: $backGroundColor;
     color: $textColor;
 	font-family: 'Lato', arial, sans-serif; 
+    -webkit-text-size-adjust: 100%;
 }
 
 #wrapper {
