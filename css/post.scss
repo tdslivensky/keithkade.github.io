@@ -4,11 +4,12 @@ $textColor: #141414;
 $slate: #212121;
 $green: #017c35;
 $purple: #81479f;
+$clearPurple: rgba(129, 71, 159, 0.75);
 $light-blue: #3e86aa;
 $medium-blue: #110ba3;
 $light-grey: #f2f2f2;
 
-$meta-width: 130px;
+$meta-width: 120px;
 
 #home-link {
     position: fixed;
@@ -53,7 +54,7 @@ header {
     
     .post-title {
         float: left;
-        width: calc(100% - $meta-width);
+        width: calc(100% - #{$meta-width});
         font-size: 32px;
         margin: 26px 0 10px 0;
     }
@@ -101,6 +102,28 @@ header {
     
     .medium-img {
         max-width: 500px;
+    }
+    
+    .video {
+        display:block;
+        margin: 10px auto 0 auto;
+        width: 100%;
+        max-width: 500px;
+    }
+    
+    .game-score {
+        background: $clearPurple;
+        color: $backGroundColor;
+        padding: 10px;
+        width: calc(100% - 20px);
+        display: block;
+        font-size: 120%;
+        
+        img {
+            height: 26px;
+            width: auto;
+            float: right;
+        }
     }
 }
 
@@ -176,6 +199,19 @@ header {
             font-size: 18px;
         }
     }
+    .post-content {
+        .game-score {
+            text-align: center;
+            font-size: 120%;
+            padding: 6px;
+            width: calc(100% - 12px);
+            
+            img {
+                float: none;
+                margin-top: 4px;
+            }
+        }
+    }
 }
 
 @media (max-width: 550px) {
@@ -185,6 +221,34 @@ header {
                 padding: 0 2px 0 4px;
             }
         }
-        
+    }
+    .post-content {
+        .video {
+            height: 330px
+        }
+    }
+}
+
+@media (max-width: 500px) {
+    .post-content {
+        .video {
+            height: 300px
+        }
+    }
+}
+
+@media (max-width: 450px) {
+    .post-content {
+        .video {
+            height: 270px
+        }
+    }
+    .post-content {
+        .game-score {
+            text-align: center;
+            font-size: 100%;
+            padding: 6px;
+            width: calc(100% - 12px);
+        }
     }
 }
