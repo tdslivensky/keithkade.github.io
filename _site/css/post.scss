@@ -8,7 +8,7 @@ $light-blue: #3e86aa;
 $medium-blue: #110ba3;
 $light-grey: #f2f2f2;
 
-$meta-width: 140px;
+$meta-width: 130px;
 
 #home-link {
     position: fixed;
@@ -94,7 +94,13 @@ header {
     }
     
     img {
+        display:block;
         width: 100%;
+        margin: 0 auto 0 auto;
+    }
+    
+    .medium-img {
+        max-width: 500px;
     }
 }
 

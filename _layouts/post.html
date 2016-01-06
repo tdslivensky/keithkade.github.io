@@ -15,8 +15,10 @@
                 {% endif %}
                 <h1 class="post-title" itemprop="name headline">
                     {{ page.title }}
-                    <br/>
-                    <span class="post-subtitle">{{ page.subtitle }}</span>                
+                    {% if page.subtitle != "none" %}
+                        <br/>
+                        <span class="post-subtitle">{{ page.subtitle }}</span>                
+                    {% endif %}
                 </h1>
                 <p class="post-meta">
                     <span itemprop="author" itemscope itemtype="http://schema.org/Person" class="metadata">
@@ -113,7 +115,6 @@
     function onScroll(){
         //had to get weird for this to work on mobile
         var newTop = document.getElementById('mainContent').scrollTop || document.body.scrollTop;
-        console.log(newTop);
         if (oldTop - newTop <= 0 && newTop > 30){ //30ish is navbar height
             document.getElementById('home-link').style.top = '-32px';
         }

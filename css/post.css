@@ -51,7 +51,7 @@ header {
   header .post-meta {
     float: right;
     text-align: right;
-    width: 140px;
+    width: 130px;
     font-size: 14px;
     margin: 30px 0 0 0; }
     /* line 75, /Users/kade/Desktop/kadekeith.me/css/post.scss */
@@ -73,64 +73,69 @@ header {
     text-decoration: underline; }
   /* line 96, /Users/kade/Desktop/kadekeith.me/css/post.scss */
   .post-content img {
-    width: 100%; }
+    display: block;
+    width: 100%;
+    margin: 0 auto 0 auto; }
+  /* line 102, /Users/kade/Desktop/kadekeith.me/css/post.scss */
+  .post-content .medium-img {
+    max-width: 500px; }
 
-/* line 101, /Users/kade/Desktop/kadekeith.me/css/post.scss */
+/* line 107, /Users/kade/Desktop/kadekeith.me/css/post.scss */
 .social-links {
   margin-top: 16px; }
-  /* line 104, /Users/kade/Desktop/kadekeith.me/css/post.scss */
+  /* line 110, /Users/kade/Desktop/kadekeith.me/css/post.scss */
   .social-links #___plusone_0 {
     position: relative;
     top: 2px; }
-  /* line 109, /Users/kade/Desktop/kadekeith.me/css/post.scss */
+  /* line 115, /Users/kade/Desktop/kadekeith.me/css/post.scss */
   .social-links .fb-like {
     position: relative;
     top: -4px; }
 
 @media (max-width: 850px) {
-  /* line 117, /Users/kade/Desktop/kadekeith.me/css/post.scss */
+  /* line 123, /Users/kade/Desktop/kadekeith.me/css/post.scss */
   header .post-title {
     font-size: 30px; } }
 
 @media (max-width: 800px) {
-  /* line 125, /Users/kade/Desktop/kadekeith.me/css/post.scss */
+  /* line 131, /Users/kade/Desktop/kadekeith.me/css/post.scss */
   header .post-title {
     font-size: 28px; }
-  /* line 129, /Users/kade/Desktop/kadekeith.me/css/post.scss */
+  /* line 135, /Users/kade/Desktop/kadekeith.me/css/post.scss */
   header .post-subtitle {
     font-size: 20px; } }
 
 @media (max-width: 720px) {
-  /* line 137, /Users/kade/Desktop/kadekeith.me/css/post.scss */
+  /* line 143, /Users/kade/Desktop/kadekeith.me/css/post.scss */
   header .post-title {
     width: 100%;
     margin: 4px 0 10px 0; }
-  /* line 142, /Users/kade/Desktop/kadekeith.me/css/post.scss */
+  /* line 148, /Users/kade/Desktop/kadekeith.me/css/post.scss */
   header .post-subtitle {
     width: 100%; }
-  /* line 146, /Users/kade/Desktop/kadekeith.me/css/post.scss */
+  /* line 152, /Users/kade/Desktop/kadekeith.me/css/post.scss */
   header .post-meta {
     float: left;
     text-align: left;
     width: 100%;
     font-size: 14px;
     margin: 4px 0 10px 0; }
-    /* line 153, /Users/kade/Desktop/kadekeith.me/css/post.scss */
+    /* line 159, /Users/kade/Desktop/kadekeith.me/css/post.scss */
     header .post-meta .metadata {
       display: inline;
       padding: 0 10px 0 10px;
       border-left: 2px solid #017c35; } }
 
 @media (max-width: 600px) {
-  /* line 165, /Users/kade/Desktop/kadekeith.me/css/post.scss */
+  /* line 171, /Users/kade/Desktop/kadekeith.me/css/post.scss */
   header .post-title {
     font-size: 26px; }
-  /* line 169, /Users/kade/Desktop/kadekeith.me/css/post.scss */
+  /* line 175, /Users/kade/Desktop/kadekeith.me/css/post.scss */
   header .post-subtitle {
     font-size: 18px; } }
 
 @media (max-width: 550px) {
-  /* line 178, /Users/kade/Desktop/kadekeith.me/css/post.scss */
+  /* line 184, /Users/kade/Desktop/kadekeith.me/css/post.scss */
   header .post-meta .metadata {
     padding: 0 2px 0 4px; } }
 

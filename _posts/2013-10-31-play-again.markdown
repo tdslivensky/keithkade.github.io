@@ -4,7 +4,7 @@ title:  "Play again? Yes"
 subtitle:  "Thoughts on revisiting old games"
 date:   2013-10-28 -0600
 author: Kade Keith
-header: 'none'
+header: "none"
 ---
 
 Remember those games you played as a kid? You should give them another chance.
