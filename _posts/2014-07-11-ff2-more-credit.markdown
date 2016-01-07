@@ -5,6 +5,7 @@ subtitle:  "none"
 date:   2014-07-11 -0600
 author: Kade Keith
 header: '/img/compressed/ff2Banner.jpg'
+preview_img: '/img/compressed/ff2Banner.jpg'
 ---
 
 The original Final Fantasy was titled so because Square believed it would be their last project prior to bankruptcy. Upon it's release though, the game was a massive hit that managed to single-handedly pull Square back onto it's feet. The game is often credited for popularizing the RPG genre. Even though many elements of FFI are archaic now, it was revolutionary for the time.

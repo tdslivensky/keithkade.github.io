@@ -5,6 +5,7 @@ subtitle:  "Should you spend a summer on The Hill?"
 date:   2013-10-28 -0600
 author: Kade Keith
 header: '/img/compressed/dcBanner.jpg'
+preview_img: '/img/compressed/dcBanner.jpg'
 ---
 
 Each summer, thousands of interns flock to the nation's capital to throw six to twelve weeks of their lives at the feet of their politician of choice. In the Summer of 2013 I joined the herd and worked for my congressman (who shall remain unnamed). Those who choose to embark on the endeavor get to experience the best and worst of the legislative process firsthand.

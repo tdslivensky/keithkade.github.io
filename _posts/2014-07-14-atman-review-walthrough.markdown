@@ -2,9 +2,10 @@
 layout: post
 title:  "The Cave of Atman Walkthrough and Review"
 subtitle:  "none"
-date:   2014-07-11 -0600
+date:   2014-07-14 -0600
 author: Kade Keith
 header: 'none'
+preview_img: '/img/compressed/atman.png'
 ---
 <iframe class="video" width="500" height="375" src="https://www.youtube.com/embed/nwr0kVzTKZc" frameborder="0" allowfullscreen></iframe>
 
