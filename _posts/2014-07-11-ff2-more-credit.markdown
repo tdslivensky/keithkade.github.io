@@ -8,7 +8,7 @@ header: '/img/compressed/ff2Banner.jpg'
 preview_img: '/img/compressed/ff2Banner.jpg'
 ---
 
-The original Final Fantasy was titled so because Square believed it would be their last project prior to bankruptcy. Upon it's release though, the game was a massive hit that managed to single-handedly pull Square back onto it's feet. The game is often credited for popularizing the RPG genre. Even though many elements of FFI are archaic now, it was revolutionary for the time.
+The original Final Fantasy was titled so because Square believed it would be their last project prior to bankruptcy. Upon its release though, the game was a massive hit that managed to single-handedly pull Square back onto its feet. The game is often credited for popularizing the RPG genre. Even though many elements of FFI are archaic now, it was revolutionary for the time.
 
 And along comes Final Fantasy II. Considering it didn't make it to the states for a while, this installment is oftentimes overlooked when the series is discussed. Understandable considering the game is a bit of a black sheep. The leveling and dialogue systems, two key pieces of any RPG, were completely overhauled from the first game. Additionally the game had number of game-altering bugs and glitches that taint the memories of many players.
 

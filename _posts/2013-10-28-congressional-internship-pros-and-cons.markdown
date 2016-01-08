@@ -45,7 +45,7 @@ My experience depended a lot on the office in which I worked, so know that these
 
 **The city is swarming with other interns,** the vast majority of which are pretty interesting (to you at least). Keep in mind though that if you are under 21, you will be very restricted in how much socializing you can do. More on this later.
 
-**Transit.** I don't have much experience with public transit, but from what I can tell the DC metro/bus system isn't too bad. My roommate and I were only in want of a car once during our six weeks, and that was too attend an event out of town.
+**Transit.** I don't have much experience with public transit, but from what I can tell the DC metro/bus system isn't too bad. My roommate and I were only in want of a car once during our six weeks, and that was to attend an event out of town.
 
 ### Cons
 **No one lives there.** It is difficult to describe, but I cannot say I liked the overall "feel" of DC. Of the people I met, very few would call DC home no matter how long they had lived there. It is a city where people go to visit and where people go to work, not where people go to live.
