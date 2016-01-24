@@ -4,6 +4,7 @@ title:  "The Cave of Atman Walkthrough and Review"
 subtitle:  "none"
 date:   2014-07-14 -0600
 author: Kade Keith
+categories: game review
 header: 'none'
 preview_img: '/img/compressed/atman.png'
 ---
