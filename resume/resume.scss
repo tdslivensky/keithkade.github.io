@@ -1,5 +1,6 @@
 $myGrey: #333333;
-$fontStack: 'Lato', 'Helvetica Nueue', Helvetica, Arial, sans-serif;
+$sansStack: 'Lato', 'Helvetica Nueue', Helvetica, Arial, sans-serif;
+$serifStack:  Baskerville, "Baskerville Old Face", "Goudy Old Style", Garamond, "Times New Roman", serif;
 $myBlue: #69D2E7;
 $myGreen: #A7DBD8;
 $mySand: #E0E4CC;
@@ -20,7 +21,7 @@ $myOrange: #ffb378;
 body {
 	background: white;
     color: white;
-	font-family: $fontStack; 
+	font-family: $sansStack; 
     font-weight: 300;
     font-size: 16px;
 }
@@ -38,8 +39,6 @@ a {
 	width: 850px;
     height: 1100px;
     position: relative;
-    
-    //border: 1px solid red;
     
     background: white;
     color: $myGrey;
@@ -59,6 +58,7 @@ a {
             font-size: 60px;
             float: left;
             width: 500px;
+            font-family: $serifStack;
         }
         
         p {
