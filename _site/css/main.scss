@@ -3,6 +3,7 @@ $textColor: #141414;
 
 $slate: #212121;
 $green: #017c35;
+$clear-green: rgba(1, 124, 53, 0.75);
 $purple: #81479f;
 $light-blue: #007dba;
 $medium-blue: #110ba3;
@@ -92,6 +93,8 @@ article {
     h2 {
         color: $green;
         font-weight: 400;
+        border-bottom: 2px solid $green;
+        padding-bottom: 5px;
         margin-bottom: 5px;
     }
     

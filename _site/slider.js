@@ -12,5 +12,5 @@ var toggleSlide = function() {
         btn.className = 'out';
     } else {
         btn.className = '';
-    }    
+    }
 };
