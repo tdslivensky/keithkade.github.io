@@ -54,27 +54,28 @@ article {
     article li h2 {
       font-size: 20px;
       margin: 4px 0 4px 4px;
-      color: #141414; }
-    /* line 59, /Users/kade/Desktop/kadekeith.me/css/blog.scss */
+      color: #141414;
+      border: none; }
+    /* line 60, /Users/kade/Desktop/kadekeith.me/css/blog.scss */
     article li div {
       margin: 4px 0 4px 4px; }
-    /* line 62, /Users/kade/Desktop/kadekeith.me/css/blog.scss */
+    /* line 63, /Users/kade/Desktop/kadekeith.me/css/blog.scss */
     article li .subtitle {
       font-size: 17px; }
-    /* line 65, /Users/kade/Desktop/kadekeith.me/css/blog.scss */
+    /* line 66, /Users/kade/Desktop/kadekeith.me/css/blog.scss */
     article li .date {
       margin-top: 6px;
       font-size: 14px; }
 
 @media (max-width: 450px) {
-  /* line 74, /Users/kade/Desktop/kadekeith.me/css/blog.scss */
+  /* line 75, /Users/kade/Desktop/kadekeith.me/css/blog.scss */
   article li {
     height: 220px;
     width: 100%; }
-    /* line 77, /Users/kade/Desktop/kadekeith.me/css/blog.scss */
+    /* line 78, /Users/kade/Desktop/kadekeith.me/css/blog.scss */
     article li .img-wrapper {
       height: 130px; }
-    /* line 80, /Users/kade/Desktop/kadekeith.me/css/blog.scss */
+    /* line 81, /Users/kade/Desktop/kadekeith.me/css/blog.scss */
     article li h2 {
       font-size: 18px;
       margin: 4px; } }
