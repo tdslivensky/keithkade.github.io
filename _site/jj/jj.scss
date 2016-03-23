@@ -62,7 +62,16 @@ article {
         padding: 5px;
         p {
             margin: 5px 0 0 0;
-        }        
+        }
+        .flexy {
+            display: inline-flex;
+            flex-wrap: wrap;
+
+            img {
+                height: 300px;
+                flex: 1;
+            }
+        }
     }
 
     #stones-throw {        
@@ -70,13 +79,6 @@ article {
             width: 70%;
             margin: 10px auto 10px auto;
             display: block;
-        }
-    }
-    
-    #examples {
-        img {
-            height: 300px;
-            display: inline-block;
         }
     }
     
@@ -92,13 +94,6 @@ article {
             float: left;
             margin: 10px 0 0 0;
         }
-    }
-    
-    #process {
-        img {
-            height: 300px;
-            display: inline-block;
-        }        
     }
     
     #sources {

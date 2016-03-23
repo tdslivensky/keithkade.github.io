@@ -52,39 +52,39 @@ article {
     /* line 63, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
     article section p {
       margin: 5px 0 0 0; }
-  /* line 69, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
+    /* line 66, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
+    article section .flexy {
+      display: inline-flex;
+      flex-wrap: wrap; }
+      /* line 70, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
+      article section .flexy img {
+        height: 300px;
+        flex: 1; }
+  /* line 78, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
   article #stones-throw img {
     width: 70%;
     margin: 10px auto 10px auto;
     display: block; }
-  /* line 77, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
-  article #examples img {
-    height: 300px;
-    display: inline-block; }
-  /* line 83, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
+  /* line 85, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
   article #identity {
     overflow: hidden; }
-    /* line 86, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
+    /* line 88, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
     article #identity img {
       width: 220px;
       margin: 0 10px 0 0;
       float: left; }
-    /* line 91, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
+    /* line 93, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
     article #identity p {
       float: left;
       margin: 10px 0 0 0; }
-  /* line 98, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
-  article #process img {
-    height: 300px;
-    display: inline-block; }
-  /* line 105, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
+  /* line 100, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
   article #sources ul {
     list-style: none; }
-    /* line 107, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
+    /* line 102, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
     article #sources ul li {
       margin: 5px 0 0 0; }
 
-/* line 114, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
+/* line 109, /Users/kade/Desktop/kadekeith.me/jj/jj.scss */
 iframe {
   position: fixed;
   bottom: 0; }
