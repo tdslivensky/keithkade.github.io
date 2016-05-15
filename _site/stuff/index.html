@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html>
-    
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="I'm Kade Keith, a Computer Scientist specializing in front end development. I try to make complicated things simple.">
-    <title>Kade Keith</title>
+    <title>Kade Keith | Other Stuff</title>
     <link rel="icon" href="/img/compressed/kFavicon.png">
 </head>
-    
+
 <body>
-    <div id="content">
-    <div id="text">
-        <h1>Kade Keith</h1>
-        <p>Front End Developer/Designer</p>
-        <nav>
+
+    <div id="navPanel">
+    <div id="navCanvas">
+        <nav class="standard-nav">
             <ul>
                 <li><a href="/about/">About</a></li>
                 <li><a target="_blank" href="/resume/">Resume</a></li>
@@ -24,8 +23,44 @@
             </ul>
         </nav>
     </div>
-    <img id="face" src="img/compressed/SelfPortraitForWebsiteFlat.jpg">
 </div>
+
+<nav id="main-nav" class="standard-nav">
+    <div onclick="toggleSlide();" id="navButton">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+    <ul>
+        <li><a href="/about/">About</a>|</li>
+        <li><a target="_blank" href="/resume/">Resume</a>|</li>
+        <li><a href="/projects/">Projects</a>|</li>
+        <li><a target="_blank" href="/blog/">Blog</a>|</li>
+        <li><a href="/stuff/">Other Stuff</a></li>
+    </ul>
+</nav>
+
+    <div id="mainContent">    
+        <div id="wrapper">
+            <header class="face-header">
+    <a href="/index.html">
+        <img src="/img/compressed/headCircle.png" />
+        <h1 class="header-name">Kade Keith</h1>
+    </a>
+</header>
+            <div id="content">
+    <nav>
+        <ul>
+            <li><a href="./classes/">Classes</a></li>
+            <li><a href="./jj/">Jeff Jank</a></li>
+            <li><a href="./reading/">Reading</a></li>
+            <li><a href="./research/">Research</a></li>
+        </ul>
+    </nav>
+</div>
+        </div>
+    </div>
+
 </body>
 
 <link rel="stylesheet" href=" /css/main.css ">
@@ -49,7 +84,5 @@
     ga('create', 'UA-71899560-1', 'auto');
     ga('send', 'pageview');
 </script>
-        
-<link rel="stylesheet" href="/css/splash.css">
-    
+
 </html>
