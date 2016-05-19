@@ -1,7 +1,7 @@
 ---
 title: "Forced-Directed Citation Visualization"
 
-link: "../classes/csce444/CitationVizBuild/app/"
+link: "../stuff/classes/csce444/CitationVizBuild/app/"
 
 img: "/img/compressed/citationViz.png"
 
