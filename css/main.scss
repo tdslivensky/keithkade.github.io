@@ -60,6 +60,13 @@ body {
     }
 }
 
+.art-list {
+    list-style: none;
+    img {
+        width: 100%;
+    }
+}
+
 /* Nav Styles */
 .standard-nav {
     position: fixed;
