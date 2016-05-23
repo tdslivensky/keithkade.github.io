@@ -51,8 +51,67 @@ body {
   .art-list img {
     width: 100%; }
 
+/* line 70, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+.masonry-grid {
+  column-count: 4;
+  -moz-column-count: 4;
+  -webkit-column-count: 4;
+  column-gap: 1em; }
+  /* line 76, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  .masonry-grid div {
+    display: inline-block;
+    margin: 0 0 1em 0;
+    line-height: 1; }
+    /* line 81, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+    .masonry-grid div .thumb-img {
+      width: 100%;
+      cursor: pointer;
+      background-color: white; }
+  /* line 88, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  .masonry-grid .hide {
+    display: none; }
+  /* line 92, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  .masonry-grid .detail-img {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(44, 44, 44, 0.7); }
+    /* line 100, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+    .masonry-grid .detail-img .full-img {
+      margin: 20px auto 0 auto;
+      height: auto;
+      max-height: 90%;
+      width: auto;
+      max-width: 90%;
+      display: block;
+      background-color: white; }
+    /* line 112, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+    .masonry-grid .detail-img .description {
+      width: 100%;
+      background-color: #414141;
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      margin: 0;
+      color: white;
+      padding: 20px 5% 20px 5%;
+      font-size: 20px;
+      line-height: 1.5; }
+
+/* line 127, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+.xout {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 26; }
+
 /* Nav Styles */
-/* line 71, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 138, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 .standard-nav {
   position: fixed;
   top: 0px;
@@ -64,70 +123,70 @@ body {
   text-align: center;
   font-size: 130%; }
 
-/* line 82, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 149, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 .standard-nav ul {
   padding: 0;
   margin: 0 auto 0 auto;
   background-color: #f7f7f7;
   width: 520px; }
 
-/* line 88, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 155, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 .standard-nav li {
   display: inline;
   color: #141414; }
 
 /* Article Styles */
-/* line 94, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 161, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 article {
   line-height: 1.5; }
-  /* line 97, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 164, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   article h2 {
     color: #017c35;
     font-weight: 400;
     border-bottom: 2px solid #017c35;
     padding-bottom: 5px;
     margin-bottom: 5px; }
-  /* line 105, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 172, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   article p {
     font-family: Verdana, sans-serif;
     font-size: 110%; }
 
 /* Link Styles */
-/* line 112, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 179, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 a {
   color: #007dba;
   text-decoration: none; }
 
-/* line 116, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 183, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 .standard-nav a {
   display: inline-block;
   padding: 10px;
   color: #141414; }
 
-/* line 121, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 188, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 .standard-nav a:hover {
   color: #81479f; }
 
-/* line 124, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 191, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 article a:hover {
   text-decoration: underline; }
 
-/* line 127, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 194, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 article a:visited {
   color: #110ba3; }
 
 /* Tooltips */
-/* line 132, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 199, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 span.tooltip {
   text-decoration: underline; }
 
-/* line 135, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 202, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 span.tooltip span {
   z-index: 25;
   display: none;
   padding: 4px; }
 
-/* line 140, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 207, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 span.tooltip:hover span {
   display: inline;
   position: absolute;
@@ -138,52 +197,52 @@ span.tooltip:hover span {
   background: white; }
 
 /* SlideMenu */
-/* line 151, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 218, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 #navButton {
   display: none; }
 
-/* line 154, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 221, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 #navPanel {
   display: none; }
 
 @media (max-width: 520px) {
-  /* line 158, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 225, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   .standard-nav {
     z-index: 25; }
-  /* line 161, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 228, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   .face-header {
     height: 80px;
     text-align: right; }
-    /* line 164, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+    /* line 231, /Users/kade/Desktop/kadekeith.me/css/main.scss */
     .face-header img {
       display: none; }
-    /* line 167, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+    /* line 234, /Users/kade/Desktop/kadekeith.me/css/main.scss */
     .face-header .header-name {
       font-size: 300%;
       padding: 0; }
-  /* line 172, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 239, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   #main-nav ul {
     display: none; }
-  /* line 175, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 242, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   #navPanel nav {
     margin: 54px 0 0 0; }
-  /* line 178, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 245, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   #navPanel nav ul {
     width: 250px;
     background-color: transparent;
     border: none;
     margin: 0 0 0 10px; }
-  /* line 184, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 251, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   #navPanel nav li {
     display: block;
     width: 250px;
     border: 1px solid white;
     margin-top: 10px; }
-  /* line 190, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 257, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   #navPanel nav li a {
     width: 230px;
     color: white; }
-  /* line 194, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 261, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   #navPanel {
     display: block;
     position: fixed;
@@ -197,7 +256,7 @@ span.tooltip:hover span {
     -moz-transition: ease 500ms;
     -ms-transition: ease 500ms;
     -o-transition: ease 500ms; }
-  /* line 208, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 275, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   #navPanel #navCanvas {
     display: block;
     position: absolute;
@@ -210,7 +269,7 @@ span.tooltip:hover span {
     overflow: auto;
     padding: 10px;
     font-size: 14px; }
-  /* line 221, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 288, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   #mainContent {
     position: fixed;
     left: 0px;
@@ -224,10 +283,10 @@ span.tooltip:hover span {
     -moz-transition: ease 500ms;
     -ms-transition: ease 500ms;
     -o-transition: ease 500ms; }
-  /* line 235, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 302, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   #mainContent.slide {
     left: 270px; }
-  /* line 238, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 305, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   #navButton {
     display: inline-block;
     float: left;
@@ -241,7 +300,7 @@ span.tooltip:hover span {
     z-index: 25;
     position: relative;
     left: 0px; }
-  /* line 252, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 319, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   #navButton.out {
     left: 270px;
     transition: left 500ms;
@@ -249,7 +308,7 @@ span.tooltip:hover span {
     -moz-transition: ease 500ms;
     -ms-transition: ease 500ms;
     -o-transition: ease 500ms; }
-  /* line 261, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 328, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   .line {
     display: block;
     position: relative;
@@ -258,23 +317,23 @@ span.tooltip:hover span {
     background: white; } }
 
 /* Table styles (what i'm reading page)*/
-/* line 272, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 339, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 table {
   text-align: left;
   border-collapse: collapse;
   width: 100%;
   margin: 10px 0 0 0; }
-  /* line 278, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 345, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   table ul {
     margin: 0;
     padding: 0 0 0 18px; }
-  /* line 283, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 350, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   table .tr-label {
     color: #017c35;
     font-weight: bold;
     text-align: right; }
 
-/* line 291, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 358, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 table, th, td {
   border: 1px solid #bababa;
   padding: 8px;
@@ -282,14 +341,42 @@ table, th, td {
 
 /* Respooooonsive */
 @media (min-width: 1100px) {
-  /* line 300, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 367, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   #wrapper {
     width: 1000px;
     margin-left: auto;
     margin-right: auto; }
-  /* line 305, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 372, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   article p {
     font-size: 110%;
     line-height: 1.6; } }
+
+@media only screen and (min-width: 400px) {
+  /* line 379, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  .masonry-grid {
+    -moz-column-count: 1;
+    -webkit-column-count: 1;
+    column-count: 1; } }
+
+@media only screen and (min-width: 520px) {
+  /* line 387, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  .masonry-grid {
+    -moz-column-count: 2;
+    -webkit-column-count: 2;
+    column-count: 2; } }
+
+@media only screen and (min-width: 700px) {
+  /* line 395, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  .masonry-grid {
+    -moz-column-count: 3;
+    -webkit-column-count: 3;
+    column-count: 3; } }
+
+@media only screen and (min-width: 900px) {
+  /* line 403, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  .masonry-grid {
+    -moz-column-count: 4;
+    -webkit-column-count: 4;
+    column-count: 4; } }
 
 /*# sourceMappingURL=main.css.map */

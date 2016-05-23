@@ -5,15 +5,124 @@ permalink: /stuff/art/mine/
 ---
 
 <article>
-    <ul class="art-list">
-        <li><img src="/img/compressed/KadeKeithFrogCropped.jpg"></li>
-        <li><img src="/img/compressed/SelfPortrait_2.jpg"></li>
-        <li><img src="/img/compressed/patternDesign6.jpg"></li>     
-        <li><img src="/img/compressed/3like2.jpg"></li>
-        <li><img src="/img/compressed/3like4_1.jpg"></li>
-        <li><img src="/img/compressed/3like4_2.jpg"></li>
-        <li><img src="/img/compressed/4like3.jpg"></li>
-    </ul>
+    <div class="masonry-grid">
+        <div>
+            <img onclick="view(this)" class="thumb-img" src="/img/compressed/KadeKeithFrogCropped-thumb.jpg" data-src="/img/compressed/KadeKeithFrogCropped.jpg">
+            <div class="detail-img hide">
+                <img class="full-img">
+                <div class="description">Digital Painting - Class Assignment - Scene from The Princess and the Frog</div>
+            </div>
+        </div>
+        <div>
+            <img onclick="view(this)" class="thumb-img" src="/img/compressed/SelfPortrait-thumb.jpg" data-src="/img/compressed/SelfPortrait_2.jpg">
+            <div class="detail-img hide">
+                <img class="full-img">
+                <div class="description">Digital Painting - Class Assignment - Self Portrait</div>
+            </div>
+        </div>
+        <div>
+            <img onclick="view(this)" class="thumb-img" src="/img/compressed/patternDesign-thumb.jpg" data-src="/img/compressed/patternDesign6.jpg">
+            <div class="detail-img hide">
+                <img class="full-img">
+                <div class="description">Color Theory - Class Assignment - Tiled Pattern Design</div>
+            </div>        
+        </div>   
+        <div>
+            <img onclick="view(this)" class="thumb-img" src="/img/compressed/GraduationPoster.png">
+            <div class="detail-img hide">
+                <img class="full-img">
+                <div class="description">Graphic Design - Class Assignment - Poster Showcasing Typeface</div>
+            </div>             
+        </div> 
+        <div>
+            <img onclick="view(this)" class="thumb-img" src="/img/compressed/GraduationTypeface.svg">
+            <div class="detail-img hide">
+                <img class="full-img">
+                <div class="description">Graphic Design - Class Assignment - Typeface Inspired by Person</div>
+            </div>              
+        </div> 
+        <div>
+            <img onclick="view(this)" class="thumb-img" src="/img/compressed/logo-layout.svg">
+            <div class="detail-img hide">
+                <img class="full-img">
+                <div class="description">Graphic Design - Class Assignment - Preworkout Logo</div>
+            </div>              
+        </div> 
+        <div>
+            <img onclick="view(this)" class="thumb-img" src="/img/compressed/preworkout.svg">
+            <div class="detail-img hide">
+                <img class="full-img">
+                <div class="description">Graphic Design - Class Assignment - Preworkout Packaging</div>
+            </div>  
+        </div>
+        <div>
+            <img onclick="view(this)" class="thumb-img" src="/img/compressed/logo-maroon.svg">
+            <div class="detail-img hide">
+                <img class="full-img">
+                <div class="description">Aggie Artificial Intelligence Society - Student Organization Logo</div>
+            </div>  
+        </div>        
+        <div>
+            <img onclick="view(this)" class="thumb-img" src="/img/compressed/3like2.jpg">
+            <div class="detail-img hide">
+                <img class="full-img">
+                <div class="description">Color Theory - Class Assignment - 3 Colors (Albers)</div>
+            </div>  
+        </div>
+        <div>
+            <img onclick="view(this)" class="thumb-img" src="/img/compressed/3like4_1.jpg">
+            <div class="detail-img hide">
+                <img class="full-img">
+                <div class="description">Color Theory - Class Assignment - 3 Colors (Albers)</div>
+            </div>  
+        </div>
+        <div>
+            <img onclick="view(this)" class="thumb-img" src="/img/compressed/3like4_2.jpg">
+            <div class="detail-img hide">
+                <img class="full-img">
+                <div class="description">Color Theory - Class Assignment - 3 Colors (Albers)</div>
+            </div>  
+        </div>
+        <div>
+            <img onclick="view(this)" class="thumb-img" src="/img/compressed/4like3.jpg">
+            <div class="detail-img hide">
+                <img class="full-img">
+                <div class="description">Color Theory - Class Assignment - 4 Colors (Albers)</div>
+            </div>  
+        </div>
+    </div>
 </article>
 
-<!-- todo ONclick bring up full size, with x out button -->
+<script>
+
+function view(elem){
+    //lazy load
+    var img = elem.parentElement.getElementsByClassName('full-img')[0];
+    
+    if (img.src == ""){
+        if(elem.dataset && elem.dataset.src){ 
+            img.src = elem.dataset.src;
+        }
+        else {
+            img.src = elem.src;
+        }
+    }
+    
+    var modal = elem.parentElement.getElementsByClassName('detail-img')[0];
+    modal.classList.remove('hide');
+
+    document.body.style.overflow = "hidden";
+    
+    var xout = document.createElement('span');
+    xout.innerHTML = "&#x2715;";
+    xout.className = "xout";
+    document.body.appendChild(xout);
+    
+    xout.onclick = function(){
+        modal.classList.add('hide');
+        document.body.style.overflow = "auto";
+        document.body.removeChild(xout);
+    }
+}
+
+</script>
