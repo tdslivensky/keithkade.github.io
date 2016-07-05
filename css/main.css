@@ -327,13 +327,19 @@ table {
   table ul {
     margin: 0;
     padding: 0 0 0 18px; }
-  /* line 350, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+    /* line 348, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+    table ul li {
+      font-weight: bold; }
+  /* line 353, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   table .tr-label {
     color: #017c35;
     font-weight: bold;
     text-align: right; }
+  /* line 359, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  table .thoughts {
+    font-weight: normal; }
 
-/* line 358, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+/* line 364, /Users/kade/Desktop/kadekeith.me/css/main.scss */
 table, th, td {
   border: 1px solid #bababa;
   padding: 8px;
@@ -341,39 +347,39 @@ table, th, td {
 
 /* Respooooonsive */
 @media (min-width: 1100px) {
-  /* line 367, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 373, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   #wrapper {
     width: 1000px;
     margin-left: auto;
     margin-right: auto; }
-  /* line 372, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 378, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   article p {
     font-size: 110%;
     line-height: 1.6; } }
 
 @media only screen and (min-width: 400px) {
-  /* line 379, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 385, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   .masonry-grid {
     -moz-column-count: 1;
     -webkit-column-count: 1;
     column-count: 1; } }
 
 @media only screen and (min-width: 520px) {
-  /* line 387, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 393, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   .masonry-grid {
     -moz-column-count: 2;
     -webkit-column-count: 2;
     column-count: 2; } }
 
 @media only screen and (min-width: 700px) {
-  /* line 395, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 401, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   .masonry-grid {
     -moz-column-count: 3;
     -webkit-column-count: 3;
     column-count: 3; } }
 
 @media only screen and (min-width: 900px) {
-  /* line 403, /Users/kade/Desktop/kadekeith.me/css/main.scss */
+  /* line 409, /Users/kade/Desktop/kadekeith.me/css/main.scss */
   .masonry-grid {
     -moz-column-count: 4;
     -webkit-column-count: 4;

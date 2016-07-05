@@ -345,13 +345,19 @@ table {
     ul {
         margin: 0;
         padding: 0 0 0 18px;
+        li {
+            font-weight: bold;
+        }
     }
     
     .tr-label {
         color: $green;
         font-weight: bold;    
         text-align: right;
-        
+    }
+    
+    .thoughts {
+        font-weight: normal;
     }
 }
 
