@@ -47,9 +47,9 @@ body {
 /* line 66, /Users/kade/Desktop/kadekeith.me/css/splash.scss */
 #me {
   position: absolute;
-  right: 20px;
+  right: 30px;
   bottom: 0;
-  width: 60%;
+  width: 38%;
   max-width: 600px;
   z-index: 1; }
 
