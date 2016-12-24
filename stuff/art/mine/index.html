@@ -5,154 +5,115 @@ permalink: /stuff/art/mine/
 ---
 
 <article>
-    <div class="masonry-grid">
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/KadeKeithFrogCropped-thumb.jpg" data-src="/img/compressed/KadeKeithFrogCropped.jpg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Digital Painting - Class Assignment - Scene from The Princess and the Frog</div>
-            </div>
-        </div>
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/archer1.svg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Graphic Design - Class Assignment - Pamphlet Showcasing Typeface (Outer) </div>
-            </div>             
-        </div> 
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/archer2.svg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Graphic Design - Class Assignment - Pamphlet Showcasing Typeface (Inner)</div>
-            </div>             
-        </div>         
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/SelfPortrait-thumb.jpg" data-src="/img/compressed/SelfPortrait_2.jpg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Digital Painting - Class Assignment - Self Portrait</div>
-            </div>
-        </div>
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/patternDesign-thumb.jpg" data-src="/img/compressed/patternDesign6.jpg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Color Theory - Class Assignment - Tiled Pattern Design</div>
-            </div>        
-        </div>   
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/GraduationPoster.png">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Graphic Design - Class Assignment - Poster Showcasing Typeface</div>
-            </div>             
-        </div> 
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/GraduationTypeface.svg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Graphic Design - Class Assignment - Typeface Inspired by Person</div>
-            </div>              
-        </div> 
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/logo-layout.svg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Graphic Design - Class Assignment - Preworkout Logo</div>
-            </div>              
-        </div> 
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/preworkout.svg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Graphic Design - Class Assignment - Preworkout Packaging</div>
-            </div>  
-        </div>
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/Letter_Final1.svg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Graphic Design - Class Assignment - Pattern from Letter</div>
-            </div>              
-        </div> 
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/Letter_Final2.svg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Graphic Design - Class Assignment - Pattern from Letter</div>
-            </div>              
-        </div> 
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/Letter_Final3.svg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Graphic Design - Class Assignment - Pattern from Letter</div>
-            </div>              
-        </div> 
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/logo-maroon.svg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Aggie Artificial Intelligence Society - Student Organization Logo</div>
-            </div>  
-        </div>        
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/3like2.jpg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Color Theory - Class Assignment - 3 Colors (Albers)</div>
-            </div>  
-        </div>
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/3like4_1.jpg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Color Theory - Class Assignment - 3 Colors (Albers)</div>
-            </div>  
-        </div>
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/3like4_2.jpg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Color Theory - Class Assignment - 3 Colors (Albers)</div>
-            </div>  
-        </div>
-        <div>
-            <img onclick="view(this)" class="thumb-img" src="/img/compressed/4like3.jpg">
-            <div class="detail-img hide">
-                <img class="full-img">
-                <div class="description">Color Theory - Class Assignment - 4 Colors (Albers)</div>
-            </div>  
-        </div>
+    <div class="masonry-grid" id="masonry-grid">
     </div>
 </article>
 
 <script>
 
-function view(elem){
-    //lazy load
-    var img = elem.parentElement.getElementsByClassName('full-img')[0];
+var grid = document.getElementById("masonry-grid");
+
+//make the images [thumbnail-src, full-src, description]
+var images = [
+    ["/img/compressed/KadeKeithFrogCropped-thumb.jpg", 
+     "/img/compressed/KadeKeithFrogCropped.jpg",
+     "Digital Painting - Class Assignment - Scene from The Princess and the Frog"],
+    ["/img/compressed/archer1.svg", 
+     "/img/compressed/archer1.svg", 
+     "Graphic Design - Class Assignment - Pamphlet Showcasing Typeface (Outer)"],
+    ["/img/compressed/archer2.svg", 
+     "/img/compressed/archer2.svg", 
+     "Graphic Design - Class Assignment - Pamphlet Showcasing Typeface (Inner)"],
+    ["/img/compressed/SelfPortrait-thumb.jpg", 
+     "/img/compressed/SelfPortrait.jpg", 
+     "Digital Painting - Class Assignment - Self Portrait"],
+    ["/img/compressed/221poster.svg", 
+     "/img/compressed/221poster.svg", 
+     "Stanford CS221 - Artificial Intelligence - Project Poster"],
+    ["/img/compressed/431poster.svg", 
+     "/img/compressed/431poster.svg", 
+     "TAMU CS431 - Software Engineering - Project Poster"],
+    ["/img/compressed/patternDesign-thumb.jpg",
+     "/img/compressed/patternDesign.jpg", 
+     "Graphic Design - Class Assignment - Tiled Pattern Design"],
+    ["/img/compressed/GraduationPoster.svg", 
+     "/img/compressed/GraduationPoster.svg", 
+     "Graphic Design - Class Assignment - Poster Showcasing Typeface"],
+    ["/img/compressed/GraduationTypeface.svg", 
+     "/img/compressed/GraduationTypeface.svg", 
+     "Graphic Design - Class Assignment - Typeface Inspired by Person"],
+    ["/img/compressed/logo-layout.svg", 
+     "/img/compressed/logo-layout.svg", 
+     "Graphic Design - Class Assignment - Preworkout Logo"],
+    ["/img/compressed/preworkout.svg", 
+     "/img/compressed/preworkout.svg",
+     "Graphic Design - Class Assignment - Preworkout Packaging"],
+    ["/img/compressed/Letter_Final1.svg",
+     "/img/compressed/Letter_Final1.svg",
+     "Graphic Design - Class Assignment - Pattern from Letter"],
+    ["/img/compressed/Letter_Final2.svg",
+     "/img/compressed/Letter_Final2.svg",
+     "Graphic Design - Class Assignment - Pattern from Letter"],
+    ["/img/compressed/Letter_Final3.svg", 
+     "/img/compressed/Letter_Final3.svg", 
+     "Graphic Design - Class Assignment - Pattern from Letter"],
+    ["/img/compressed/logo-maroon.svg",
+     "/img/compressed/logo-maroon.svg",
+     "Aggie Artificial Intelligence Society - Student Organization Logo"],
+    ["/img/compressed/3like2.jpg",
+     "/img/compressed/3like2.jpg",
+     "Color Theory - Class Assignment - 3 Colors (Albers)"],
+    ["/img/compressed/3like4_1.jpg",
+     "/img/compressed/3like4_1.jpg",
+     "Color Theory - Class Assignment - 3 Colors (Albers)"],
+    ["/img/compressed/3like4_2.jpg",
+     "/img/compressed/3like4_2.jpg",
+     "Color Theory - Class Assignment - 3 Colors (Albers)"],
+    ["/img/compressed/4like3.jpg",
+     "/img/compressed/4like3.jpg",
+     "Color Theory - Class Assignment - 4 Colors (Albers)"]
+];
+
+for (image of images) {
+    var div = document.createElement("div");
+    var img = document.createElement("img");
+    img.className = "thumb-img";
+    img.src = image[0];
+    div.appendChild(img);
+
+    var innerDiv = document.createElement("div");
+    innerDiv.className = "detail-img hide";
+    var innerImg = document.createElement("img");
+    innerImg.className = "full-img";
+    var description = document.createElement("div");
+    description.className = "description";
+    description.innerHTML = image[2];
+    innerDiv.appendChild(innerImg);
+    innerDiv.appendChild(description);
+    div.appendChild(innerDiv);
     
-    if (img.src == ""){
-        if(elem.dataset && elem.dataset.src){ 
-            img.src = elem.dataset.src;
-        }
-        else {
-            img.src = elem.src;
-        }
-    }
-    
-    var modal = elem.parentElement.getElementsByClassName('detail-img')[0];
+    //closure tomfoolery
+    (function(elem, str) {
+        img.addEventListener("click", function(){
+            view(elem, str);
+        }, false);
+    })(innerDiv, image[1])
+
+    grid.appendChild(div)
+}
+
+//bring up modal and lazy load
+function view(modal, src){
+    modal.getElementsByTagName("img")[0].src = src;
     modal.classList.remove('hide');
 
     document.body.style.overflow = "hidden";
-    
+
     var xout = document.createElement('span');
     xout.innerHTML = "&#x2715;";
     xout.className = "xout";
     document.body.appendChild(xout);
-    
+
     xout.onclick = function(){
         modal.classList.add('hide');
         document.body.style.overflow = "auto";
