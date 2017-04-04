@@ -149,6 +149,11 @@ a {
     }
 
     #expDiv {
+        
+        li {
+            line-height: 140%;
+        }
+
         .company {
             float: left;
             margin-top: 4px;
@@ -184,102 +189,6 @@ a {
             font-size: 16px;
             li {
                 margin-top: 12px;
-            }
-            span {
-                margin-left: -3px;
-                padding: 2px 4px 2px 4px;
-            }
-            span:first-child {
-                margin-left: 0;
-            }
-            .bar1 {
-                //background-color: $myBlue;
-                border: 3px solid $myBlue;
-            }
-            .bar2  {
-                //background-color: $myGreen;
-                border: 3px solid $myGreen;
-            }
-            .bar3  {
-                //background-color: $mySand;
-                border: 3px solid $mySand;                
-            }
-            .bar4  {
-                //background-color: $myOrange;
-                border: 3px solid $myOrange;                
-            }            
-            .label {
-                /*float: right;*/
-                position: relative;
-                bottom: 1px;
-                left: 5px;
-                font-size: 14px;
-            }
-            #cppBar {
-                padding-right: 114px
-            }
-            #javaBar {
-                padding-right: 104px;
-            }
-            #pythonBar {
-                padding-right: 104px;
-            }
-            #jsBar {
-                padding-right: 140px;
-            }
-            #HTML5Bar {
-                padding-right: 90px;
-            }
-            #cssBar {
-                padding-right: 55px;
-            }
-            #gwtBar {
-                //padding-right: 5px;
-            } 
-            #sassBar {
-                padding-right: 28px;
-            }
-            #mapBar {
-                padding-right: 6px;
-            }
-            #restBar {
-                padding-right: 24px;
-            }
-            #xpathBar {
-                padding-right: 10px;
-            }
-            #d3Bar {
-                padding-right: 90px;
-            }
-            #creBar {
-                padding-right: 6px;
-            }
-            #chromeBar {
-                padding-right: 30px;
-            }
-            #gitBar {
-                padding-right: 70px;
-            }
-            #nixBar {
-                padding-right: 10px;
-            }
-            #eclBar {
-                padding-right: 10px;
-            }
-            #grtBar {
-                padding-right: 15px;            
-            }            
-            #psdBar {
-                padding-right: 40px;
-            }
-            #prmBar {
-                padding-right: 10px;
-            }            
-            #gimpBar {
-                padding-right: 30px;
-            }
-            #imovieBar {
-                padding-right: 10px;
             }
         }
     }
