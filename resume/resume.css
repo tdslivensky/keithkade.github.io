@@ -165,11 +165,12 @@ a {
   /* line 197, /Users/kade/Desktop/kadekeith.me/resume/resume.scss */
   #resume #projectDiv #projectList {
     list-style: none;
+    line-height: 1.4;
     padding-left: 0; }
-    /* line 200, /Users/kade/Desktop/kadekeith.me/resume/resume.scss */
+    /* line 201, /Users/kade/Desktop/kadekeith.me/resume/resume.scss */
     #resume #projectDiv #projectList li {
       margin-top: 6px; }
-  /* line 207, /Users/kade/Desktop/kadekeith.me/resume/resume.scss */
+  /* line 208, /Users/kade/Desktop/kadekeith.me/resume/resume.scss */
   #resume #honorsDiv #honorsList {
     list-style: none;
     padding-left: 0; }
