@@ -1,3 +1,6 @@
 [submodule "classes/csce444/CitationViz"]
 	path = classes/csce444/CitationViz
 	url = https://github.com/keithkade/CitationViz.git
+[submodule "stuff/space-battle-boids"]
+	path = stuff/space-battle-boids
+	url = https://github.com/keithkade/space-battle-boids.git
