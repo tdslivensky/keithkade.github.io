@@ -1,18 +1,109 @@
+--- 
+layout: noface 
+title: THREE.js Glow 
+permalink: /stuff/three/glow/ 
 ---
-layout: noface
-title: THREE.js Glow
-permalink: /stuff/three/glow/
----
+
+<style>
+  #webgl-container {
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    background-color: aqua;
+  }
+</style>
 
 <script src="lib/three.min.js"></script>
 <script src="lib/OrbitControls.js"></script>
+<script src="lib/SubdivisionModifier.js"></script>
 
-<script>
-  console.log('TODO');
+<script id="vertexShaderSun" type="x-shader/x-vertex">
+uniform vec3 viewVector;
+varying float intensity;
+void main() {
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4( position, 1.0 );
+    vec3 actual_normal = vec3(modelMatrix * vec4(normal, 0.0));
+    intensity = pow( dot(normalize(viewVector), actual_normal), 6.0 );
+}
+</script>
+
+<script id="fragmentShaderSun" type="x-shader/x-vertex"> 
+varying float intensity;
+void main() {
+	vec3 glow = vec3(0, 1, 0) * intensity;
+    gl_FragColor = vec4( glow, 1.0 );
+}
 </script>
 
 <article>
-  <div>
-    THREE JS STUFF GOES HERE
-  </div>
+  <h2>THREE.js Glow</h2>
+  <div id="webgl-container"></div>
 </article>
+
+<script>
+  /************* THREE.js boilerplate *************/
+
+  let SCENE_WIDTH = window.innerWidth;
+  let SCENE_HEIGHT = Math.max(window.innerHeight - 130, 200);
+
+  let FIELD_OF_VIEW = 45;
+  let ASPECT = SCENE_WIDTH / SCENE_HEIGHT;
+  let NEAR = 0.1;
+  let FAR = 10000;
+
+  let scene = new THREE.Scene();
+
+  /** create the renderer and add it to the scene */
+  let renderer = new THREE.WebGLRenderer();
+  renderer.setClearColor(0x8d8d8d, 1);
+  renderer.setSize(SCENE_WIDTH, SCENE_HEIGHT);
+  document.getElementById('webgl-container').appendChild(renderer.domElement);
+
+  /** create the camera and add it to the scene */
+  let camera = new THREE.PerspectiveCamera(FIELD_OF_VIEW, ASPECT, NEAR, FAR);
+  camera.position.set(-10, 10, 10);
+  camera.lookAt(new THREE.Vector3(0, 0, 0));  
+  scene.add(camera);
+
+  // main light
+  let light = new THREE.PointLight(0xffffff, 0.8); // white light
+  light.position.set(30, 100, 50);
+  scene.add(light);
+
+  let geometry = new THREE.TorusGeometry( 10, 3, 16, 100 );
+  let material = new THREE.MeshPhongMaterial({color: 0x00ff00});
+  let object = new THREE.Mesh( geometry, material );
+  
+  let glowMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      viewVector: {
+        type: "v3",
+        value: camera.position
+      }
+    },
+    vertexShader: document.getElementById('vertexShaderSun').textContent,
+    fragmentShader: document.getElementById('fragmentShaderSun').textContent,
+    side: THREE.FrontSide,
+    blending: THREE.AdditiveBlending,
+    transparent: true
+  });
+
+  let glowGeometry = new THREE.TorusGeometry( 10, 5, 16, 100 );
+  
+  let glowMesh = new THREE.Mesh(glowGeometry, glowMaterial);
+  object.add(glowMesh);
+  object.glow = glowMesh;
+  scene.add(object);
+
+  let controls = new THREE.OrbitControls(camera, renderer.domElement);
+  
+  function update () {
+    let viewVector = new THREE.Vector3().subVectors( camera.position, object.glow.getWorldPosition());
+    object.glow.material.uniforms.viewVector.value = viewVector;
+    
+    renderer.render(scene, camera);
+    requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+
+</script>
