@@ -12,6 +12,13 @@ $light-blue: #3e86aa;
 $medium-blue: #110ba3;
 $light-grey: #f2f2f2;
 $meta-width: 120px;
+
+#wrapper {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #home-link {
     position: fixed;
     top: 0;
