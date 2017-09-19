@@ -30,9 +30,9 @@ The vertex shader calculates the dot product of the view vector and the normal, 
 uniform vec3 viewVector;
 varying float intensity;
 void main() {
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4( position, 1.0 );
-    vec3 actual_normal = vec3(modelMatrix * vec4(normal, 0.0));
-    intensity = pow( dot(normalize(viewVector), actual_normal), 6.0 );
+  gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4( position, 1.0 );
+  vec3 actual_normal = vec3(modelMatrix * vec4(normal, 0.0));
+  intensity = pow( dot(normalize(viewVector), actual_normal), 6.0 );
 }
 ```
 
@@ -41,7 +41,7 @@ The fragment shader multiplies the color by the intensity you just calculated. T
 ```
 varying float intensity;
 void main() {
-	vec3 glow = vec3(0, 1, 0) * intensity;
-    gl_FragColor = vec4( glow, 1.0 );
+  vec3 glow = vec3(0, 1, 0) * intensity;
+  gl_FragColor = vec4( glow, 1.0 );
 }
 ```
