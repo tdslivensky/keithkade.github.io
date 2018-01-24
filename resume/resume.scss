@@ -1,3 +1,6 @@
+---
+---
+
 $myGrey: #333333;
 $sansStack: 'Lato', 'Helvetica Nueue', Helvetica, Arial, sans-serif;
 $serifStack:  Baskerville, "Baskerville Old Face", "Goudy Old Style", Garamond, "Times New Roman", serif;
@@ -202,6 +205,17 @@ a {
                 margin-top: 6px;  
             }
         }  
+    }
+
+    #volunteerDiv {
+        #volunteerList {
+          list-style: none;
+          line-height: 1.4;
+          padding-left: 0;
+          li {
+            margin-top: 6px;
+          }
+        }
     }
 
     #honorsDiv {
