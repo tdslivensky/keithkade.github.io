@@ -1,213 +1,231 @@
 $myGrey: #333333;
 $sansStack: 'Lato', 'Helvetica Nueue', Helvetica, Arial, sans-serif;
-$serifStack:  Baskerville, "Baskerville Old Face", "Goudy Old Style", Garamond, "Times New Roman", serif;
+$serifStack : Baskerville, "Baskerville Old Face", "Goudy Old Style", Garamond, "Times New Roman", serif;
 $myBlue: #69D2E7;
 $myGreen: #A7DBD8;
 $mySand: #E0E4CC;
 $myOrange: #ffb378;
 
 * {
-	margin: 0; 
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 //safari tries to scale things willy nilly
-@media screen and (max-device-width: 667px){
-  body{
+@media screen and (max-device-width: 667px) {
+  body {
     -webkit-text-size-adjust: none;
   }
 }
 
 body {
-	background: white;
-    color: white;
-	font-family: $sansStack; 
-    font-weight: 300;
-    font-size: 16px;
+  background: white;
+  color: white;
+  font-family: $sansStack;
+  font-weight: 300;
+  font-size: 16px;
 }
+
 h1 {
-    -webkit-margin-before: 0em;
-    -webkit-margin-after: 0em;
-    line-height: 100%;
+  -webkit-margin-before: 0em;
+  -webkit-margin-after: 0em;
+  line-height: 100%;
 }
+
 a {
-    color: #013d79;
+  color: #013d79;
 }
-#resume {    
-    margin-left: auto;
-    margin-right: auto;
-	width: 850px;
-    height: 1100px;
-    position: relative;
-    
-    background: white;
-    color: $myGrey;
-    
-    .link {
-        font-size: 11px;
-    }
-    
-    header {
-        height: 100px;
-        background-color: $myGrey;
-        color: white;
 
-        h1 {
-            margin: 20px 0px 0px 30px;
-            font-weight: 300;
-            font-size: 60px;
-            float: left;
-            width: 500px;
-            font-family: $serifStack;
-        }
-        
-        p {
-            margin: 8px 30px 0px 0px;
-            float: right;
-            text-align: right;
-        }
-    }  
-    
-    #stripe {
-        height: 8px;
-        width: 100%;
-        position: relative;
-        bottom: 10px;
-        left: 4px;
-        div {
-            width: 208px;
-            height: 6px;
-            display: inline-block;
-            margin: 0;
-            padding: 0;
-        }
-        #blue {background-color: $myBlue;}
-        #green {background-color: $myGreen;}
-        #sand {background-color: $mySand;}
-        #orange {background-color: $myOrange;}
+#resume {
+  margin-left: auto;
+  margin-right: auto;
+  width: 850px;
+  height: 1100px;
+  position: relative;
+
+  background: white;
+  color: $myGrey;
+
+  header {
+    height: 96px;
+    background-color: $myGrey;
+    color: white;
+
+    .title {
+      float: left;
+      margin: 12px 0px 0px 30px;
+      width: 500px;
+      font-family: $serifStack;
+
+      h1 {
+        font-weight: 300;
+        font-size: 44px;
+      }
+
+      h2 {
+        font-weight: 300;
+        font-size: 24px;
+      }
     }
-    
+
     p {
-        margin: 0px 0 6px 0;
+      margin: 8px 30px 0px 0px;
+      float: right;
+      text-align: right;
+    }
+  }
+
+  #stripe {
+    height: 8px;
+    width: 100%;
+    position: relative;
+    bottom: 10px;
+    left: 4px;
+    div {
+      width: 208px;
+      height: 6px;
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+    }
+    #blue {
+      background-color: $myBlue;
+    }
+    #green {
+      background-color: $myGreen;
+    }
+    #sand {
+      background-color: $mySand;
+    }
+    #orange {
+      background-color: $myOrange;
+    }
+  }
+
+  p {
+    margin: 0px 0 6px 0;
+  }
+
+  h4 {
+    margin: 0px 0 3px 0;
+  }
+
+  .time {
+    float: right;
+  }
+
+  b {
+    font-weight: 500;
+  }
+
+  dl {
+
+    dt {
+      width: 90px;
+      text-align: right;
+      float: left;
+      position: relative;
+      top: 10px;
+      font-size: 16px;
+      font-weight: 500;
     }
 
-    h4 {
-        margin: 0px 0 3px 0;
-    } 
-
-    .time {
-        float: right;
+    .clear {
+      height: 10px;
+      border: none;
     }
+
+    dd {
+      width: 720px;
+      float: right;
+      padding-right: 10px;
+      border-left: 1px solid #898989;
+      padding-left: 16px;
+    }
+
+  }
+
+  #eduDiv {
+    .university {
+      float: left;
+    }
+
+    .undergrad {
+      margin-top: 10px;
+    }
+
+    .degree {
+      clear: both;
+    }
+  }
+
+  #expDiv {
 
     ul {
-        padding-left: 22px;
-        margin-bottom: 0;
-        margin-top: 0;
-        clear: both;
-        li {
-            margin: 3px 0 3px 0;
-        }
+      padding-left: 22px;
+      margin-bottom: 0;
+      margin-top: 0;
+      clear: both;
+
+      li {
+        line-height: 140%;
+      }
     }
 
-    b {
-        font-weight: 500;
-    }
-    
-    dl {
-        dt {
-            width: 100px;
-            text-align: right;
-            float: left;
-            position: relative;
-            top: 10px;
-            font-size: 16px;
-            font-weight: 500;
-        }
-          
-        .clear {
-            height: 12px;
-            border: none;
-        } 
-        
-        dd {
-            width: 710px;
-            float: right;
-            padding-right: 10px;
-            border-left: 1px solid #898989;
-            padding-left: 16px;
-        }
-
-    }
-    
-    #eduDiv {
-        #university {
-            float: left;
-        }
-        #degree {
-            clear: both;
-        }
+    .company {
+      float: left;
+      margin-top: 4px;
+      margin-bottom: 0px;
     }
 
-    #expDiv {
-        
-        li {
-            line-height: 140%;
-        }
+    .triCol {
+      h4 {
+        margin-top: 5px;
+      }
+      ul {
+        list-style: none;
+        padding-left: 0;
 
-        .company {
-            float: left;
-            margin-top: 4px;
-            margin-bottom: 0px;
-        }
-        
-        .triCol {
-            h4 {
-                margin-top: 5px;
-            }
-            ul {
-                list-style: none;
-                padding-left: 0;
-                
-            }
-        }
-        #extracurricular {
-            margin-top: 3px;
-            width: 45%;
-            float: left;
-        }
-        #leadership {
-            margin-top: 3px;
-            width: 54%;
-            float: left;
-        }
+      }
     }
+    #extracurricular {
+      margin-top: 3px;
+      width: 45%;
+      float: left;
+    }
+    #leadership {
+      margin-top: 3px;
+      width: 54%;
+      float: left;
+    }
+  }
 
-    #skillsDiv {
-        ul {
-            list-style: none;
-            padding-left: 0;
-            font-size: 16px;
-            li {
-                margin-top: 12px;
-            }
-        }
-    }
+  #skillsDiv {
+    ul {
+      list-style: none;
+      padding-left: 0;
 
-    #projectDiv {
-        #projectList {
-            list-style: none;
-            line-height: 1.4;
-            padding-left: 0;
-            li {
-                margin-top: 6px;  
-            }
-        }  
+      li {
+        margin-bottom: 6px;
+      }
     }
+  }
 
-    #honorsDiv {
-        #honorsList {
-            list-style: none;
-            padding-left: 0;
-        }   
+  #projectDiv {
+    #projectList {
+      list-style: none;
+      line-height: 1.4;
+      padding-left: 0;
+      li {
+        margin-bottom: 6px;
+      }
     }
+  }
+
+  #honorsDiv {
+    #honorsList {
+      list-style: none;
+      padding-left: 0;
+    }
+  }
 }
